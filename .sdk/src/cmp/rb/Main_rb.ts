@@ -1,0 +1,148 @@
+
+import * as Path from 'node:path'
+
+import {
+  cmp, each, names, cmap,
+  List, File, Content, Copy, Folder, Fragment, Line, FeatureHook,
+  pluginExcludes,
+  targetFeatures,
+  TEST_CONTROL_EXCLUDE
+} from '@voxgig/sdkgen'
+
+
+import type {
+  ModelEntity
+} from '@voxgig/apidef'
+
+
+import {
+  KIT,
+  getModelPath
+} from '@voxgig/apidef'
+
+
+import { Package } from './Package_rb'
+import { Config } from './Config_rb'
+import { Gitignore } from './Gitignore_rb'
+import { MainEntity } from './MainEntity_rb'
+import { EntityTypes } from './EntityTypes_rb'
+
+
+const Main = cmp(async function Main(props: any) {
+
+  const { target } = props
+  const { model } = props.ctx$
+
+  const entity: ModelEntity = getModelPath(model, `main.${KIT}.entity`)
+  // Gated by the applicability tags, so this target never imports or
+  // registers a feature it has no source for. One rule, one place:
+  // helpers/applicability.
+  const feature = targetFeatures(model, target)
+
+  Package({ target })
+
+  Gitignore({})
+
+  // Copy tm/rb files with replacements
+  Copy({
+    from: 'tm/' + target.name,
+    // pluginExcludes: the generate-time plugin trim (an INACTIVE plugin
+    // group's declared files stay out of the tree - the model's `path`
+    // entries are target-root-relative, which is this Copy's root). The
+    // FEATURE-level trim for rb stays an add-time concern (vendor-tag
+    // rollout, Decision 5).
+    exclude: [/src\//, TEST_CONTROL_EXCLUDE, ...pluginExcludes(model)],
+    replace: {
+      ...props.ctx$.stdrep,
+    }
+  })
+
+  // Generate main SDK file
+  File({ name: model.const.Name + '_sdk.' + target.ext }, () => {
+
+    Fragment(
+      {
+        from: Path.normalize(__dirname + '/../../../src/cmp/rb/fragment/Main.fragment.rb'),
+        replace: {
+          ...props.ctx$.stdrep,
+
+          '#BuildFeatures': ({ indent }: any) => {
+            each(feature, (feat: any) => {
+              const fname = feat.name.charAt(0).toUpperCase() + feat.name.slice(1)
+              Content({ indent }, `  # feature: ${feat.name}
+`)
+            })
+          },
+
+          '#Feature-Hook': ({ name, indent }: any) => Content({ indent }, `
+utility.feature_hook.call(@_rootctx, "${name}")
+`),
+
+        }
+      },
+
+      // Entities - injected at SLOT
+      () => {
+        each(entity, (entity: ModelEntity) => {
+          const entitySDK = getModelPath(model, `main.${KIT}.entity.${entity.name}`)
+          const entprops = { target, entity, entitySDK }
+          MainEntity(entprops)
+        })
+      })
+  })
+
+  // Generate config module
+  Folder({ name: '.' }, () => {
+    Config({ target })
+  })
+
+  // Generate typed models (<Sdk>_types.rb) — required by the main SDK file.
+  EntityTypes({ target })
+
+  // Generate feature factory module
+  File({ name: 'features.' + target.ext }, () => {
+    Content(`# ${model.const.Name} SDK feature factory
+
+require_relative 'feature/base_feature'
+`)
+
+    each(feature, (feat: any) => {
+      if (feat.name !== 'base') {
+        const fname = feat.name.charAt(0).toUpperCase() + feat.name.slice(1)
+        Content(`require_relative 'feature/${feat.name}_feature'
+`)
+      }
+    })
+
+    Content(`
+
+module ${model.const.Name}Features
+  def self.make_feature(name)
+    case name
+    when "base"
+      ${model.const.Name}BaseFeature.new
+`)
+
+    each(feature, (feat: any) => {
+      if (feat.name !== 'base') {
+        const fname = feat.name.charAt(0).toUpperCase() + feat.name.slice(1)
+        Content(`    when "${feat.name}"
+      ${model.const.Name}${fname}Feature.new
+`)
+      }
+    })
+
+    Content(`    else
+      ${model.const.Name}BaseFeature.new
+    end
+  end
+end
+`)
+  })
+
+})
+
+
+export {
+  Main
+}

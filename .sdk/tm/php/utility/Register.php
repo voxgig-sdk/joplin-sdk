@@ -1,0 +1,70 @@
+<?php
+declare(strict_types=1);
+
+// Joplin SDK utility registration
+
+require_once __DIR__ . '/../core/UtilityType.php';
+require_once __DIR__ . '/Clean.php';
+require_once __DIR__ . '/Done.php';
+require_once __DIR__ . '/MakeError.php';
+require_once __DIR__ . '/FeatureAdd.php';
+require_once __DIR__ . '/FeatureHook.php';
+require_once __DIR__ . '/FeatureInit.php';
+require_once __DIR__ . '/Fetcher.php';
+require_once __DIR__ . '/MakeFetchDef.php';
+require_once __DIR__ . '/MakeContext.php';
+require_once __DIR__ . '/MakeOptions.php';
+require_once __DIR__ . '/MakeRequest.php';
+require_once __DIR__ . '/MakeResponse.php';
+require_once __DIR__ . '/MakeResult.php';
+require_once __DIR__ . '/MakePoint.php';
+require_once __DIR__ . '/MakeSpec.php';
+require_once __DIR__ . '/MakeUrl.php';
+require_once __DIR__ . '/Param.php';
+require_once __DIR__ . '/PrepareAuth.php';
+require_once __DIR__ . '/PrepareBody.php';
+require_once __DIR__ . '/Graphql.php';
+require_once __DIR__ . '/PrepareHeaders.php';
+require_once __DIR__ . '/PrepareMethod.php';
+require_once __DIR__ . '/PrepareParams.php';
+require_once __DIR__ . '/PreparePath.php';
+require_once __DIR__ . '/PrepareQuery.php';
+require_once __DIR__ . '/ResultBasic.php';
+require_once __DIR__ . '/ResultBody.php';
+require_once __DIR__ . '/ResultHeaders.php';
+require_once __DIR__ . '/TransformRequest.php';
+require_once __DIR__ . '/TransformResponse.php';
+
+JoplinUtility::setRegistrar(function (JoplinUtility $u): void {
+    $u->clean = [JoplinClean::class, 'call'];
+    $u->done = [JoplinDone::class, 'call'];
+    $u->make_error = [JoplinMakeError::class, 'call'];
+    $u->feature_add = [JoplinFeatureAdd::class, 'call'];
+    $u->feature_hook = [JoplinFeatureHook::class, 'call'];
+    $u->feature_init = [JoplinFeatureInit::class, 'call'];
+    $u->fetcher = [JoplinFetcher::class, 'call'];
+    $u->make_fetch_def = [JoplinMakeFetchDef::class, 'call'];
+    $u->make_context = [JoplinMakeContext::class, 'call'];
+    $u->make_options = [JoplinMakeOptions::class, 'call'];
+    $u->make_request = [JoplinMakeRequest::class, 'call'];
+    $u->make_response = [JoplinMakeResponse::class, 'call'];
+    $u->make_result = [JoplinMakeResult::class, 'call'];
+    $u->make_point = [JoplinMakePoint::class, 'call'];
+    $u->make_spec = [JoplinMakeSpec::class, 'call'];
+    $u->make_url = [JoplinMakeUrl::class, 'call'];
+    $u->param = [JoplinParam::class, 'call'];
+    $u->prepare_auth = [JoplinPrepareAuth::class, 'call'];
+    $u->prepare_body = [JoplinPrepareBody::class, 'call'];
+    $u->prepare_headers = [JoplinPrepareHeaders::class, 'call'];
+    $u->prepare_method = [JoplinPrepareMethod::class, 'call'];
+    $u->prepare_params = [JoplinPrepareParams::class, 'call'];
+    $u->prepare_path = [JoplinPreparePath::class, 'call'];
+    $u->prepare_query = [JoplinPrepareQuery::class, 'call'];
+    $u->graphql_body = [JoplinGraphql::class, 'body'];
+    $u->graphql_errors = [JoplinGraphql::class, 'errors'];
+    $u->result_basic = [JoplinResultBasic::class, 'call'];
+    $u->result_body = [JoplinResultBody::class, 'call'];
+    $u->result_headers = [JoplinResultHeaders::class, 'call'];
+    $u->transform_request = [JoplinTransformRequest::class, 'call'];
+    $u->transform_response = [JoplinTransformResponse::class, 'call'];
+});

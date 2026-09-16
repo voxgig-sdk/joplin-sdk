@@ -1,0 +1,3160 @@
+{
+  "NAME": "JOPLIN",
+  "Name": "Joplin",
+  "def": "joplin-notes-folders-tags.json",
+  "main": {
+    "api": {
+      "entity": {},
+      "guide": {}
+    },
+    "custom": {
+      "plurals": {}
+    },
+    "def": {
+      "desc": ""
+    },
+    "kit": {
+      "author": {
+        "name": "",
+        "url": ""
+      },
+      "config": {
+        "docs_order": [
+          "ts",
+          "py",
+          "php",
+          "go",
+          "rb",
+          "lua"
+        ],
+        "headers": {
+          "content-type": "application/json"
+        },
+        "repr": "auto"
+      },
+      "contributor": {},
+      "doc": {
+        "active": true,
+        "assets": {
+          "path": ".sdk/doc/assets"
+        },
+        "brand": {
+          "label": "",
+          "notice": "",
+          "shortNotice": "",
+          "url": ""
+        },
+        "ci": {
+          "active": true,
+          "branch": "main"
+        },
+        "content": {
+          "path": ".sdk/doc/content"
+        },
+        "edition": {
+          "github-pages": {
+            "active": true,
+            "base": "node_modules/@voxgig/docgen/project/.sdk",
+            "brand": {},
+            "filter": {
+              "entities": [],
+              "features": [],
+              "targets": []
+            },
+            "kind": "github-pages",
+            "name": "github-pages",
+            "origname": "",
+            "output": {
+              "path": "docs"
+            },
+            "package": "@voxgig/docgen",
+            "site": {
+              "active": true
+            },
+            "style": {},
+            "title": ""
+          },
+          "summary": {
+            "active": true,
+            "base": "node_modules/@voxgig/docgen/project/.sdk",
+            "brand": {},
+            "filter": {
+              "entities": [],
+              "features": [],
+              "targets": []
+            },
+            "kind": "summary",
+            "name": "summary",
+            "origname": "",
+            "output": {
+              "path": "SUMMARY.md"
+            },
+            "package": "@voxgig/docgen",
+            "site": {
+              "active": true
+            },
+            "style": {},
+            "title": ""
+          }
+        },
+        "qa": {
+          "vocabulary": []
+        },
+        "style": {
+          "color": {
+            "accent": "#00c6d8",
+            "background": "#f5f5f9",
+            "darkBackground": "#0f1117",
+            "darkText": "#e6edf3",
+            "primary": "#e70042",
+            "text": "#0a0a0a"
+          },
+          "font": "Nunito, system-ui, sans-serif",
+          "fontFile": "",
+          "headingFont": "Nunito, system-ui, sans-serif",
+          "headingFontFile": "",
+          "logo": "",
+          "mode": "light",
+          "mono": "ui-monospace, monospace",
+          "monoFile": ""
+        },
+        "target": {}
+      },
+      "entity": {
+        "folder": {
+          "active": true,
+          "alias": {
+            "field": {}
+          },
+          "fields": [
+            {
+              "active": true,
+              "name": "created_time",
+              "req": false,
+              "short": "When the folder was created.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "id",
+              "req": false,
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "is_shared",
+              "req": false,
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "parent_id",
+              "req": false,
+              "short": "ID of the parent notebook, empty for a top-level notebook.",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "title",
+              "req": false,
+              "short": "The folder title.",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "updated_time",
+              "req": false,
+              "short": "When the folder was last updated.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "user_created_time",
+              "req": false,
+              "short": "When the folder was created.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "user_updated_time",
+              "req": false,
+              "short": "When the folder was last updated.",
+              "type": "`$INTEGER`"
+            }
+          ],
+          "id": {
+            "field": "id",
+            "name": "id"
+          },
+          "name": "folder",
+          "op": {
+            "create": {
+              "input": "data",
+              "name": "create",
+              "points": [
+                {
+                  "active": true,
+                  "args": {},
+                  "contract": {
+                    "id": "POST /folders",
+                    "json": "{\"operationId\":\"createFolder\",\"parameters\":[],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"created_time\":{\"description\":\"When the folder was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_shared\":{\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the parent notebook, empty for a top-level notebook.\",\"type\":\"string\"},\"title\":{\"description\":\"The folder title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the folder was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the folder was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the folder was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"required\":true},\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"created_time\":{\"description\":\"When the folder was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_shared\":{\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the parent notebook, empty for a top-level notebook.\",\"type\":\"string\"},\"title\":{\"description\":\"The folder title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the folder was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the folder was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the folder was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"description\":\"The created folder.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "POST",
+                  "orig": "/folders",
+                  "segments": [
+                    {
+                      "lit": "folders"
+                    }
+                  ],
+                  "select": {},
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            },
+            "list": {
+              "input": "data",
+              "name": "list",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "query": [
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "field",
+                        "orig": "field",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      },
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "order_by",
+                        "orig": "order_by",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      },
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "order_dir",
+                        "orig": "order_dir",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      },
+                      {
+                        "active": true,
+                        "example": 1,
+                        "kind": "query",
+                        "name": "page",
+                        "orig": "page",
+                        "reqd": false,
+                        "type": "`$INTEGER`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "GET /folders",
+                    "json": "{\"operationId\":\"listFolders\",\"parameters\":[{\"description\":\"Comma-separated list of properties to return. Request only what you need.\",\"in\":\"query\",\"name\":\"fields\",\"required\":false,\"schema\":{\"type\":\"string\"}},{\"description\":\"1-based page number. Read has_more to know whether to ask for the next.\",\"in\":\"query\",\"name\":\"page\",\"required\":false,\"schema\":{\"default\":1,\"type\":\"integer\"}},{\"description\":\"Property to sort by, for example updated_time.\",\"in\":\"query\",\"name\":\"order_by\",\"required\":false,\"schema\":{\"type\":\"string\"}},{\"description\":\"Sort direction.\",\"in\":\"query\",\"name\":\"order_dir\",\"required\":false,\"schema\":{\"enum\":[\"ASC\",\"DESC\"],\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"has_more\":{\"description\":\"True when a further page is available; pass the next page number.\",\"type\":\"boolean\"},\"items\":{\"items\":{\"properties\":{\"created_time\":{\"description\":\"When the folder was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_shared\":{\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the parent notebook, empty for a top-level notebook.\",\"type\":\"string\"},\"title\":{\"description\":\"The folder title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the folder was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the folder was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the folder was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"},\"type\":\"array\"}},\"type\":\"object\"}}},\"description\":\"A page of results.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "GET",
+                  "orig": "/folders",
+                  "segments": [
+                    {
+                      "lit": "folders"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "field",
+                      "order_by",
+                      "order_dir",
+                      "page"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body.items`"
+                  }
+                },
+                {
+                  "active": true,
+                  "args": {
+                    "params": [
+                      {
+                        "active": true,
+                        "kind": "param",
+                        "name": "id",
+                        "orig": "id",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      }
+                    ],
+                    "query": [
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "field",
+                        "orig": "field",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "GET /folders/{id}/notes",
+                    "json": "{\"operationId\":\"listFolderNotes\",\"parameters\":[{\"description\":\"The item ID.\",\"in\":\"path\",\"name\":\"id\",\"required\":true,\"schema\":{\"type\":\"string\"}},{\"description\":\"Comma-separated list of properties to return. Request only what you need.\",\"in\":\"query\",\"name\":\"fields\",\"required\":false,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"has_more\":{\"description\":\"True when a further page is available; pass the next page number.\",\"type\":\"boolean\"},\"items\":{\"items\":{\"properties\":{\"altitude\":{\"type\":\"number\"},\"author\":{\"type\":\"string\"},\"body\":{\"description\":\"The note body, in Markdown. May also contain HTML.\",\"type\":\"string\"},\"created_time\":{\"description\":\"When the note was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_conflict\":{\"description\":\"Tells whether the note is a conflict or not.\",\"type\":\"integer\"},\"is_todo\":{\"description\":\"Tells whether this note is a to-do or not.\",\"type\":\"integer\"},\"latitude\":{\"type\":\"number\"},\"longitude\":{\"type\":\"number\"},\"markup_language\":{\"description\":\"1 for Markdown, 2 for HTML.\",\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the notebook that contains this note. Change this ID to move the note to a different notebook.\",\"type\":\"string\"},\"source_url\":{\"description\":\"The full URL where the note comes from.\",\"type\":\"string\"},\"title\":{\"description\":\"The note title.\",\"type\":\"string\"},\"todo_completed\":{\"description\":\"When the to-do was completed.\",\"type\":\"integer\"},\"todo_due\":{\"description\":\"When the to-do is due.\",\"type\":\"integer\"},\"updated_time\":{\"description\":\"When the note was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the note was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the note was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"},\"type\":\"array\"}},\"type\":\"object\"}}},\"description\":\"The item.\"},\"404\":{\"description\":\"No item with that ID.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "GET",
+                  "orig": "/folders/{id}/notes",
+                  "segments": [
+                    {
+                      "lit": "folders"
+                    },
+                    {
+                      "var": "id"
+                    },
+                    {
+                      "lit": "notes"
+                    }
+                  ],
+                  "select": {
+                    "$action": "note",
+                    "exist": [
+                      "field",
+                      "id"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body.items`"
+                  }
+                }
+              ]
+            },
+            "load": {
+              "input": "data",
+              "name": "load",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "params": [
+                      {
+                        "active": true,
+                        "kind": "param",
+                        "name": "id",
+                        "orig": "id",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      }
+                    ],
+                    "query": [
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "field",
+                        "orig": "field",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "GET /folders/{id}",
+                    "json": "{\"operationId\":\"loadFolder\",\"parameters\":[{\"description\":\"The item ID.\",\"in\":\"path\",\"name\":\"id\",\"required\":true,\"schema\":{\"type\":\"string\"}},{\"description\":\"Comma-separated list of properties to return. Request only what you need.\",\"in\":\"query\",\"name\":\"fields\",\"required\":false,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"created_time\":{\"description\":\"When the folder was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_shared\":{\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the parent notebook, empty for a top-level notebook.\",\"type\":\"string\"},\"title\":{\"description\":\"The folder title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the folder was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the folder was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the folder was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"description\":\"The item.\"},\"404\":{\"description\":\"No item with that ID.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "GET",
+                  "orig": "/folders/{id}",
+                  "segments": [
+                    {
+                      "lit": "folders"
+                    },
+                    {
+                      "var": "id"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "field",
+                      "id"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            },
+            "remove": {
+              "input": "data",
+              "name": "remove",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "params": [
+                      {
+                        "active": true,
+                        "kind": "param",
+                        "name": "id",
+                        "orig": "id",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "DELETE /folders/{id}",
+                    "json": "{\"operationId\":\"removeFolder\",\"parameters\":[{\"description\":\"The item ID.\",\"in\":\"path\",\"name\":\"id\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"description\":\"Deleted.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "DELETE",
+                  "orig": "/folders/{id}",
+                  "segments": [
+                    {
+                      "lit": "folders"
+                    },
+                    {
+                      "var": "id"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "id"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            },
+            "update": {
+              "input": "data",
+              "name": "update",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "params": [
+                      {
+                        "active": true,
+                        "kind": "param",
+                        "name": "id",
+                        "orig": "id",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "PUT /folders/{id}",
+                    "json": "{\"operationId\":\"updateFolder\",\"parameters\":[{\"description\":\"The item ID.\",\"in\":\"path\",\"name\":\"id\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"created_time\":{\"description\":\"When the folder was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_shared\":{\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the parent notebook, empty for a top-level notebook.\",\"type\":\"string\"},\"title\":{\"description\":\"The folder title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the folder was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the folder was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the folder was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"required\":true},\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"created_time\":{\"description\":\"When the folder was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_shared\":{\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the parent notebook, empty for a top-level notebook.\",\"type\":\"string\"},\"title\":{\"description\":\"The folder title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the folder was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the folder was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the folder was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"description\":\"The updated folder.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "PUT",
+                  "orig": "/folders/{id}",
+                  "segments": [
+                    {
+                      "lit": "folders"
+                    },
+                    {
+                      "var": "id"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "id"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            }
+          },
+          "relations": {
+            "ancestors": []
+          }
+        },
+        "note": {
+          "active": true,
+          "alias": {
+            "field": {}
+          },
+          "fields": [
+            {
+              "active": true,
+              "name": "altitude",
+              "req": false,
+              "type": "`$NUMBER`"
+            },
+            {
+              "active": true,
+              "name": "author",
+              "req": false,
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "body",
+              "req": false,
+              "short": "The note body, in Markdown.",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "created_time",
+              "req": false,
+              "short": "When the note was created.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "id",
+              "req": false,
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "is_conflict",
+              "req": false,
+              "short": "Tells whether the note is a conflict or not.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "is_todo",
+              "req": false,
+              "short": "Tells whether this note is a to-do or not.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "latitude",
+              "req": false,
+              "type": "`$NUMBER`"
+            },
+            {
+              "active": true,
+              "name": "longitude",
+              "req": false,
+              "type": "`$NUMBER`"
+            },
+            {
+              "active": true,
+              "name": "markup_language",
+              "req": false,
+              "short": "1 for Markdown, 2 for HTML.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "parent_id",
+              "req": false,
+              "short": "ID of the notebook that contains this note.",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "source_url",
+              "req": false,
+              "short": "The full URL where the note comes from.",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "title",
+              "req": false,
+              "short": "The note title.",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "todo_completed",
+              "req": false,
+              "short": "When the to-do was completed.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "todo_due",
+              "req": false,
+              "short": "When the to-do is due.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "updated_time",
+              "req": false,
+              "short": "When the note was last updated.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "user_created_time",
+              "req": false,
+              "short": "When the note was created.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "user_updated_time",
+              "req": false,
+              "short": "When the note was last updated.",
+              "type": "`$INTEGER`"
+            }
+          ],
+          "id": {
+            "field": "id",
+            "name": "id"
+          },
+          "name": "note",
+          "op": {
+            "create": {
+              "input": "data",
+              "name": "create",
+              "points": [
+                {
+                  "active": true,
+                  "args": {},
+                  "contract": {
+                    "id": "POST /notes",
+                    "json": "{\"operationId\":\"createNote\",\"parameters\":[],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"altitude\":{\"type\":\"number\"},\"author\":{\"type\":\"string\"},\"body\":{\"description\":\"The note body, in Markdown. May also contain HTML.\",\"type\":\"string\"},\"created_time\":{\"description\":\"When the note was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_conflict\":{\"description\":\"Tells whether the note is a conflict or not.\",\"type\":\"integer\"},\"is_todo\":{\"description\":\"Tells whether this note is a to-do or not.\",\"type\":\"integer\"},\"latitude\":{\"type\":\"number\"},\"longitude\":{\"type\":\"number\"},\"markup_language\":{\"description\":\"1 for Markdown, 2 for HTML.\",\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the notebook that contains this note. Change this ID to move the note to a different notebook.\",\"type\":\"string\"},\"source_url\":{\"description\":\"The full URL where the note comes from.\",\"type\":\"string\"},\"title\":{\"description\":\"The note title.\",\"type\":\"string\"},\"todo_completed\":{\"description\":\"When the to-do was completed.\",\"type\":\"integer\"},\"todo_due\":{\"description\":\"When the to-do is due.\",\"type\":\"integer\"},\"updated_time\":{\"description\":\"When the note was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the note was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the note was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"required\":true},\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"altitude\":{\"type\":\"number\"},\"author\":{\"type\":\"string\"},\"body\":{\"description\":\"The note body, in Markdown. May also contain HTML.\",\"type\":\"string\"},\"created_time\":{\"description\":\"When the note was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_conflict\":{\"description\":\"Tells whether the note is a conflict or not.\",\"type\":\"integer\"},\"is_todo\":{\"description\":\"Tells whether this note is a to-do or not.\",\"type\":\"integer\"},\"latitude\":{\"type\":\"number\"},\"longitude\":{\"type\":\"number\"},\"markup_language\":{\"description\":\"1 for Markdown, 2 for HTML.\",\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the notebook that contains this note. Change this ID to move the note to a different notebook.\",\"type\":\"string\"},\"source_url\":{\"description\":\"The full URL where the note comes from.\",\"type\":\"string\"},\"title\":{\"description\":\"The note title.\",\"type\":\"string\"},\"todo_completed\":{\"description\":\"When the to-do was completed.\",\"type\":\"integer\"},\"todo_due\":{\"description\":\"When the to-do is due.\",\"type\":\"integer\"},\"updated_time\":{\"description\":\"When the note was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the note was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the note was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"description\":\"The created note.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "POST",
+                  "orig": "/notes",
+                  "segments": [
+                    {
+                      "lit": "notes"
+                    }
+                  ],
+                  "select": {},
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            },
+            "list": {
+              "input": "data",
+              "name": "list",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "query": [
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "field",
+                        "orig": "field",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      },
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "order_by",
+                        "orig": "order_by",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      },
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "order_dir",
+                        "orig": "order_dir",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      },
+                      {
+                        "active": true,
+                        "example": 1,
+                        "kind": "query",
+                        "name": "page",
+                        "orig": "page",
+                        "reqd": false,
+                        "type": "`$INTEGER`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "GET /notes",
+                    "json": "{\"operationId\":\"listNotes\",\"parameters\":[{\"description\":\"Comma-separated list of properties to return. Request only what you need.\",\"in\":\"query\",\"name\":\"fields\",\"required\":false,\"schema\":{\"type\":\"string\"}},{\"description\":\"1-based page number. Read has_more to know whether to ask for the next.\",\"in\":\"query\",\"name\":\"page\",\"required\":false,\"schema\":{\"default\":1,\"type\":\"integer\"}},{\"description\":\"Property to sort by, for example updated_time.\",\"in\":\"query\",\"name\":\"order_by\",\"required\":false,\"schema\":{\"type\":\"string\"}},{\"description\":\"Sort direction.\",\"in\":\"query\",\"name\":\"order_dir\",\"required\":false,\"schema\":{\"enum\":[\"ASC\",\"DESC\"],\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"has_more\":{\"description\":\"True when a further page is available; pass the next page number.\",\"type\":\"boolean\"},\"items\":{\"items\":{\"properties\":{\"altitude\":{\"type\":\"number\"},\"author\":{\"type\":\"string\"},\"body\":{\"description\":\"The note body, in Markdown. May also contain HTML.\",\"type\":\"string\"},\"created_time\":{\"description\":\"When the note was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_conflict\":{\"description\":\"Tells whether the note is a conflict or not.\",\"type\":\"integer\"},\"is_todo\":{\"description\":\"Tells whether this note is a to-do or not.\",\"type\":\"integer\"},\"latitude\":{\"type\":\"number\"},\"longitude\":{\"type\":\"number\"},\"markup_language\":{\"description\":\"1 for Markdown, 2 for HTML.\",\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the notebook that contains this note. Change this ID to move the note to a different notebook.\",\"type\":\"string\"},\"source_url\":{\"description\":\"The full URL where the note comes from.\",\"type\":\"string\"},\"title\":{\"description\":\"The note title.\",\"type\":\"string\"},\"todo_completed\":{\"description\":\"When the to-do was completed.\",\"type\":\"integer\"},\"todo_due\":{\"description\":\"When the to-do is due.\",\"type\":\"integer\"},\"updated_time\":{\"description\":\"When the note was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the note was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the note was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"},\"type\":\"array\"}},\"type\":\"object\"}}},\"description\":\"A page of results.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "GET",
+                  "orig": "/notes",
+                  "segments": [
+                    {
+                      "lit": "notes"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "field",
+                      "order_by",
+                      "order_dir",
+                      "page"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body.items`"
+                  }
+                },
+                {
+                  "active": true,
+                  "args": {
+                    "params": [
+                      {
+                        "active": true,
+                        "kind": "param",
+                        "name": "id",
+                        "orig": "id",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      }
+                    ],
+                    "query": [
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "field",
+                        "orig": "field",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "GET /notes/{id}/tags",
+                    "json": "{\"operationId\":\"listNoteTags\",\"parameters\":[{\"description\":\"The item ID.\",\"in\":\"path\",\"name\":\"id\",\"required\":true,\"schema\":{\"type\":\"string\"}},{\"description\":\"Comma-separated list of properties to return. Request only what you need.\",\"in\":\"query\",\"name\":\"fields\",\"required\":false,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"has_more\":{\"description\":\"True when a further page is available; pass the next page number.\",\"type\":\"boolean\"},\"items\":{\"items\":{\"properties\":{\"created_time\":{\"description\":\"When the tag was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"title\":{\"description\":\"The tag title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the tag was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the tag was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the tag was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"},\"type\":\"array\"}},\"type\":\"object\"}}},\"description\":\"The item.\"},\"404\":{\"description\":\"No item with that ID.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "GET",
+                  "orig": "/notes/{id}/tags",
+                  "segments": [
+                    {
+                      "lit": "notes"
+                    },
+                    {
+                      "var": "id"
+                    },
+                    {
+                      "lit": "tags"
+                    }
+                  ],
+                  "select": {
+                    "$action": "tag",
+                    "exist": [
+                      "field",
+                      "id"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body.items`"
+                  }
+                }
+              ]
+            },
+            "load": {
+              "input": "data",
+              "name": "load",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "params": [
+                      {
+                        "active": true,
+                        "kind": "param",
+                        "name": "id",
+                        "orig": "id",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      }
+                    ],
+                    "query": [
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "field",
+                        "orig": "field",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "GET /notes/{id}",
+                    "json": "{\"operationId\":\"loadNote\",\"parameters\":[{\"description\":\"The item ID.\",\"in\":\"path\",\"name\":\"id\",\"required\":true,\"schema\":{\"type\":\"string\"}},{\"description\":\"Comma-separated list of properties to return. Request only what you need.\",\"in\":\"query\",\"name\":\"fields\",\"required\":false,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"altitude\":{\"type\":\"number\"},\"author\":{\"type\":\"string\"},\"body\":{\"description\":\"The note body, in Markdown. May also contain HTML.\",\"type\":\"string\"},\"created_time\":{\"description\":\"When the note was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_conflict\":{\"description\":\"Tells whether the note is a conflict or not.\",\"type\":\"integer\"},\"is_todo\":{\"description\":\"Tells whether this note is a to-do or not.\",\"type\":\"integer\"},\"latitude\":{\"type\":\"number\"},\"longitude\":{\"type\":\"number\"},\"markup_language\":{\"description\":\"1 for Markdown, 2 for HTML.\",\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the notebook that contains this note. Change this ID to move the note to a different notebook.\",\"type\":\"string\"},\"source_url\":{\"description\":\"The full URL where the note comes from.\",\"type\":\"string\"},\"title\":{\"description\":\"The note title.\",\"type\":\"string\"},\"todo_completed\":{\"description\":\"When the to-do was completed.\",\"type\":\"integer\"},\"todo_due\":{\"description\":\"When the to-do is due.\",\"type\":\"integer\"},\"updated_time\":{\"description\":\"When the note was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the note was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the note was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"description\":\"The item.\"},\"404\":{\"description\":\"No item with that ID.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "GET",
+                  "orig": "/notes/{id}",
+                  "segments": [
+                    {
+                      "lit": "notes"
+                    },
+                    {
+                      "var": "id"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "field",
+                      "id"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            },
+            "remove": {
+              "input": "data",
+              "name": "remove",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "params": [
+                      {
+                        "active": true,
+                        "kind": "param",
+                        "name": "id",
+                        "orig": "id",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "DELETE /notes/{id}",
+                    "json": "{\"operationId\":\"removeNote\",\"parameters\":[{\"description\":\"The item ID.\",\"in\":\"path\",\"name\":\"id\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"description\":\"Deleted.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "DELETE",
+                  "orig": "/notes/{id}",
+                  "segments": [
+                    {
+                      "lit": "notes"
+                    },
+                    {
+                      "var": "id"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "id"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            },
+            "update": {
+              "input": "data",
+              "name": "update",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "params": [
+                      {
+                        "active": true,
+                        "kind": "param",
+                        "name": "id",
+                        "orig": "id",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "PUT /notes/{id}",
+                    "json": "{\"operationId\":\"updateNote\",\"parameters\":[{\"description\":\"The item ID.\",\"in\":\"path\",\"name\":\"id\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"altitude\":{\"type\":\"number\"},\"author\":{\"type\":\"string\"},\"body\":{\"description\":\"The note body, in Markdown. May also contain HTML.\",\"type\":\"string\"},\"created_time\":{\"description\":\"When the note was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_conflict\":{\"description\":\"Tells whether the note is a conflict or not.\",\"type\":\"integer\"},\"is_todo\":{\"description\":\"Tells whether this note is a to-do or not.\",\"type\":\"integer\"},\"latitude\":{\"type\":\"number\"},\"longitude\":{\"type\":\"number\"},\"markup_language\":{\"description\":\"1 for Markdown, 2 for HTML.\",\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the notebook that contains this note. Change this ID to move the note to a different notebook.\",\"type\":\"string\"},\"source_url\":{\"description\":\"The full URL where the note comes from.\",\"type\":\"string\"},\"title\":{\"description\":\"The note title.\",\"type\":\"string\"},\"todo_completed\":{\"description\":\"When the to-do was completed.\",\"type\":\"integer\"},\"todo_due\":{\"description\":\"When the to-do is due.\",\"type\":\"integer\"},\"updated_time\":{\"description\":\"When the note was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the note was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the note was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"required\":true},\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"altitude\":{\"type\":\"number\"},\"author\":{\"type\":\"string\"},\"body\":{\"description\":\"The note body, in Markdown. May also contain HTML.\",\"type\":\"string\"},\"created_time\":{\"description\":\"When the note was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_conflict\":{\"description\":\"Tells whether the note is a conflict or not.\",\"type\":\"integer\"},\"is_todo\":{\"description\":\"Tells whether this note is a to-do or not.\",\"type\":\"integer\"},\"latitude\":{\"type\":\"number\"},\"longitude\":{\"type\":\"number\"},\"markup_language\":{\"description\":\"1 for Markdown, 2 for HTML.\",\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the notebook that contains this note. Change this ID to move the note to a different notebook.\",\"type\":\"string\"},\"source_url\":{\"description\":\"The full URL where the note comes from.\",\"type\":\"string\"},\"title\":{\"description\":\"The note title.\",\"type\":\"string\"},\"todo_completed\":{\"description\":\"When the to-do was completed.\",\"type\":\"integer\"},\"todo_due\":{\"description\":\"When the to-do is due.\",\"type\":\"integer\"},\"updated_time\":{\"description\":\"When the note was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the note was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the note was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"description\":\"The updated note.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "PUT",
+                  "orig": "/notes/{id}",
+                  "segments": [
+                    {
+                      "lit": "notes"
+                    },
+                    {
+                      "var": "id"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "id"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            }
+          },
+          "relations": {
+            "ancestors": []
+          }
+        },
+        "tag": {
+          "active": true,
+          "alias": {
+            "field": {}
+          },
+          "fields": [
+            {
+              "active": true,
+              "name": "created_time",
+              "req": false,
+              "short": "When the tag was created.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "id",
+              "req": false,
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "title",
+              "req": false,
+              "short": "The tag title.",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "updated_time",
+              "req": false,
+              "short": "When the tag was last updated.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "user_created_time",
+              "req": false,
+              "short": "When the tag was created.",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "user_updated_time",
+              "req": false,
+              "short": "When the tag was last updated.",
+              "type": "`$INTEGER`"
+            }
+          ],
+          "id": {
+            "field": "id",
+            "name": "id"
+          },
+          "name": "tag",
+          "op": {
+            "create": {
+              "input": "data",
+              "name": "create",
+              "points": [
+                {
+                  "active": true,
+                  "args": {},
+                  "contract": {
+                    "id": "POST /tags",
+                    "json": "{\"operationId\":\"createTag\",\"parameters\":[],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"created_time\":{\"description\":\"When the tag was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"title\":{\"description\":\"The tag title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the tag was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the tag was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the tag was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"required\":true},\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"created_time\":{\"description\":\"When the tag was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"title\":{\"description\":\"The tag title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the tag was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the tag was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the tag was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"description\":\"The created tag.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "POST",
+                  "orig": "/tags",
+                  "segments": [
+                    {
+                      "lit": "tags"
+                    }
+                  ],
+                  "select": {},
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            },
+            "list": {
+              "input": "data",
+              "name": "list",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "query": [
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "field",
+                        "orig": "field",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      },
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "order_by",
+                        "orig": "order_by",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      },
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "order_dir",
+                        "orig": "order_dir",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      },
+                      {
+                        "active": true,
+                        "example": 1,
+                        "kind": "query",
+                        "name": "page",
+                        "orig": "page",
+                        "reqd": false,
+                        "type": "`$INTEGER`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "GET /tags",
+                    "json": "{\"operationId\":\"listTags\",\"parameters\":[{\"description\":\"Comma-separated list of properties to return. Request only what you need.\",\"in\":\"query\",\"name\":\"fields\",\"required\":false,\"schema\":{\"type\":\"string\"}},{\"description\":\"1-based page number. Read has_more to know whether to ask for the next.\",\"in\":\"query\",\"name\":\"page\",\"required\":false,\"schema\":{\"default\":1,\"type\":\"integer\"}},{\"description\":\"Property to sort by, for example updated_time.\",\"in\":\"query\",\"name\":\"order_by\",\"required\":false,\"schema\":{\"type\":\"string\"}},{\"description\":\"Sort direction.\",\"in\":\"query\",\"name\":\"order_dir\",\"required\":false,\"schema\":{\"enum\":[\"ASC\",\"DESC\"],\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"has_more\":{\"description\":\"True when a further page is available; pass the next page number.\",\"type\":\"boolean\"},\"items\":{\"items\":{\"properties\":{\"created_time\":{\"description\":\"When the tag was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"title\":{\"description\":\"The tag title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the tag was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the tag was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the tag was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"},\"type\":\"array\"}},\"type\":\"object\"}}},\"description\":\"A page of results.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "GET",
+                  "orig": "/tags",
+                  "segments": [
+                    {
+                      "lit": "tags"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "field",
+                      "order_by",
+                      "order_dir",
+                      "page"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body.items`"
+                  }
+                },
+                {
+                  "active": true,
+                  "args": {
+                    "params": [
+                      {
+                        "active": true,
+                        "kind": "param",
+                        "name": "id",
+                        "orig": "id",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      }
+                    ],
+                    "query": [
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "field",
+                        "orig": "field",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "GET /tags/{id}/notes",
+                    "json": "{\"operationId\":\"listTagNotes\",\"parameters\":[{\"description\":\"The item ID.\",\"in\":\"path\",\"name\":\"id\",\"required\":true,\"schema\":{\"type\":\"string\"}},{\"description\":\"Comma-separated list of properties to return. Request only what you need.\",\"in\":\"query\",\"name\":\"fields\",\"required\":false,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"has_more\":{\"description\":\"True when a further page is available; pass the next page number.\",\"type\":\"boolean\"},\"items\":{\"items\":{\"properties\":{\"altitude\":{\"type\":\"number\"},\"author\":{\"type\":\"string\"},\"body\":{\"description\":\"The note body, in Markdown. May also contain HTML.\",\"type\":\"string\"},\"created_time\":{\"description\":\"When the note was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"is_conflict\":{\"description\":\"Tells whether the note is a conflict or not.\",\"type\":\"integer\"},\"is_todo\":{\"description\":\"Tells whether this note is a to-do or not.\",\"type\":\"integer\"},\"latitude\":{\"type\":\"number\"},\"longitude\":{\"type\":\"number\"},\"markup_language\":{\"description\":\"1 for Markdown, 2 for HTML.\",\"type\":\"integer\"},\"parent_id\":{\"description\":\"ID of the notebook that contains this note. Change this ID to move the note to a different notebook.\",\"type\":\"string\"},\"source_url\":{\"description\":\"The full URL where the note comes from.\",\"type\":\"string\"},\"title\":{\"description\":\"The note title.\",\"type\":\"string\"},\"todo_completed\":{\"description\":\"When the to-do was completed.\",\"type\":\"integer\"},\"todo_due\":{\"description\":\"When the to-do is due.\",\"type\":\"integer\"},\"updated_time\":{\"description\":\"When the note was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the note was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the note was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"},\"type\":\"array\"}},\"type\":\"object\"}}},\"description\":\"The item.\"},\"404\":{\"description\":\"No item with that ID.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "GET",
+                  "orig": "/tags/{id}/notes",
+                  "segments": [
+                    {
+                      "lit": "tags"
+                    },
+                    {
+                      "var": "id"
+                    },
+                    {
+                      "lit": "notes"
+                    }
+                  ],
+                  "select": {
+                    "$action": "note",
+                    "exist": [
+                      "field",
+                      "id"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body.items`"
+                  }
+                }
+              ]
+            },
+            "load": {
+              "input": "data",
+              "name": "load",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "params": [
+                      {
+                        "active": true,
+                        "kind": "param",
+                        "name": "id",
+                        "orig": "id",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      }
+                    ],
+                    "query": [
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "field",
+                        "orig": "field",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "GET /tags/{id}",
+                    "json": "{\"operationId\":\"loadTag\",\"parameters\":[{\"description\":\"The item ID.\",\"in\":\"path\",\"name\":\"id\",\"required\":true,\"schema\":{\"type\":\"string\"}},{\"description\":\"Comma-separated list of properties to return. Request only what you need.\",\"in\":\"query\",\"name\":\"fields\",\"required\":false,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"created_time\":{\"description\":\"When the tag was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"title\":{\"description\":\"The tag title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the tag was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the tag was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the tag was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"description\":\"The item.\"},\"404\":{\"description\":\"No item with that ID.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "GET",
+                  "orig": "/tags/{id}",
+                  "segments": [
+                    {
+                      "lit": "tags"
+                    },
+                    {
+                      "var": "id"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "field",
+                      "id"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            },
+            "remove": {
+              "input": "data",
+              "name": "remove",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "params": [
+                      {
+                        "active": true,
+                        "kind": "param",
+                        "name": "id",
+                        "orig": "id",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "DELETE /tags/{id}",
+                    "json": "{\"operationId\":\"removeTag\",\"parameters\":[{\"description\":\"The item ID.\",\"in\":\"path\",\"name\":\"id\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"description\":\"Deleted.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "DELETE",
+                  "orig": "/tags/{id}",
+                  "segments": [
+                    {
+                      "lit": "tags"
+                    },
+                    {
+                      "var": "id"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "id"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            },
+            "update": {
+              "input": "data",
+              "name": "update",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "params": [
+                      {
+                        "active": true,
+                        "kind": "param",
+                        "name": "id",
+                        "orig": "id",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "PUT /tags/{id}",
+                    "json": "{\"operationId\":\"updateTag\",\"parameters\":[{\"description\":\"The item ID.\",\"in\":\"path\",\"name\":\"id\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"created_time\":{\"description\":\"When the tag was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"title\":{\"description\":\"The tag title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the tag was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the tag was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the tag was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"required\":true},\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"created_time\":{\"description\":\"When the tag was created.\",\"type\":\"integer\"},\"id\":{\"type\":\"string\"},\"title\":{\"description\":\"The tag title.\",\"type\":\"string\"},\"updated_time\":{\"description\":\"When the tag was last updated.\",\"type\":\"integer\"},\"user_created_time\":{\"description\":\"When the tag was created. May differ from created_time as the user can set it.\",\"type\":\"integer\"},\"user_updated_time\":{\"description\":\"When the tag was last updated. May differ from updated_time as the user can set it.\",\"type\":\"integer\"}},\"type\":\"object\"}}},\"description\":\"The updated tag.\"}},\"security\":[{\"token\":[]}],\"securitySchemes\":{\"token\":{\"description\":\"The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.\",\"in\":\"query\",\"name\":\"token\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "PUT",
+                  "orig": "/tags/{id}",
+                  "segments": [
+                    {
+                      "lit": "tags"
+                    },
+                    {
+                      "var": "id"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "id"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            }
+          },
+          "relations": {
+            "ancestors": []
+          }
+        }
+      },
+      "feature": {
+        "debug": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "max": 100,
+              "redact": [
+                "authorization",
+                "cookie",
+                "set-cookie",
+                "api-key",
+                "apikey",
+                "x-api-key",
+                "idempotency-key"
+              ]
+            },
+            "optspec": {
+              "now": "`$FUNCTION`",
+              "onEntry": "`$FUNCTION`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreDone": {
+              "active": true,
+              "await": false
+            },
+            "PreRequest": {
+              "active": true,
+              "await": false
+            },
+            "PreResponse": {
+              "active": true,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "PreUnexpected": {
+              "active": true,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "debug",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "rb": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Request/response capture ring buffer for debugging",
+          "transport": "none",
+          "version": "0.0.1"
+        },
+        "idempotency": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "header": "Idempotency-Key",
+              "methods": [
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE"
+              ],
+              "ops": [
+                "create",
+                "update",
+                "remove"
+              ]
+            },
+            "optspec": {
+              "keygen": "`$FUNCTION`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreRequest": {
+              "active": true,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "idempotency",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "rb": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Idempotency keys for safe retries of mutating operations",
+          "transport": "none",
+          "version": "0.0.1"
+        },
+        "metrics": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false
+            },
+            "optspec": {
+              "now": "`$FUNCTION`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreDone": {
+              "active": true,
+              "await": false
+            },
+            "PrePoint": {
+              "active": true,
+              "await": false
+            },
+            "PreRequest": {
+              "active": false,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "PreUnexpected": {
+              "active": true,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "metrics",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "rb": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Statistics capture: per-operation counters and latency",
+          "transport": "none",
+          "version": "0.0.1"
+        },
+        "paging": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "afterVar": "after",
+              "cursorParam": "cursor",
+              "firstVar": "first",
+              "limitParam": "limit",
+              "pageParam": "page",
+              "startPage": 1
+            },
+            "optspec": {
+              "limit": "`$NUMBER`",
+              "ops": "`$LIST`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreRequest": {
+              "active": true,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": true,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "paging",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "rb": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Pagination signals for list operations",
+          "transport": "none",
+          "version": "0.0.1"
+        },
+        "ratelimit": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "burst": 5,
+              "rate": 5
+            },
+            "optspec": {
+              "now": "`$FUNCTION`",
+              "sleep": "`$FUNCTION`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreRequest": {
+              "active": false,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "ratelimit",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "rb": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Client-side rate limiting via a token bucket",
+          "transport": "wrap",
+          "version": "0.0.1"
+        },
+        "retry": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "factor": 2,
+              "maxDelay": 2000,
+              "minDelay": 50,
+              "retries": 2,
+              "statuses": [
+                408,
+                425,
+                429,
+                500,
+                502,
+                503,
+                504
+              ]
+            },
+            "optspec": {
+              "jitter": "`$BOOLEAN`",
+              "sleep": "`$FUNCTION`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreRequest": {
+              "active": false,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "retry",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "rb": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Automatic retry of transient failures with exponential backoff",
+          "transport": "wrap",
+          "version": "0.0.1"
+        },
+        "test": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false
+            },
+            "optspec": {
+              "entity": "`$MAP`",
+              "net": "`$MAP`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": true,
+              "await": false
+            },
+            "GetMatch": {
+              "active": true,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": true,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": true,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PrePoint": {
+              "active": true,
+              "await": false
+            },
+            "PreRequest": {
+              "active": true,
+              "await": false
+            },
+            "PreResponse": {
+              "active": true,
+              "await": false
+            },
+            "PreResult": {
+              "active": true,
+              "await": false
+            },
+            "PreSpec": {
+              "active": true,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": true,
+              "await": false
+            },
+            "SetMatch": {
+              "active": true,
+              "await": false
+            }
+          },
+          "name": "test",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "rb": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "In-memory mock transport for testing without a live server",
+          "transport": "base",
+          "version": "0.0.1"
+        },
+        "timeout": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "ms": 30000
+            },
+            "optspec": {
+              "clearTimer": "`$FUNCTION`",
+              "setTimer": "`$FUNCTION`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreRequest": {
+              "active": false,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "timeout",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "rb": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Per-request timeout with transport abort",
+          "transport": "wrap",
+          "version": "0.0.1"
+        }
+      },
+      "flow": {
+        "BasicFolderFlow": {
+          "active": true,
+          "entity": "folder",
+          "key$": "BasicFolderFlow",
+          "kind": "basic",
+          "name": "BasicFolderFlow",
+          "param": {},
+          "step": [
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "folder_ref01"
+              },
+              "match": {},
+              "op": "create",
+              "spec": [],
+              "valid": []
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {},
+              "match": {},
+              "op": "list",
+              "spec": [],
+              "valid": [
+                {
+                  "apply": "ItemExists",
+                  "def": {
+                    "ref": "folder_ref01"
+                  }
+                }
+              ]
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "folder_ref01",
+                "srcdatavar": "folder_ref01_data",
+                "suffix": "_up0",
+                "textfield": "parent_id"
+              },
+              "match": {},
+              "op": "update",
+              "spec": [
+                {
+                  "apply": "TextFieldMark",
+                  "def": {
+                    "mark": "Mark01-folder_ref01"
+                  }
+                }
+              ],
+              "valid": []
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "folder_ref01",
+                "srcdatavar": "folder_ref01_data",
+                "suffix": "_dt0"
+              },
+              "match": {
+                "id": "folder01"
+              },
+              "op": "load",
+              "spec": [],
+              "valid": [
+                {
+                  "apply": "TextFieldMark",
+                  "def": {
+                    "mark": "Mark01-folder_ref01"
+                  }
+                }
+              ]
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "folder_ref01",
+                "suffix": "_rm0"
+              },
+              "match": {
+                "id": "folder01"
+              },
+              "op": "remove",
+              "spec": [],
+              "valid": []
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "suffix": "_rt0"
+              },
+              "match": {},
+              "op": "list",
+              "spec": [],
+              "valid": [
+                {
+                  "apply": "ItemNotExists",
+                  "def": {
+                    "ref": "folder_ref01"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "BasicNoteFlow": {
+          "active": true,
+          "entity": "note",
+          "key$": "BasicNoteFlow",
+          "kind": "basic",
+          "name": "BasicNoteFlow",
+          "param": {},
+          "step": [
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "note_ref01"
+              },
+              "match": {},
+              "op": "create",
+              "spec": [],
+              "valid": []
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {},
+              "match": {},
+              "op": "list",
+              "spec": [],
+              "valid": [
+                {
+                  "apply": "ItemExists",
+                  "def": {
+                    "ref": "note_ref01"
+                  }
+                }
+              ]
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "note_ref01",
+                "srcdatavar": "note_ref01_data",
+                "suffix": "_up0",
+                "textfield": "author"
+              },
+              "match": {},
+              "op": "update",
+              "spec": [
+                {
+                  "apply": "TextFieldMark",
+                  "def": {
+                    "mark": "Mark01-note_ref01"
+                  }
+                }
+              ],
+              "valid": []
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "note_ref01",
+                "srcdatavar": "note_ref01_data",
+                "suffix": "_dt0"
+              },
+              "match": {
+                "id": "note01"
+              },
+              "op": "load",
+              "spec": [],
+              "valid": [
+                {
+                  "apply": "TextFieldMark",
+                  "def": {
+                    "mark": "Mark01-note_ref01"
+                  }
+                }
+              ]
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "note_ref01",
+                "suffix": "_rm0"
+              },
+              "match": {
+                "id": "note01"
+              },
+              "op": "remove",
+              "spec": [],
+              "valid": []
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "suffix": "_rt0"
+              },
+              "match": {},
+              "op": "list",
+              "spec": [],
+              "valid": [
+                {
+                  "apply": "ItemNotExists",
+                  "def": {
+                    "ref": "note_ref01"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "BasicTagFlow": {
+          "active": true,
+          "entity": "tag",
+          "key$": "BasicTagFlow",
+          "kind": "basic",
+          "name": "BasicTagFlow",
+          "param": {},
+          "step": [
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "tag_ref01"
+              },
+              "match": {},
+              "op": "create",
+              "spec": [],
+              "valid": []
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {},
+              "match": {},
+              "op": "list",
+              "spec": [],
+              "valid": [
+                {
+                  "apply": "ItemExists",
+                  "def": {
+                    "ref": "tag_ref01"
+                  }
+                }
+              ]
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "tag_ref01",
+                "srcdatavar": "tag_ref01_data",
+                "suffix": "_up0",
+                "textfield": "title"
+              },
+              "match": {},
+              "op": "update",
+              "spec": [
+                {
+                  "apply": "TextFieldMark",
+                  "def": {
+                    "mark": "Mark01-tag_ref01"
+                  }
+                }
+              ],
+              "valid": []
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "tag_ref01",
+                "srcdatavar": "tag_ref01_data",
+                "suffix": "_dt0"
+              },
+              "match": {
+                "id": "tag01"
+              },
+              "op": "load",
+              "spec": [],
+              "valid": [
+                {
+                  "apply": "TextFieldMark",
+                  "def": {
+                    "mark": "Mark01-tag_ref01"
+                  }
+                }
+              ]
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "tag_ref01",
+                "suffix": "_rm0"
+              },
+              "match": {
+                "id": "tag01"
+              },
+              "op": "remove",
+              "spec": [],
+              "valid": []
+            },
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "suffix": "_rt0"
+              },
+              "match": {},
+              "op": "list",
+              "spec": [],
+              "valid": [
+                {
+                  "apply": "ItemNotExists",
+                  "def": {
+                    "ref": "tag_ref01"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "info": {
+        "description": "The Joplin Data API, served by the Clipper Server that the Joplin desktop application runs locally. Scoped here to the three core item types: notes, folders (notebooks) and tags.\n\nUnofficial definition, authored by Voxgig from the published Joplin REST API reference. Not an official Joplin document.",
+        "security": {
+          "in": "query",
+          "name": "token",
+          "prefix": "",
+          "scheme": "token",
+          "type": "apiKey"
+        },
+        "servers": [
+          {
+            "description": "The Clipper Server, enabled in Joplin under Options, Web Clipper.",
+            "url": "http://localhost:41184"
+          }
+        ],
+        "summary": "The Joplin Data API, served by the Clipper Server that the Joplin desktop application runs locally.",
+        "title": "Joplin Data API",
+        "version": "1.0.0"
+      },
+      "option": {},
+      "optspec": {
+        "allow": {
+          "method": "GET,PUT,POST,PATCH,DELETE,OPTIONS",
+          "op": "create,update,load,list,remove,command,direct,graphql"
+        },
+        "apikey": "",
+        "auth": {
+          "basic": false,
+          "prefix": ""
+        },
+        "base": "http://localhost:8000",
+        "clean": {
+          "keys": "key,token,id"
+        },
+        "entity": {
+          "`$CHILD`": {
+            "`$OPEN`": true,
+            "active": false,
+            "alias": {}
+          }
+        },
+        "extend": "`$ANY`",
+        "headers": {
+          "`$CHILD`": "`$STRING`"
+        },
+        "prefix": "",
+        "secret": "",
+        "server": {
+          "`$CHILD`": ""
+        },
+        "suffix": "",
+        "system": {
+          "fetch": "`$ANY`"
+        },
+        "test": {
+          "active": false,
+          "entity": {
+            "`$OPEN`": true
+          }
+        },
+        "utility": {}
+      },
+      "repo": {
+        "host": "github.com",
+        "path": ""
+      },
+      "target": {
+        "go": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {},
+          "ext": "go",
+          "feature": {
+            "fullset": [
+              "test/feature_test.go"
+            ],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "joplin",
+            "package": "",
+            "path": ""
+          },
+          "name": "go",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "",
+              "package": "",
+              "state": "pending",
+              "url": "",
+              "vault": {
+                "alias": "",
+                "env": "",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "srcfeature": false,
+          "superseded": [
+            "test/runner_test.go",
+            "test/struct_runner_test.go"
+          ],
+          "title": "Golang"
+        },
+        "go-cli": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {},
+          "ext": "go",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "joplin",
+            "package": "",
+            "path": ""
+          },
+          "name": "go-cli",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "phase": {
+            "agentguide": {
+              "active": false
+            },
+            "entity": {
+              "active": false
+            },
+            "feature": {
+              "active": false
+            },
+            "readme": {
+              "active": false
+            },
+            "test": {
+              "active": false
+            }
+          },
+          "provides": {},
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "",
+              "package": "",
+              "state": "pending",
+              "url": "",
+              "vault": {
+                "alias": "",
+                "env": "",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "root"
+            },
+            "version": "0.0.1"
+          },
+          "superseded": [],
+          "title": "Go CLI"
+        },
+        "go-mcp": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {},
+          "ext": "go",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "joplin",
+            "package": "",
+            "path": ""
+          },
+          "name": "go-mcp",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "phase": {
+            "agentguide": {
+              "active": false
+            },
+            "entity": {
+              "active": false
+            },
+            "feature": {
+              "active": false
+            },
+            "readme": {
+              "active": false
+            },
+            "test": {
+              "active": false
+            }
+          },
+          "provides": {},
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "",
+              "package": "",
+              "state": "pending",
+              "url": "",
+              "vault": {
+                "alias": "",
+                "env": "",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "root"
+            },
+            "version": "0.0.1"
+          },
+          "superseded": [],
+          "title": "Go MCP server"
+        },
+        "lua": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "--"
+          },
+          "deps": {
+            "dkjson": {
+              "active": true,
+              "kind": "prod",
+              "version": "2.5"
+            }
+          },
+          "ext": "lua",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "joplin",
+            "package": "",
+            "path": ""
+          },
+          "name": "lua",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "luarocks",
+              "package": "",
+              "state": "pending",
+              "url": "https://luarocks.org",
+              "vault": {
+                "alias": "luarocks",
+                "env": "LUAROCKS_API_KEY",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "srcfeature": false,
+          "superseded": [
+            "test/struct_runner.lua"
+          ],
+          "title": "Lua"
+        },
+        "php": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {},
+          "ext": "php",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "joplin",
+            "package": "",
+            "path": ""
+          },
+          "name": "php",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "packagist",
+              "package": "",
+              "state": "pending",
+              "url": "https://packagist.org",
+              "vault": {
+                "alias": "packagist",
+                "env": "PACKAGIST_API_TOKEN",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "srcfeature": false,
+          "superseded": [
+            "test/StructRunner.php"
+          ],
+          "title": "PHP"
+        },
+        "py": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "#"
+          },
+          "deps": {
+            "requests": {
+              "active": true,
+              "kind": "prod",
+              "version": "2.33"
+            }
+          },
+          "ext": "py",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "joplin",
+            "package": "",
+            "path": ""
+          },
+          "name": "py",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "pypi",
+              "package": "",
+              "state": "pending",
+              "url": "https://pypi.org",
+              "vault": {
+                "alias": "pypi",
+                "env": "",
+                "recipe": "pypi"
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "srcfeature": false,
+          "superseded": [
+            "test/struct_runner.py"
+          ],
+          "title": "Python"
+        },
+        "rb": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "#"
+          },
+          "deps": {
+            "json": {
+              "active": true,
+              "kind": "prod",
+              "version": "0"
+            },
+            "voxgig-struct": {
+              "active": true,
+              "kind": "prod",
+              "version": "0.0.10"
+            }
+          },
+          "ext": "rb",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "joplin",
+            "package": "",
+            "path": ""
+          },
+          "name": "rb",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "rubygems",
+              "package": "",
+              "state": "pending",
+              "url": "https://rubygems.org",
+              "vault": {
+                "alias": "gem",
+                "env": "",
+                "recipe": "gem"
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "srcfeature": false,
+          "superseded": [
+            "test/struct_runner.rb"
+          ],
+          "title": "Ruby"
+        },
+        "ts": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {
+            "@types/node": {
+              "active": true,
+              "kind": "dev",
+              "version": "^25.6.0"
+            },
+            "typescript": {
+              "active": true,
+              "kind": "dev",
+              "version": "^5.9.3"
+            }
+          },
+          "ext": "ts",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "joplin",
+            "package": "",
+            "path": ""
+          },
+          "name": "ts",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "schema": true,
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "npm",
+              "package": "",
+              "state": "pending",
+              "url": "https://registry.npmjs.org",
+              "vault": {
+                "alias": "npm",
+                "env": "",
+                "recipe": "npm"
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "superseded": [
+            "test/runner.ts",
+            "test/vendor/omni/compat.ts",
+            "src/feature/secrets/sekreto/Providers.ts",
+            "src/feature/secrets/sekreto/Sigv4.ts",
+            "src/feature/secrets/sekreto/provider/Registry.ts",
+            "src/feature/secrets/sekreto/provider/http.ts"
+          ],
+          "title": "TypeScript"
+        }
+      },
+      "test": {
+        "live": {
+          "app": false,
+          "base": "",
+          "strict": true
+        }
+      }
+    }
+  },
+  "name": "joplin",
+  "name-": "joplin",
+  "name_": "joplin",
+  "name__orig": "joplin",
+  "origin": "voxgig-sdk"
+}

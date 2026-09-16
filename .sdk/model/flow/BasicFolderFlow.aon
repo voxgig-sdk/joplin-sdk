@@ -1,0 +1,100 @@
+# BasicFolderFlow
+
+main: kit: flow: BasicFolderFlow:
+{
+  entity: "folder",
+  kind: "basic",
+  name: "BasicFolderFlow",
+  step: [
+    {
+      input: {
+        ref: "folder_ref01"
+      }
+
+      op: "create"
+    }
+
+    {
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "folder_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      input: {
+        ref: "folder_ref01",
+        srcdatavar: "folder_ref01_data",
+        suffix: "_up0",
+        textfield: "parent_id"
+      }
+
+      op: "update",
+      spec: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-folder_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      input: {
+        ref: "folder_ref01",
+        srcdatavar: "folder_ref01_data",
+        suffix: "_dt0"
+      }
+
+      match: {
+        id: "folder01"
+      }
+
+      op: "load",
+      valid: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-folder_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      input: {
+        ref: "folder_ref01",
+        suffix: "_rm0"
+      }
+
+      match: {
+        id: "folder01"
+      }
+
+      op: "remove"
+    }
+
+    {
+      input: {
+        suffix: "_rt0"
+      }
+
+      op: "list",
+      valid: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "folder_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicFolderFlow"
+}

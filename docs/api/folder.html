@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Folder | Joplin Data API</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header class="site-header"><a class="site-title" href="../index.html">Joplin Data API<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/joplin-sdk">voxgig-sdk/joplin-sdk</a></div></header>
+<div class="site-notice" role="note"></div>
+<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Joplin Data API</a></details>
+<details open><summary>API</summary><a href="../api/index.html">API overview</a>
+<a aria-current="page" href="../api/folder.html">Folder</a><div class="nav-sections"><a class="nav-section" href="#post-folders">POST /folders</a>
+<a class="nav-section" href="#get-folders">GET /folders</a>
+<a class="nav-section" href="#get-foldersidnotes">GET /folders/{id}/notes</a>
+<a class="nav-section" href="#get-foldersid">GET /folders/{id}</a>
+<a class="nav-section" href="#delete-foldersid">DELETE /folders/{id}</a>
+<a class="nav-section" href="#put-foldersid">PUT /folders/{id}</a></div>
+<a href="../api/note.html">Note</a>
+<a href="../api/tag.html">Tag</a></details>
+<details><summary>Guides</summary><a href="../guides/authentication.html">Authentication</a>
+<a href="../guides/first-call.html">Make your first API call</a>
+<a href="../guides/errors.html">Handle errors</a>
+<a href="../guides/concepts.html">Entities, SDKs, and tools</a></details>
+<details><summary>SDKs</summary><a href="../sdks/go.html">Golang</a>
+<a href="../sdks/lua.html">Lua</a>
+<a href="../sdks/php.html">PHP</a>
+<a href="../sdks/py.html">Python</a>
+<a href="../sdks/rb.html">Ruby</a>
+<a href="../sdks/ts.html">TypeScript</a></details>
+<details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
+<a href="../tools/go-mcp.html">Go MCP server</a></details>
+<details><summary>Features</summary><a href="../features/debug.html">Request/response capture ring buffer for debugging</a>
+<a href="../features/idempotency.html">Idempotency keys for safe retries of mutating operations</a>
+<a href="../features/metrics.html">Statistics capture: per-operation counters and latency</a>
+<a href="../features/paging.html">Pagination signals for list operations</a>
+<a href="../features/ratelimit.html">Client-side rate limiting via a token bucket</a>
+<a href="../features/retry.html">Automatic retry of transient failures with exponential backoff</a>
+<a href="../features/test.html">In-memory mock transport for testing without a live server</a>
+<a href="../features/timeout.html">Per-request timeout with transport abort</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="folder">Folder</h1>
+<h2 id="operations">Operations</h2>
+<p>Every route this entity exposes. Each route links to its own reference on this page.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>SDK operation</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><a href="#post-folders"><code>/folders</code></a></td>
+<td><code>create</code></td>
+<td>The created folder</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-folders"><code>/folders</code></a></td>
+<td><code>list</code></td>
+<td>A page of results</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-foldersidnotes"><code>/folders/{id}/notes</code></a></td>
+<td><code>list</code></td>
+<td>The item</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-foldersid"><code>/folders/{id}</code></a></td>
+<td><code>load</code></td>
+<td>The item</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><a href="#delete-foldersid"><code>/folders/{id}</code></a></td>
+<td><code>remove</code></td>
+<td>Deleted</td>
+</tr>
+<tr>
+<td><code>PUT</code></td>
+<td><a href="#put-foldersid"><code>/folders/{id}</code></a></td>
+<td><code>update</code></td>
+<td>The updated folder</td>
+</tr>
+</tbody>
+</table>
+<h2 id="fields">Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created.</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>is_shared</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>parent_id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>ID of the parent notebook, empty for a top-level notebook.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The folder title.</td>
+</tr>
+<tr>
+<td><code>updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated.</td>
+</tr>
+<tr>
+<td><code>user_created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created.</td>
+</tr>
+<tr>
+<td><code>user_updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="create">create</h2>
+<h3 id="post-folders" class="operation" data-method="post"><code>POST</code> /folders</h3>
+<p>Operation ID: <code>createFolder</code>.</p>
+<p>Authentication: API key in the query (<code>token</code>).</p>
+<h4 id="request-body">Request body</h4>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created.</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>is_shared</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>parent_id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>ID of the parent notebook, empty for a top-level notebook.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The folder title.</td>
+</tr>
+<tr>
+<td><code>updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated.</td>
+</tr>
+<tr>
+<td><code>user_created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created. May differ from created_time as the user can set it.</td>
+</tr>
+<tr>
+<td><code>user_updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated. May differ from updated_time as the user can set it.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses">Responses</h4>
+<h5 id="200-the-created-folder" class="status" data-status="2xx">200: The created folder</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created.</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>is_shared</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>parent_id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>ID of the parent notebook, empty for a top-level notebook.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The folder title.</td>
+</tr>
+<tr>
+<td><code>updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated.</td>
+</tr>
+<tr>
+<td><code>user_created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created. May differ from created_time as the user can set it.</td>
+</tr>
+<tr>
+<td><code>user_updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated. May differ from updated_time as the user can set it.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="list">list</h2>
+<h3 id="get-folders" class="operation" data-method="get"><code>GET</code> /folders</h3>
+<p>Operation ID: <code>listFolders</code>.</p>
+<p>Authentication: API key in the query (<code>token</code>).</p>
+<h4 id="parameters">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>fields</code> | <code>query</code> | <code>string</code> | No | Comma-separated list of properties to return. Request only what you need. |
+| <code>page</code> | <code>query</code> | <code>integer</code> | No | 1-based page number. Read has_more to know whether to ask for the next. |
+| <code>order_by</code> | <code>query</code> | <code>string</code> | No | Property to sort by, for example updated_time. |
+| <code>order_dir</code> | <code>query</code> | <code>enum: ASC, DESC</code> | No | Sort direction. |</p>
+<h4 id="responses-1">Responses</h4>
+<h5 id="200-a-page-of-results" class="status" data-status="2xx">200: A page of results</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has_more</code></td>
+<td><code>boolean</code></td>
+<td>No</td>
+<td>True when a further page is available; pass the next page number.</td>
+</tr>
+<tr>
+<td><code>items</code></td>
+<td><code>array of object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>items[].created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created.</td>
+</tr>
+<tr>
+<td><code>items[].id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>items[].is_shared</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>items[].parent_id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>ID of the parent notebook, empty for a top-level notebook.</td>
+</tr>
+<tr>
+<td><code>items[].title</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The folder title.</td>
+</tr>
+<tr>
+<td><code>items[].updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated.</td>
+</tr>
+<tr>
+<td><code>items[].user_created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created. May differ from created_time as the user can set it.</td>
+</tr>
+<tr>
+<td><code>items[].user_updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated. May differ from updated_time as the user can set it.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get-foldersidnotes" class="operation" data-method="get"><code>GET</code> /folders/{id}/notes</h3>
+<p>Operation ID: <code>listFolderNotes</code>.</p>
+<p>Authentication: API key in the query (<code>token</code>).</p>
+<h4 id="parameters-1">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>id</code> | <code>path</code> | <code>string</code> | Yes | The item ID. |
+| <code>fields</code> | <code>query</code> | <code>string</code> | No | Comma-separated list of properties to return. Request only what you need. |</p>
+<h4 id="responses-2">Responses</h4>
+<h5 id="200-the-item" class="status" data-status="2xx">200: The item</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has_more</code></td>
+<td><code>boolean</code></td>
+<td>No</td>
+<td>True when a further page is available; pass the next page number.</td>
+</tr>
+<tr>
+<td><code>items</code></td>
+<td><code>array of object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>items[].altitude</code></td>
+<td><code>number</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>items[].author</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>items[].body</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The note body, in Markdown. May also contain HTML.</td>
+</tr>
+<tr>
+<td><code>items[].created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the note was created.</td>
+</tr>
+<tr>
+<td><code>items[].id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>items[].is_conflict</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>Tells whether the note is a conflict or not.</td>
+</tr>
+<tr>
+<td><code>items[].is_todo</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>Tells whether this note is a to-do or not.</td>
+</tr>
+<tr>
+<td><code>items[].latitude</code></td>
+<td><code>number</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>items[].longitude</code></td>
+<td><code>number</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>items[].markup_language</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>1 for Markdown, 2 for HTML.</td>
+</tr>
+<tr>
+<td><code>items[].parent_id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>ID of the notebook that contains this note. Change this ID to move the note to a different notebook.</td>
+</tr>
+<tr>
+<td><code>items[].source_url</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The full URL where the note comes from.</td>
+</tr>
+<tr>
+<td><code>items[].title</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The note title.</td>
+</tr>
+<tr>
+<td><code>items[].todo_completed</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the to-do was completed.</td>
+</tr>
+<tr>
+<td><code>items[].todo_due</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the to-do is due.</td>
+</tr>
+<tr>
+<td><code>items[].updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the note was last updated.</td>
+</tr>
+<tr>
+<td><code>items[].user_created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the note was created. May differ from created_time as the user can set it.</td>
+</tr>
+<tr>
+<td><code>items[].user_updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the note was last updated. May differ from updated_time as the user can set it.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="404-no-item-with-that-id" class="status" data-status="4xx">404: No item with that ID</h5>
+<h2 id="load">load</h2>
+<h3 id="get-foldersid" class="operation" data-method="get"><code>GET</code> /folders/{id}</h3>
+<p>Operation ID: <code>loadFolder</code>.</p>
+<p>Authentication: API key in the query (<code>token</code>).</p>
+<h4 id="parameters-2">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>id</code> | <code>path</code> | <code>string</code> | Yes | The item ID. |
+| <code>fields</code> | <code>query</code> | <code>string</code> | No | Comma-separated list of properties to return. Request only what you need. |</p>
+<h4 id="responses-3">Responses</h4>
+<h5 id="200-the-item-1" class="status" data-status="2xx">200: The item</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created.</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>is_shared</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>parent_id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>ID of the parent notebook, empty for a top-level notebook.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The folder title.</td>
+</tr>
+<tr>
+<td><code>updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated.</td>
+</tr>
+<tr>
+<td><code>user_created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created. May differ from created_time as the user can set it.</td>
+</tr>
+<tr>
+<td><code>user_updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated. May differ from updated_time as the user can set it.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="404-no-item-with-that-id-1" class="status" data-status="4xx">404: No item with that ID</h5>
+<h2 id="remove">remove</h2>
+<h3 id="delete-foldersid" class="operation" data-method="delete"><code>DELETE</code> /folders/{id}</h3>
+<p>Operation ID: <code>removeFolder</code>.</p>
+<p>Authentication: API key in the query (<code>token</code>).</p>
+<h4 id="parameters-3">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>id</code> | <code>path</code> | <code>string</code> | Yes | The item ID. |</p>
+<h4 id="responses-4">Responses</h4>
+<h5 id="200-deleted" class="status" data-status="2xx">200: Deleted</h5>
+<h2 id="update">update</h2>
+<h3 id="put-foldersid" class="operation" data-method="put"><code>PUT</code> /folders/{id}</h3>
+<p>Operation ID: <code>updateFolder</code>.</p>
+<p>Authentication: API key in the query (<code>token</code>).</p>
+<h4 id="parameters-4">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>id</code> | <code>path</code> | <code>string</code> | Yes | The item ID. |</p>
+<h4 id="request-body-1">Request body</h4>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created.</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>is_shared</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>parent_id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>ID of the parent notebook, empty for a top-level notebook.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The folder title.</td>
+</tr>
+<tr>
+<td><code>updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated.</td>
+</tr>
+<tr>
+<td><code>user_created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created. May differ from created_time as the user can set it.</td>
+</tr>
+<tr>
+<td><code>user_updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated. May differ from updated_time as the user can set it.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses-5">Responses</h4>
+<h5 id="200-the-updated-folder" class="status" data-status="2xx">200: The updated folder</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created.</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>is_shared</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>parent_id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>ID of the parent notebook, empty for a top-level notebook.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The folder title.</td>
+</tr>
+<tr>
+<td><code>updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated.</td>
+</tr>
+<tr>
+<td><code>user_created_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was created. May differ from created_time as the user can set it.</td>
+</tr>
+<tr>
+<td><code>user_updated_time</code></td>
+<td><code>integer</code></td>
+<td>No</td>
+<td>When the folder was last updated. May differ from updated_time as the user can set it.</td>
+</tr>
+</tbody>
+</table>
+</main></div>
+<script src="../assets/search.js" defer></script></body></html>

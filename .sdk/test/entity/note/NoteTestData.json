@@ -1,0 +1,877 @@
+{
+  "existing": {
+    "note": {
+      "NOTE00": {
+        "altitude": 180,
+        "author": "sb5",
+        "body": "sb6",
+        "created_time": 183,
+        "id": "NOTE00",
+        "is_conflict": 185,
+        "is_todo": 186,
+        "latitude": 187,
+        "longitude": 188,
+        "markup_language": 189,
+        "parent_id": "PARENT01",
+        "source_url": "sbf",
+        "title": "sc0",
+        "todo_completed": 193,
+        "todo_due": 194,
+        "updated_time": 195,
+        "user_created_time": 196,
+        "user_updated_time": 197
+      },
+      "NOTE01": {
+        "altitude": 360,
+        "author": "s169",
+        "body": "s16a",
+        "created_time": 363,
+        "id": "NOTE01",
+        "is_conflict": 365,
+        "is_todo": 366,
+        "latitude": 367,
+        "longitude": 368,
+        "markup_language": 369,
+        "parent_id": "PARENT01",
+        "source_url": "s173",
+        "title": "s174",
+        "todo_completed": 373,
+        "todo_due": 374,
+        "updated_time": 375,
+        "user_created_time": 376,
+        "user_updated_time": 377
+      },
+      "NOTE02": {
+        "altitude": 540,
+        "author": "s21d",
+        "body": "s21e",
+        "created_time": 543,
+        "id": "NOTE02",
+        "is_conflict": 545,
+        "is_todo": 546,
+        "latitude": 547,
+        "longitude": 548,
+        "markup_language": 549,
+        "parent_id": "PARENT01",
+        "source_url": "s227",
+        "title": "s228",
+        "todo_completed": 553,
+        "todo_due": 554,
+        "updated_time": 555,
+        "user_created_time": 556,
+        "user_updated_time": 557
+      }
+    }
+  },
+  "new": {
+    "note": {
+      "note_ref01": {
+        "altitude": 720,
+        "author": "s2d1",
+        "body": "s2d2",
+        "created_time": 723,
+        "is_conflict": 725,
+        "is_todo": 726,
+        "latitude": 727,
+        "longitude": 728,
+        "markup_language": 729,
+        "parent_id": "PARENT01",
+        "source_url": "s2db",
+        "title": "s2dc",
+        "todo_completed": 733,
+        "todo_due": 734,
+        "updated_time": 735,
+        "user_created_time": 736,
+        "user_updated_time": 737
+      }
+    }
+  },
+  "requests": {
+    "POST /notes": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "createNote",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "altitude": {
+                    "type": "number"
+                  },
+                  "author": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "description": "The note body, in Markdown. May also contain HTML.",
+                    "type": "string"
+                  },
+                  "created_time": {
+                    "description": "When the note was created.",
+                    "type": "integer"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "is_conflict": {
+                    "description": "Tells whether the note is a conflict or not.",
+                    "type": "integer"
+                  },
+                  "is_todo": {
+                    "description": "Tells whether this note is a to-do or not.",
+                    "type": "integer"
+                  },
+                  "latitude": {
+                    "type": "number"
+                  },
+                  "longitude": {
+                    "type": "number"
+                  },
+                  "markup_language": {
+                    "description": "1 for Markdown, 2 for HTML.",
+                    "type": "integer"
+                  },
+                  "parent_id": {
+                    "description": "ID of the notebook that contains this note. Change this ID to move the note to a different notebook.",
+                    "type": "string"
+                  },
+                  "source_url": {
+                    "description": "The full URL where the note comes from.",
+                    "type": "string"
+                  },
+                  "title": {
+                    "description": "The note title.",
+                    "type": "string"
+                  },
+                  "todo_completed": {
+                    "description": "When the to-do was completed.",
+                    "type": "integer"
+                  },
+                  "todo_due": {
+                    "description": "When the to-do is due.",
+                    "type": "integer"
+                  },
+                  "updated_time": {
+                    "description": "When the note was last updated.",
+                    "type": "integer"
+                  },
+                  "user_created_time": {
+                    "description": "When the note was created. May differ from created_time as the user can set it.",
+                    "type": "integer"
+                  },
+                  "user_updated_time": {
+                    "description": "When the note was last updated. May differ from updated_time as the user can set it.",
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "altitude": {
+                      "type": "number"
+                    },
+                    "author": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "description": "The note body, in Markdown. May also contain HTML.",
+                      "type": "string"
+                    },
+                    "created_time": {
+                      "description": "When the note was created.",
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "is_conflict": {
+                      "description": "Tells whether the note is a conflict or not.",
+                      "type": "integer"
+                    },
+                    "is_todo": {
+                      "description": "Tells whether this note is a to-do or not.",
+                      "type": "integer"
+                    },
+                    "latitude": {
+                      "type": "number"
+                    },
+                    "longitude": {
+                      "type": "number"
+                    },
+                    "markup_language": {
+                      "description": "1 for Markdown, 2 for HTML.",
+                      "type": "integer"
+                    },
+                    "parent_id": {
+                      "description": "ID of the notebook that contains this note. Change this ID to move the note to a different notebook.",
+                      "type": "string"
+                    },
+                    "source_url": {
+                      "description": "The full URL where the note comes from.",
+                      "type": "string"
+                    },
+                    "title": {
+                      "description": "The note title.",
+                      "type": "string"
+                    },
+                    "todo_completed": {
+                      "description": "When the to-do was completed.",
+                      "type": "integer"
+                    },
+                    "todo_due": {
+                      "description": "When the to-do is due.",
+                      "type": "integer"
+                    },
+                    "updated_time": {
+                      "description": "When the note was last updated.",
+                      "type": "integer"
+                    },
+                    "user_created_time": {
+                      "description": "When the note was created. May differ from created_time as the user can set it.",
+                      "type": "integer"
+                    },
+                    "user_updated_time": {
+                      "description": "When the note was last updated. May differ from updated_time as the user can set it.",
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "The created note."
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ],
+        "securitySchemes": {
+          "token": {
+            "description": "The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.",
+            "in": "query",
+            "name": "token",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    },
+    "GET /notes": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "listNotes",
+        "parameters": [
+          {
+            "description": "Comma-separated list of properties to return. Request only what you need.",
+            "in": "query",
+            "name": "fields",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "1-based page number. Read has_more to know whether to ask for the next.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Property to sort by, for example updated_time.",
+            "in": "query",
+            "name": "order_by",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Sort direction.",
+            "in": "query",
+            "name": "order_dir",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "has_more": {
+                      "description": "True when a further page is available; pass the next page number.",
+                      "type": "boolean"
+                    },
+                    "items": {
+                      "items": {
+                        "properties": {
+                          "altitude": {
+                            "type": "number"
+                          },
+                          "author": {
+                            "type": "string"
+                          },
+                          "body": {
+                            "description": "The note body, in Markdown. May also contain HTML.",
+                            "type": "string"
+                          },
+                          "created_time": {
+                            "description": "When the note was created.",
+                            "type": "integer"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "is_conflict": {
+                            "description": "Tells whether the note is a conflict or not.",
+                            "type": "integer"
+                          },
+                          "is_todo": {
+                            "description": "Tells whether this note is a to-do or not.",
+                            "type": "integer"
+                          },
+                          "latitude": {
+                            "type": "number"
+                          },
+                          "longitude": {
+                            "type": "number"
+                          },
+                          "markup_language": {
+                            "description": "1 for Markdown, 2 for HTML.",
+                            "type": "integer"
+                          },
+                          "parent_id": {
+                            "description": "ID of the notebook that contains this note. Change this ID to move the note to a different notebook.",
+                            "type": "string"
+                          },
+                          "source_url": {
+                            "description": "The full URL where the note comes from.",
+                            "type": "string"
+                          },
+                          "title": {
+                            "description": "The note title.",
+                            "type": "string"
+                          },
+                          "todo_completed": {
+                            "description": "When the to-do was completed.",
+                            "type": "integer"
+                          },
+                          "todo_due": {
+                            "description": "When the to-do is due.",
+                            "type": "integer"
+                          },
+                          "updated_time": {
+                            "description": "When the note was last updated.",
+                            "type": "integer"
+                          },
+                          "user_created_time": {
+                            "description": "When the note was created. May differ from created_time as the user can set it.",
+                            "type": "integer"
+                          },
+                          "user_updated_time": {
+                            "description": "When the note was last updated. May differ from updated_time as the user can set it.",
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "A page of results."
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ],
+        "securitySchemes": {
+          "token": {
+            "description": "The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.",
+            "in": "query",
+            "name": "token",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    },
+    "GET /notes/{id}/tags": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "listNoteTags",
+        "parameters": [
+          {
+            "description": "The item ID.",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Comma-separated list of properties to return. Request only what you need.",
+            "in": "query",
+            "name": "fields",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "has_more": {
+                      "description": "True when a further page is available; pass the next page number.",
+                      "type": "boolean"
+                    },
+                    "items": {
+                      "items": {
+                        "properties": {
+                          "created_time": {
+                            "description": "When the tag was created.",
+                            "type": "integer"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "description": "The tag title.",
+                            "type": "string"
+                          },
+                          "updated_time": {
+                            "description": "When the tag was last updated.",
+                            "type": "integer"
+                          },
+                          "user_created_time": {
+                            "description": "When the tag was created. May differ from created_time as the user can set it.",
+                            "type": "integer"
+                          },
+                          "user_updated_time": {
+                            "description": "When the tag was last updated. May differ from updated_time as the user can set it.",
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "The item."
+          },
+          "404": {
+            "description": "No item with that ID."
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ],
+        "securitySchemes": {
+          "token": {
+            "description": "The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.",
+            "in": "query",
+            "name": "token",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    },
+    "GET /notes/{id}": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "loadNote",
+        "parameters": [
+          {
+            "description": "The item ID.",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Comma-separated list of properties to return. Request only what you need.",
+            "in": "query",
+            "name": "fields",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "altitude": {
+                      "type": "number"
+                    },
+                    "author": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "description": "The note body, in Markdown. May also contain HTML.",
+                      "type": "string"
+                    },
+                    "created_time": {
+                      "description": "When the note was created.",
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "is_conflict": {
+                      "description": "Tells whether the note is a conflict or not.",
+                      "type": "integer"
+                    },
+                    "is_todo": {
+                      "description": "Tells whether this note is a to-do or not.",
+                      "type": "integer"
+                    },
+                    "latitude": {
+                      "type": "number"
+                    },
+                    "longitude": {
+                      "type": "number"
+                    },
+                    "markup_language": {
+                      "description": "1 for Markdown, 2 for HTML.",
+                      "type": "integer"
+                    },
+                    "parent_id": {
+                      "description": "ID of the notebook that contains this note. Change this ID to move the note to a different notebook.",
+                      "type": "string"
+                    },
+                    "source_url": {
+                      "description": "The full URL where the note comes from.",
+                      "type": "string"
+                    },
+                    "title": {
+                      "description": "The note title.",
+                      "type": "string"
+                    },
+                    "todo_completed": {
+                      "description": "When the to-do was completed.",
+                      "type": "integer"
+                    },
+                    "todo_due": {
+                      "description": "When the to-do is due.",
+                      "type": "integer"
+                    },
+                    "updated_time": {
+                      "description": "When the note was last updated.",
+                      "type": "integer"
+                    },
+                    "user_created_time": {
+                      "description": "When the note was created. May differ from created_time as the user can set it.",
+                      "type": "integer"
+                    },
+                    "user_updated_time": {
+                      "description": "When the note was last updated. May differ from updated_time as the user can set it.",
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "The item."
+          },
+          "404": {
+            "description": "No item with that ID."
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ],
+        "securitySchemes": {
+          "token": {
+            "description": "The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.",
+            "in": "query",
+            "name": "token",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    },
+    "DELETE /notes/{id}": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "removeNote",
+        "parameters": [
+          {
+            "description": "The item ID.",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ],
+        "securitySchemes": {
+          "token": {
+            "description": "The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.",
+            "in": "query",
+            "name": "token",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    },
+    "PUT /notes/{id}": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "updateNote",
+        "parameters": [
+          {
+            "description": "The item ID.",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "altitude": {
+                    "type": "number"
+                  },
+                  "author": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "description": "The note body, in Markdown. May also contain HTML.",
+                    "type": "string"
+                  },
+                  "created_time": {
+                    "description": "When the note was created.",
+                    "type": "integer"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "is_conflict": {
+                    "description": "Tells whether the note is a conflict or not.",
+                    "type": "integer"
+                  },
+                  "is_todo": {
+                    "description": "Tells whether this note is a to-do or not.",
+                    "type": "integer"
+                  },
+                  "latitude": {
+                    "type": "number"
+                  },
+                  "longitude": {
+                    "type": "number"
+                  },
+                  "markup_language": {
+                    "description": "1 for Markdown, 2 for HTML.",
+                    "type": "integer"
+                  },
+                  "parent_id": {
+                    "description": "ID of the notebook that contains this note. Change this ID to move the note to a different notebook.",
+                    "type": "string"
+                  },
+                  "source_url": {
+                    "description": "The full URL where the note comes from.",
+                    "type": "string"
+                  },
+                  "title": {
+                    "description": "The note title.",
+                    "type": "string"
+                  },
+                  "todo_completed": {
+                    "description": "When the to-do was completed.",
+                    "type": "integer"
+                  },
+                  "todo_due": {
+                    "description": "When the to-do is due.",
+                    "type": "integer"
+                  },
+                  "updated_time": {
+                    "description": "When the note was last updated.",
+                    "type": "integer"
+                  },
+                  "user_created_time": {
+                    "description": "When the note was created. May differ from created_time as the user can set it.",
+                    "type": "integer"
+                  },
+                  "user_updated_time": {
+                    "description": "When the note was last updated. May differ from updated_time as the user can set it.",
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "altitude": {
+                      "type": "number"
+                    },
+                    "author": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "description": "The note body, in Markdown. May also contain HTML.",
+                      "type": "string"
+                    },
+                    "created_time": {
+                      "description": "When the note was created.",
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "is_conflict": {
+                      "description": "Tells whether the note is a conflict or not.",
+                      "type": "integer"
+                    },
+                    "is_todo": {
+                      "description": "Tells whether this note is a to-do or not.",
+                      "type": "integer"
+                    },
+                    "latitude": {
+                      "type": "number"
+                    },
+                    "longitude": {
+                      "type": "number"
+                    },
+                    "markup_language": {
+                      "description": "1 for Markdown, 2 for HTML.",
+                      "type": "integer"
+                    },
+                    "parent_id": {
+                      "description": "ID of the notebook that contains this note. Change this ID to move the note to a different notebook.",
+                      "type": "string"
+                    },
+                    "source_url": {
+                      "description": "The full URL where the note comes from.",
+                      "type": "string"
+                    },
+                    "title": {
+                      "description": "The note title.",
+                      "type": "string"
+                    },
+                    "todo_completed": {
+                      "description": "When the to-do was completed.",
+                      "type": "integer"
+                    },
+                    "todo_due": {
+                      "description": "When the to-do is due.",
+                      "type": "integer"
+                    },
+                    "updated_time": {
+                      "description": "When the note was last updated.",
+                      "type": "integer"
+                    },
+                    "user_created_time": {
+                      "description": "When the note was created. May differ from created_time as the user can set it.",
+                      "type": "integer"
+                    },
+                    "user_updated_time": {
+                      "description": "When the note was last updated. May differ from updated_time as the user can set it.",
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "The updated note."
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ],
+        "securitySchemes": {
+          "token": {
+            "description": "The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper.",
+            "in": "query",
+            "name": "token",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    }
+  }
+}

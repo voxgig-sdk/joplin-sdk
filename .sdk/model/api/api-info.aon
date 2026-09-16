@@ -1,0 +1,29 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      description: `The Joplin Data API, served by the Clipper Server that the Joplin desktop application runs locally. Scoped here to the three core item types: notes, folders (notebooks) and tags.
+
+Unofficial definition, authored by Voxgig from the published Joplin REST API reference. Not an official Joplin document.`
+      security: {
+        in: "query"
+        name: "token"
+        prefix: ""
+        scheme: "token"
+        type: "apiKey"
+      }
+      servers: [
+        {
+          description: "The Clipper Server, enabled in Joplin under Options, Web Clipper."
+          url: "http://localhost:41184"
+        }
+      ]
+      summary: "The Joplin Data API, served by the Clipper Server that the Joplin desktop application runs locally."
+      title: "Joplin Data API"
+      version: "1.0.0"
+    }
+  }
+}
+
