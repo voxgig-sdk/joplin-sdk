@@ -1,0 +1,854 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Joplin Data API",
+    "version": "1.0.0",
+    "description": "The Joplin Data API, served by the Clipper Server that the Joplin desktop application runs locally. Scoped here to the three core item types: notes, folders (notebooks) and tags.\n\nUnofficial definition, authored by Voxgig from the published Joplin REST API reference. Not an official Joplin document."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:41184",
+      "description": "The Clipper Server, enabled in Joplin under Options, Web Clipper."
+    }
+  ],
+  "tags": [
+    {
+      "name": "note"
+    },
+    {
+      "name": "folder"
+    },
+    {
+      "name": "tag"
+    }
+  ],
+  "paths": {
+    "/notes": {
+      "get": {
+        "tags": [
+          "note"
+        ],
+        "summary": "Get all notes.",
+        "operationId": "listNotes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/fields"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/order_dir"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Note"
+                      }
+                    },
+                    "has_more": {
+                      "type": "boolean",
+                      "description": "True when a further page is available; pass the next page number."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "note"
+        ],
+        "summary": "Create a note.",
+        "operationId": "createNote",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Note"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The created note.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notes/{id}": {
+      "get": {
+        "tags": [
+          "note"
+        ],
+        "summary": "Get the note with this ID.",
+        "operationId": "loadNote",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The item.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "note"
+        ],
+        "summary": "Update a note. Only the properties supplied are changed.",
+        "operationId": "updateNote",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Note"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated note.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "note"
+        ],
+        "summary": "Delete a note.",
+        "operationId": "removeNote",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      }
+    },
+    "/notes/{id}/tags": {
+      "get": {
+        "tags": [
+          "note"
+        ],
+        "summary": "Get the tags on this note.",
+        "operationId": "listNoteTags",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The item.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Tag"
+                      }
+                    },
+                    "has_more": {
+                      "type": "boolean",
+                      "description": "True when a further page is available; pass the next page number."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/folders": {
+      "get": {
+        "tags": [
+          "folder"
+        ],
+        "summary": "Get all folders.",
+        "operationId": "listFolders",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/fields"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/order_dir"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Folder"
+                      }
+                    },
+                    "has_more": {
+                      "type": "boolean",
+                      "description": "True when a further page is available; pass the next page number."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "folder"
+        ],
+        "summary": "Create a folder.",
+        "operationId": "createFolder",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Folder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The created folder.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Folder"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/folders/{id}": {
+      "get": {
+        "tags": [
+          "folder"
+        ],
+        "summary": "Get the folder with this ID.",
+        "operationId": "loadFolder",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The item.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Folder"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "folder"
+        ],
+        "summary": "Update a folder. Only the properties supplied are changed.",
+        "operationId": "updateFolder",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Folder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated folder.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Folder"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "folder"
+        ],
+        "summary": "Delete a folder.",
+        "operationId": "removeFolder",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      }
+    },
+    "/folders/{id}/notes": {
+      "get": {
+        "tags": [
+          "folder"
+        ],
+        "summary": "Get the notes in this folder.",
+        "operationId": "listFolderNotes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The item.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Note"
+                      }
+                    },
+                    "has_more": {
+                      "type": "boolean",
+                      "description": "True when a further page is available; pass the next page number."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/tags": {
+      "get": {
+        "tags": [
+          "tag"
+        ],
+        "summary": "Get all tags.",
+        "operationId": "listTags",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/fields"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/order_by"
+          },
+          {
+            "$ref": "#/components/parameters/order_dir"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Tag"
+                      }
+                    },
+                    "has_more": {
+                      "type": "boolean",
+                      "description": "True when a further page is available; pass the next page number."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "tag"
+        ],
+        "summary": "Create a tag.",
+        "operationId": "createTag",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tag"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The created tag.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tags/{id}": {
+      "get": {
+        "tags": [
+          "tag"
+        ],
+        "summary": "Get the tag with this ID.",
+        "operationId": "loadTag",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The item.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "tag"
+        ],
+        "summary": "Update a tag. Only the properties supplied are changed.",
+        "operationId": "updateTag",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tag"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated tag.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "tag"
+        ],
+        "summary": "Delete a tag.",
+        "operationId": "removeTag",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      }
+    },
+    "/tags/{id}/notes": {
+      "get": {
+        "tags": [
+          "tag"
+        ],
+        "summary": "Get the notes with this tag.",
+        "operationId": "listTagNotes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "$ref": "#/components/parameters/fields"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The item.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Note"
+                      }
+                    },
+                    "has_more": {
+                      "type": "boolean",
+                      "description": "True when a further page is available; pass the next page number."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "token": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "token",
+        "description": "The Web Clipper authorisation token, shown in Joplin under Options, Web Clipper."
+      }
+    },
+    "parameters": {
+      "id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The item ID."
+      },
+      "note_id": {
+        "name": "note_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The note ID."
+      },
+      "fields": {
+        "name": "fields",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Comma-separated list of properties to return. Request only what you need."
+      },
+      "page": {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "default": 1
+        },
+        "description": "1-based page number. Read has_more to know whether to ask for the next."
+      },
+      "order_by": {
+        "name": "order_by",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Property to sort by, for example updated_time."
+      },
+      "order_dir": {
+        "name": "order_dir",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "ASC",
+            "DESC"
+          ]
+        },
+        "description": "Sort direction."
+      }
+    },
+    "responses": {
+      "NotFound": {
+        "description": "No item with that ID."
+      }
+    },
+    "schemas": {
+      "Note": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "parent_id": {
+            "type": "string",
+            "description": "ID of the notebook that contains this note. Change this ID to move the note to a different notebook."
+          },
+          "title": {
+            "type": "string",
+            "description": "The note title."
+          },
+          "body": {
+            "type": "string",
+            "description": "The note body, in Markdown. May also contain HTML."
+          },
+          "created_time": {
+            "type": "integer",
+            "description": "When the note was created."
+          },
+          "updated_time": {
+            "type": "integer",
+            "description": "When the note was last updated."
+          },
+          "is_conflict": {
+            "type": "integer",
+            "description": "Tells whether the note is a conflict or not."
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "altitude": {
+            "type": "number"
+          },
+          "author": {
+            "type": "string"
+          },
+          "source_url": {
+            "type": "string",
+            "description": "The full URL where the note comes from."
+          },
+          "is_todo": {
+            "type": "integer",
+            "description": "Tells whether this note is a to-do or not."
+          },
+          "todo_due": {
+            "type": "integer",
+            "description": "When the to-do is due."
+          },
+          "todo_completed": {
+            "type": "integer",
+            "description": "When the to-do was completed."
+          },
+          "markup_language": {
+            "type": "integer",
+            "description": "1 for Markdown, 2 for HTML."
+          },
+          "user_created_time": {
+            "type": "integer",
+            "description": "When the note was created. May differ from created_time as the user can set it."
+          },
+          "user_updated_time": {
+            "type": "integer",
+            "description": "When the note was last updated. May differ from updated_time as the user can set it."
+          }
+        }
+      },
+      "Folder": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "The folder title."
+          },
+          "parent_id": {
+            "type": "string",
+            "description": "ID of the parent notebook, empty for a top-level notebook."
+          },
+          "created_time": {
+            "type": "integer",
+            "description": "When the folder was created."
+          },
+          "updated_time": {
+            "type": "integer",
+            "description": "When the folder was last updated."
+          },
+          "user_created_time": {
+            "type": "integer",
+            "description": "When the folder was created. May differ from created_time as the user can set it."
+          },
+          "user_updated_time": {
+            "type": "integer",
+            "description": "When the folder was last updated. May differ from updated_time as the user can set it."
+          },
+          "is_shared": {
+            "type": "integer"
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "The tag title."
+          },
+          "created_time": {
+            "type": "integer",
+            "description": "When the tag was created."
+          },
+          "updated_time": {
+            "type": "integer",
+            "description": "When the tag was last updated."
+          },
+          "user_created_time": {
+            "type": "integer",
+            "description": "When the tag was created. May differ from created_time as the user can set it."
+          },
+          "user_updated_time": {
+            "type": "integer",
+            "description": "When the tag was last updated. May differ from updated_time as the user can set it."
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "token": []
+    }
+  ]
+}
