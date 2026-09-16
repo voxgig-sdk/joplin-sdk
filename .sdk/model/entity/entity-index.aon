@@ -1,5 +1,5 @@
 # Entity Models
 
-@"folder.aon"
-@"note.aon"
-@"tag.aon"
+@"./folder.aon"
+@"./note.aon"
+@"./tag.aon"

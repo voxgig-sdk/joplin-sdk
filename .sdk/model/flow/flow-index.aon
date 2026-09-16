@@ -1,5 +1,5 @@
 # Flows
 
-@"BasicFolderFlow.aon"
-@"BasicNoteFlow.aon"
-@"BasicTagFlow.aon"
+@"./BasicFolderFlow.aon"
+@"./BasicNoteFlow.aon"
+@"./BasicTagFlow.aon"

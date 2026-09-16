@@ -18,6 +18,7 @@
     "docs/guides/errors.html",
     "docs/guides/first-call.html",
     "docs/index.html",
+    "docs/sdks/c.html",
     "docs/sdks/go.html",
     "docs/sdks/lua.html",
     "docs/sdks/php.html",
