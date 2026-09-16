@@ -151,6 +151,8 @@ func MakeConfig() map[string]any {
 			"base": "http://localhost:41184",
 			"auth": map[string]any{
 				"prefix": "",
+				"in": "query",
+				"name": "token",
 			},
 			"headers": map[string]any{
 				"content-type": "application/json",

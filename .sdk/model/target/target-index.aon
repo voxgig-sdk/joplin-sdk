@@ -1,6 +1,7 @@
 # SDK Targets.
 
 
+@"./c.aon"
 @"./go.aon"
 @"./go-cli.aon"
 @"./go-mcp.aon"
@@ -9,5 +10,3 @@
 @"./py.aon"
 @"./rb.aon"
 @"./ts.aon"
-
-@"./c.aon"

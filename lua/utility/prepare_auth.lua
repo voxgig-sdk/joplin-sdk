@@ -2,7 +2,7 @@
 
 local vs = require("utility.struct.struct")
 
-local HEADER_AUTH = "authorization"
+local QUERY_AUTH = "token"
 local OPTION_APIKEY = "apikey"
 local NOT_FOUND = "__NOTFOUND__"
 
@@ -13,12 +13,12 @@ local function prepare_auth_util(ctx)
       "Expected context spec property to be defined.")
   end
 
-  local headers = spec.headers
+  local query = spec.query
   local options = ctx.client:options_map()
 
   -- Public APIs that need no auth omit the options.auth block entirely.
   if options.auth == nil then
-    headers[HEADER_AUTH] = nil
+    query[QUERY_AUTH] = nil
     return spec, nil
   end
 
@@ -27,23 +27,16 @@ local function prepare_auth_util(ctx)
   if apikey == nil
     or (type(apikey) == "string" and (apikey == NOT_FOUND or apikey == ""))
   then
-    headers[HEADER_AUTH] = nil
+    query[QUERY_AUTH] = nil
   else
-    local auth_prefix = ""
-    local ap = vs.getpath(options, "auth.prefix")
-    if type(ap) == "string" then
-      auth_prefix = ap
-    end
+    -- NO PREFIX IN A QUERY STRING: "?token=Bearer%20abc" is not a thing
+    -- any API reads, so the auth.prefix a header placement space-joins is
+    -- dropped here deliberately rather than concatenated.
     local apikey_val = ""
     if type(apikey) == "string" then
       apikey_val = apikey
     end
-    -- Empty prefix (raw apiKey credential) must not add a leading space.
-    if auth_prefix == "" then
-      headers[HEADER_AUTH] = apikey_val
-    else
-      headers[HEADER_AUTH] = auth_prefix .. " " .. apikey_val
-    end
+    query[QUERY_AUTH] = apikey_val
   end
 
   return spec, nil

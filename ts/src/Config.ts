@@ -201,6 +201,8 @@ class Config {
 
     auth: {
       prefix: '',
+      in: 'query',
+      name: 'token',
     },
 
     headers: {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 class JoplinPrepareAuth
 {
-    private const HEADER_AUTH = 'authorization';
+    private const QUERY_AUTH = 'token';
     private const OPTION_APIKEY = 'apikey';
     private const NOT_FOUND = '__NOTFOUND__';
 
@@ -16,12 +16,12 @@ class JoplinPrepareAuth
             return [null, $ctx->make_error('auth_no_spec', 'Expected context spec property to be defined.')];
         }
 
-        $headers = &$spec->headers;
+        $query = &$spec->query;
         $options = $ctx->client->options_map();
 
         // Public APIs that need no auth omit the options.auth block entirely.
         if (!isset($options['auth']) || $options['auth'] === null) {
-            unset($headers[self::HEADER_AUTH]);
+            unset($query[self::QUERY_AUTH]);
             return [$spec, null];
         }
 
@@ -31,13 +31,12 @@ class JoplinPrepareAuth
             (is_string($apikey) && ($apikey === self::NOT_FOUND || $apikey === ''))
             || $apikey === null
         ) {
-            unset($headers[self::HEADER_AUTH]);
+            unset($query[self::QUERY_AUTH]);
         } else {
-            $auth_prefix = \Voxgig\Struct\Struct::getpath($options, 'auth.prefix') ?? '';
-            $apikey_val = is_string($apikey) ? $apikey : '';
-            // Empty prefix (raw apiKey credential) must not add a leading space.
-            $headers[self::HEADER_AUTH] = $auth_prefix === ''
-                ? $apikey_val : "{$auth_prefix} {$apikey_val}";
+            // NO PREFIX IN A QUERY STRING. `?token=Bearer%20abc` is not a
+            // thing any API reads; the prefix is a header convention and is
+            // dropped here deliberately rather than silently concatenated.
+            $query[self::QUERY_AUTH] = is_string($apikey) ? $apikey : '';
         }
 
         return [$spec, null];

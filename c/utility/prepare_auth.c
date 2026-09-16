@@ -1,11 +1,14 @@
 // prepare_auth utility (mirrors utility/prepare_auth.rs).
+//
+// GENERATED, not templated: where the credential goes - header, query or
+// cookie, and under what name - is a fact about THIS API, and tm/ can only
+// hold one answer. See PrepareAuth_c.
 
 #include "sdk.h"
 
-#include <stdio.h>
 #include <string.h>
 
-#define HEADER_AUTH "authorization"
+#define CRED_NAME "token"
 #define OPTION_APIKEY "apikey"
 #define NOT_FOUND "__NOTFOUND__"
 
@@ -17,13 +20,13 @@ Spec* prepare_auth_util(Context* ctx, PNError** err) {
     return NULL;
   }
 
-  voxgig_value* headers = spec->headers;
+  voxgig_value* query = spec->query;
   voxgig_value* options = ctx->client ? sdk_options_map(ctx->client) : ctx->options;
 
   voxgig_value* auth = getp(options, "auth");
   if (v_is_noval(auth) || v_is_null(auth)) {
-    voxgig_value* k = voxgig_new_string(HEADER_AUTH);
-    voxgig_delprop(headers, k);
+    voxgig_value* k = voxgig_new_string(CRED_NAME);
+    voxgig_delprop(query, k);
     voxgig_release(k);
     return spec;
   }
@@ -45,20 +48,12 @@ Spec* prepare_auth_util(Context* ctx, PNError** err) {
   }
 
   if (skip) {
-    voxgig_value* k = voxgig_new_string(HEADER_AUTH);
-    voxgig_delprop(headers, k);
+    voxgig_value* k = voxgig_new_string(CRED_NAME);
+    voxgig_delprop(query, k);
     voxgig_release(k);
   } else {
-    voxgig_value* prefix_v = getpath2(options, "auth", "prefix");
-    const char* auth_prefix = voxgig_is_string(prefix_v) ? voxgig_as_string(prefix_v) : "";
     const char* apikey_val = voxgig_is_string(apikey) ? voxgig_as_string(apikey) : "";
-    if (auth_prefix[0] == '\0') {
-      setp(headers, HEADER_AUTH, v_str(apikey_val));
-    } else {
-      char buf[1024];
-      snprintf(buf, sizeof(buf), "%s %s", auth_prefix, apikey_val);
-      setp(headers, HEADER_AUTH, v_str(buf));
-    }
+    setp(query, CRED_NAME, v_str(apikey_val));
   }
 
   return spec;

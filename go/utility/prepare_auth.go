@@ -6,7 +6,7 @@ import (
 	"github.com/voxgig-sdk/joplin-sdk/go/core"
 )
 
-const headerAuth = "authorization"
+const credName = "token"
 const optionApikey = "apikey"
 const notFound = "__NOTFOUND__"
 
@@ -17,12 +17,12 @@ func prepareAuthUtil(ctx *core.Context) (*core.Spec, error) {
 			"Expected context spec property to be defined.")
 	}
 
-	headers := spec.Headers
+	query := spec.Query
 	options := ctx.Client.OptionsMap()
 
 	// Public APIs that need no auth omit the options.auth block entirely.
 	if options["auth"] == nil {
-		delete(headers, headerAuth)
+		delete(query, credName)
 		return spec, nil
 	}
 
@@ -37,22 +37,13 @@ func prepareAuthUtil(ctx *core.Context) (*core.Spec, error) {
 	}
 
 	if skip {
-		delete(headers, headerAuth)
+		delete(query, credName)
 	} else {
-		authPrefix := ""
-		if ap := vs.GetPath(options, []any{"auth", "prefix"}); ap != nil {
-			authPrefix, _ = ap.(string)
-		}
 		apikeyVal := ""
 		if av, ok := apikey.(string); ok {
 			apikeyVal = av
 		}
-		// Empty prefix (raw apiKey credential) must not add a leading space.
-		if authPrefix == "" {
-			headers[headerAuth] = apikeyVal
-		} else {
-			headers[headerAuth] = authPrefix + " " + apikeyVal
-		}
+		query[credName] = apikeyVal
 	}
 
 	return spec, nil

@@ -173,6 +173,8 @@ class JoplinConfig
                 "base" => "http://localhost:41184",
                 "auth" => [
                     "prefix" => "",
+                    "in" => "query",
+                    "name" => "token",
                 ],
                 "headers" => [
           'content-type' => 'application/json',
