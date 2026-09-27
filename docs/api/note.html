@@ -27,14 +27,14 @@
 <a href="../sdks/ts.html">TypeScript</a></details>
 <details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
 <a href="../tools/go-mcp.html">Go MCP server</a></details>
-<details><summary>Features</summary><a href="../features/debug.html">Request/response capture ring buffer for debugging</a>
-<a href="../features/idempotency.html">Idempotency keys for safe retries of mutating operations</a>
-<a href="../features/metrics.html">Statistics capture: per-operation counters and latency</a>
-<a href="../features/paging.html">Pagination signals for list operations</a>
-<a href="../features/ratelimit.html">Client-side rate limiting via a token bucket</a>
-<a href="../features/retry.html">Automatic retry of transient failures with exponential backoff</a>
-<a href="../features/test.html">In-memory mock transport for testing without a live server</a>
-<a href="../features/timeout.html">Per-request timeout with transport abort</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="note">Note</h1>
+<details><summary>Features</summary><a href="../features/debug.html">Debug capture</a>
+<a href="../features/idempotency.html">Idempotency</a>
+<a href="../features/metrics.html">Metrics</a>
+<a href="../features/paging.html">Paging</a>
+<a href="../features/ratelimit.html">Rate limiting</a>
+<a href="../features/retry.html">Retry</a>
+<a href="../features/test.html">Test transport</a>
+<a href="../features/timeout.html">Timeout</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="note">Note</h1>
 <h2 id="operations">Operations</h2>
 <p>Every route this entity exposes. Each route links to its own reference on this page.</p>
 <table>
@@ -85,6 +85,76 @@
 </tr>
 </tbody>
 </table>
+<h2 id="examples">Examples</h2>
+<p>One example per SDK, generated from the API model. The argument names are the parameters and fields of this entity, and the values are placeholders. The examples are not compiled or executed.</p>
+<h3 id="golang">Golang</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/go.html#set-up-the-client">Golang setup</a>, then call the operations:</p>
+<pre><code class="language-go">notes, err := client.Note(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(notes)
+note, err := client.Note(nil).Load(map[string]any{&quot;id&quot;: &quot;example_id&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(note)
+created, err := client.Note(nil).Create(map[string]any{&quot;altitude&quot;: 1, &quot;author&quot;: &quot;example&quot;, &quot;body&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(created)
+updated, err := client.Note(nil).Update(map[string]any{&quot;id&quot;: &quot;example_id&quot;, &quot;altitude&quot;: 1, &quot;author&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(updated)
+removed, err := client.Note(nil).Remove(map[string]any{&quot;id&quot;: &quot;example_id&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(removed)
+</code></pre>
+<h3 id="lua">Lua</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/lua.html#set-up-the-client">Lua setup</a>, then call the operations:</p>
+<pre><code class="language-lua">local notes, err = client:Note():list()
+local note, err = client:Note():load({ id = &quot;example_id&quot; })
+local created, err = client:Note():create({ altitude = 1, author = &quot;example&quot;, body = &quot;example&quot; })
+local updated, err = client:Note():update({ id = &quot;example_id&quot;, altitude = 1, author = &quot;example&quot; })
+local removed, err = client:Note():remove({ id = &quot;example_id&quot; })
+</code></pre>
+<h3 id="php">PHP</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/php.html#set-up-the-client">PHP setup</a>, then call the operations:</p>
+<pre><code class="language-php">$notes = $client-&gt;Note()-&gt;list();
+$note = $client-&gt;Note()-&gt;load([&quot;id&quot; =&gt; &quot;example_id&quot;]);
+$created = $client-&gt;Note()-&gt;create([&quot;altitude&quot; =&gt; 1, &quot;author&quot; =&gt; &quot;example&quot;, &quot;body&quot; =&gt; &quot;example&quot;]);
+$updated = $client-&gt;Note()-&gt;update([&quot;id&quot; =&gt; &quot;example_id&quot;, &quot;altitude&quot; =&gt; 1, &quot;author&quot; =&gt; &quot;example&quot;]);
+$client-&gt;Note()-&gt;remove([&quot;id&quot; =&gt; &quot;example_id&quot;]);
+</code></pre>
+<h3 id="python">Python</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/py.html#set-up-the-client">Python setup</a>, then call the operations:</p>
+<pre><code class="language-py">notes = client.Note().list()
+note = client.Note().load({&quot;id&quot;: &quot;example_id&quot;})
+created = client.Note().create({ &quot;altitude&quot;: 1, &quot;author&quot;: &quot;example&quot;, &quot;body&quot;: &quot;example&quot; })
+updated = client.Note().update({&quot;id&quot;: &quot;example_id&quot;, &quot;altitude&quot;: 1, &quot;author&quot;: &quot;example&quot;})
+client.Note().remove({&quot;id&quot;: &quot;example_id&quot;})
+</code></pre>
+<h3 id="ruby">Ruby</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/rb.html#set-up-the-client">Ruby setup</a>, then call the operations:</p>
+<pre><code class="language-rb">notes = client.Note.list()
+note = client.Note.load({ &quot;id&quot; =&gt; &quot;example_id&quot; })
+created = client.Note.create({ &quot;altitude&quot; =&gt; 1, &quot;author&quot; =&gt; &quot;example&quot;, &quot;body&quot; =&gt; &quot;example&quot; })
+updated = client.Note.update({ &quot;id&quot; =&gt; &quot;example_id&quot;, &quot;altitude&quot; =&gt; 1, &quot;author&quot; =&gt; &quot;example&quot; })
+client.Note.remove({ &quot;id&quot; =&gt; &quot;example_id&quot; })
+</code></pre>
+<h3 id="typescript">TypeScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/ts.html#set-up-the-client">TypeScript setup</a>, then call the operations:</p>
+<pre><code class="language-ts">const notes = await client.Note().list()
+const note = await client.Note().load({ id: &quot;example_id&quot; })
+const created = await client.Note().create({ altitude: 1, author: &quot;example&quot;, body: &quot;example&quot; })
+const updated = await client.Note().update({ id: &quot;example_id&quot;, altitude: 1, author: &quot;example&quot; })
+await client.Note().remove({ id: &quot;example_id&quot; })
+</code></pre>
 <h2 id="fields">Fields</h2>
 <table>
 <thead>
@@ -100,13 +170,13 @@
 <td><code>altitude</code></td>
 <td><code>number</code></td>
 <td>No</td>
-<td></td>
+<td>Altitude</td>
 </tr>
 <tr>
 <td><code>author</code></td>
 <td><code>string</code></td>
 <td>No</td>
-<td></td>
+<td>Author</td>
 </tr>
 <tr>
 <td><code>body</code></td>
@@ -124,7 +194,7 @@
 <td><code>id</code></td>
 <td><code>string</code></td>
 <td>No</td>
-<td></td>
+<td>Id</td>
 </tr>
 <tr>
 <td><code>is_conflict</code></td>
@@ -142,13 +212,13 @@
 <td><code>latitude</code></td>
 <td><code>number</code></td>
 <td>No</td>
-<td></td>
+<td>Latitude</td>
 </tr>
 <tr>
 <td><code>longitude</code></td>
 <td><code>number</code></td>
 <td>No</td>
-<td></td>
+<td>Longitude</td>
 </tr>
 <tr>
 <td><code>markup_language</code></td>
@@ -322,13 +392,13 @@
 <td><code>user_created_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the note was created. May differ from created_time as the user can set it.</td>
+<td>When the note was created. May differ from <code>created_time</code> as the user can set it.</td>
 </tr>
 <tr>
 <td><code>user_updated_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the note was last updated. May differ from updated_time as the user can set it.</td>
+<td>When the note was last updated. May differ from <code>updated_time</code> as the user can set it.</td>
 </tr>
 </tbody>
 </table>
@@ -445,13 +515,13 @@
 <td><code>user_created_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the note was created. May differ from created_time as the user can set it.</td>
+<td>When the note was created. May differ from <code>created_time</code> as the user can set it.</td>
 </tr>
 <tr>
 <td><code>user_updated_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the note was last updated. May differ from updated_time as the user can set it.</td>
+<td>When the note was last updated. May differ from <code>updated_time</code> as the user can set it.</td>
 </tr>
 </tbody>
 </table>
@@ -463,8 +533,8 @@
 <p>| Parameter | In | Type | Required | Description |
 | --- | --- | --- | --- |
 | <code>fields</code> | <code>query</code> | <code>string</code> | No | Comma-separated list of properties to return. Request only what you need. |
-| <code>page</code> | <code>query</code> | <code>integer</code> | No | 1-based page number. Read has_more to know whether to ask for the next. |
-| <code>order_by</code> | <code>query</code> | <code>string</code> | No | Property to sort by, for example updated_time. |
+| <code>page</code> | <code>query</code> | <code>integer</code> | No | 1-based page number. Read <code>has_more</code> to know whether to ask for the next. |
+| <code>order_by</code> | <code>query</code> | <code>string</code> | No | Property to sort by, for example <code>updated_time</code>. |
 | <code>order_dir</code> | <code>query</code> | <code>enum: ASC, DESC</code> | No | Sort direction. |</p>
 <h4 id="responses-1">Responses</h4>
 <h5 id="200-a-page-of-results" class="status" data-status="2xx">200: A page of results</h5>
@@ -591,13 +661,13 @@
 <td><code>items[].user_created_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the note was created. May differ from created_time as the user can set it.</td>
+<td>When the note was created. May differ from <code>created_time</code> as the user can set it.</td>
 </tr>
 <tr>
 <td><code>items[].user_updated_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the note was last updated. May differ from updated_time as the user can set it.</td>
+<td>When the note was last updated. May differ from <code>updated_time</code> as the user can set it.</td>
 </tr>
 </tbody>
 </table>
@@ -662,13 +732,13 @@
 <td><code>items[].user_created_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the tag was created. May differ from created_time as the user can set it.</td>
+<td>When the tag was created. May differ from <code>created_time</code> as the user can set it.</td>
 </tr>
 <tr>
 <td><code>items[].user_updated_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the tag was last updated. May differ from updated_time as the user can set it.</td>
+<td>When the tag was last updated. May differ from <code>updated_time</code> as the user can set it.</td>
 </tr>
 </tbody>
 </table>
@@ -795,13 +865,13 @@
 <td><code>user_created_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the note was created. May differ from created_time as the user can set it.</td>
+<td>When the note was created. May differ from <code>created_time</code> as the user can set it.</td>
 </tr>
 <tr>
 <td><code>user_updated_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the note was last updated. May differ from updated_time as the user can set it.</td>
+<td>When the note was last updated. May differ from <code>updated_time</code> as the user can set it.</td>
 </tr>
 </tbody>
 </table>
@@ -936,13 +1006,13 @@
 <td><code>user_created_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the note was created. May differ from created_time as the user can set it.</td>
+<td>When the note was created. May differ from <code>created_time</code> as the user can set it.</td>
 </tr>
 <tr>
 <td><code>user_updated_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the note was last updated. May differ from updated_time as the user can set it.</td>
+<td>When the note was last updated. May differ from <code>updated_time</code> as the user can set it.</td>
 </tr>
 </tbody>
 </table>
@@ -1059,13 +1129,13 @@
 <td><code>user_created_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the note was created. May differ from created_time as the user can set it.</td>
+<td>When the note was created. May differ from <code>created_time</code> as the user can set it.</td>
 </tr>
 <tr>
 <td><code>user_updated_time</code></td>
 <td><code>integer</code></td>
 <td>No</td>
-<td>When the note was last updated. May differ from updated_time as the user can set it.</td>
+<td>When the note was last updated. May differ from <code>updated_time</code> as the user can set it.</td>
 </tr>
 </tbody>
 </table>

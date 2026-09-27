@@ -24,12 +24,6 @@ const FEATURE_CLASS: Record<string, typeof BaseFeature> = {
 }
 
 
-// Per-feature plugin DEFINITIONS (voxgig/plugin `Definition` values), from
-// the model's active plugin groups. A feature that takes a `plugins` option
-// (secrets over sekreto) reads its own entry; a feature with no plugins has
-// none. Named imports above make each definition statically reachable, so
-// an SDK carries exactly the plugin modules its model selects — the same
-// leanness the old side-effect registry imports bought, without a registry.
 const FEATURE_PLUGINS: Record<string, any[]> = {
   
 }
@@ -40,7 +34,6 @@ class Config {
   makeFeature(this: any, fn: string) {
     const fc = FEATURE_CLASS[fn]
     const fi = new fc()
-    // TODO: errors etc
     return fi
   }
 
@@ -229,41 +222,49 @@ class Config {
       "fields": [
         {
           "name": "created_time",
-          "short": "When the folder was created.",
-          "type": "`$INTEGER`"
+          "title": "Created Time",
+          "type": "`$INTEGER`",
+          "short": "When the folder was created."
         },
         {
           "name": "id",
+          "title": "Id",
           "type": "`$STRING`"
         },
         {
           "name": "is_shared",
+          "title": "Is Shared",
           "type": "`$INTEGER`"
         },
         {
           "name": "parent_id",
-          "short": "ID of the parent notebook, empty for a top-level notebook.",
-          "type": "`$STRING`"
+          "title": "Parent Id",
+          "type": "`$STRING`",
+          "short": "ID of the parent notebook, empty for a top-level notebook."
         },
         {
           "name": "title",
-          "short": "The folder title.",
-          "type": "`$STRING`"
+          "title": "Title",
+          "type": "`$STRING`",
+          "short": "The folder title."
         },
         {
           "name": "updated_time",
-          "short": "When the folder was last updated.",
-          "type": "`$INTEGER`"
+          "title": "Updated Time",
+          "type": "`$INTEGER`",
+          "short": "When the folder was last updated."
         },
         {
           "name": "user_created_time",
-          "short": "When the folder was created.",
-          "type": "`$INTEGER`"
+          "title": "User Created Time",
+          "type": "`$INTEGER`",
+          "short": "When the folder was created."
         },
         {
           "name": "user_updated_time",
-          "short": "When the folder was last updated.",
-          "type": "`$INTEGER`"
+          "title": "User Updated Time",
+          "type": "`$INTEGER`",
+          "short": "When the folder was last updated."
         }
       ],
       "id": {
@@ -277,7 +278,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/folders",
@@ -286,14 +286,16 @@ class Config {
                   "lit": "folders"
                 }
               ],
-              "select": {},
+              "parts": [
+                "folders"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
               },
-              "parts": [
-                "folders"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         },
@@ -302,35 +304,6 @@ class Config {
           "name": "list",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "field",
-                    "orig": "field",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "order_by",
-                    "orig": "order_by",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "order_dir",
-                    "orig": "order_dir",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": 1,
-                    "kind": "query",
-                    "name": "page",
-                    "orig": "page",
-                    "type": "`$INTEGER`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/folders",
@@ -339,6 +312,43 @@ class Config {
                   "lit": "folders"
                 }
               ],
+              "parts": [
+                "folders"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.items`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "field",
+                    "orig": "field",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "order_by",
+                    "orig": "order_by",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "order_dir",
+                    "orig": "order_dir",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "page",
+                    "orig": "page",
+                    "type": "`$INTEGER`",
+                    "kind": "query",
+                    "example": 1
+                  }
+                ]
+              },
               "select": {
                 "exist": [
                   "field",
@@ -346,35 +356,9 @@ class Config {
                   "order_dir",
                   "page"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.items`"
-              },
-              "parts": [
-                "folders"
-              ]
+              }
             },
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "field",
-                    "orig": "field",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/folders/{id}/notes",
@@ -389,22 +373,42 @@ class Config {
                   "lit": "notes"
                 }
               ],
+              "parts": [
+                "folders",
+                "{id}",
+                "notes"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.items`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "field",
+                    "orig": "field",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  }
+                ]
+              },
               "select": {
                 "$action": "note",
                 "exist": [
                   "field",
                   "id"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.items`"
-              },
-              "parts": [
-                "folders",
-                "{id}",
-                "notes"
-              ]
+              }
             }
           ]
         },
@@ -413,25 +417,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "field",
-                    "orig": "field",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/folders/{id}",
@@ -443,20 +428,40 @@ class Config {
                   "var": "id"
                 }
               ],
+              "parts": [
+                "folders",
+                "{id}"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "field",
+                    "orig": "field",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  }
+                ]
+              },
               "select": {
                 "exist": [
                   "field",
                   "id"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "folders",
-                "{id}"
-              ]
+              }
             }
           ]
         },
@@ -465,17 +470,6 @@ class Config {
           "name": "remove",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "DELETE",
               "orig": "/folders/{id}",
@@ -487,19 +481,31 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
+              "parts": [
+                "folders",
+                "{id}"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
               },
-              "parts": [
-                "folders",
-                "{id}"
-              ]
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         },
@@ -508,17 +514,6 @@ class Config {
           "name": "update",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "PUT",
               "orig": "/folders/{id}",
@@ -530,19 +525,31 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
+              "parts": [
+                "folders",
+                "{id}"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
               },
-              "parts": [
-                "folders",
-                "{id}"
-              ]
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         }
@@ -555,88 +562,106 @@ class Config {
       "fields": [
         {
           "name": "altitude",
+          "title": "Altitude",
           "type": "`$NUMBER`"
         },
         {
           "name": "author",
+          "title": "Author",
           "type": "`$STRING`"
         },
         {
           "name": "body",
-          "short": "The note body, in Markdown.",
-          "type": "`$STRING`"
+          "title": "Body",
+          "type": "`$STRING`",
+          "short": "The note body, in Markdown."
         },
         {
           "name": "created_time",
-          "short": "When the note was created.",
-          "type": "`$INTEGER`"
+          "title": "Created Time",
+          "type": "`$INTEGER`",
+          "short": "When the note was created."
         },
         {
           "name": "id",
+          "title": "Id",
           "type": "`$STRING`"
         },
         {
           "name": "is_conflict",
-          "short": "Tells whether the note is a conflict or not.",
-          "type": "`$INTEGER`"
+          "title": "Is Conflict",
+          "type": "`$INTEGER`",
+          "short": "Tells whether the note is a conflict or not."
         },
         {
           "name": "is_todo",
-          "short": "Tells whether this note is a to-do or not.",
-          "type": "`$INTEGER`"
+          "title": "Is Todo",
+          "type": "`$INTEGER`",
+          "short": "Tells whether this note is a to-do or not."
         },
         {
           "name": "latitude",
+          "title": "Latitude",
           "type": "`$NUMBER`"
         },
         {
           "name": "longitude",
+          "title": "Longitude",
           "type": "`$NUMBER`"
         },
         {
           "name": "markup_language",
-          "short": "1 for Markdown, 2 for HTML.",
-          "type": "`$INTEGER`"
+          "title": "Markup Language",
+          "type": "`$INTEGER`",
+          "short": "1 for Markdown, 2 for HTML."
         },
         {
           "name": "parent_id",
-          "short": "ID of the notebook that contains this note.",
-          "type": "`$STRING`"
+          "title": "Parent Id",
+          "type": "`$STRING`",
+          "short": "ID of the notebook that contains this note."
         },
         {
           "name": "source_url",
-          "short": "The full URL where the note comes from.",
-          "type": "`$STRING`"
+          "title": "Source Url",
+          "type": "`$STRING`",
+          "short": "The full URL where the note comes from."
         },
         {
           "name": "title",
-          "short": "The note title.",
-          "type": "`$STRING`"
+          "title": "Title",
+          "type": "`$STRING`",
+          "short": "The note title."
         },
         {
           "name": "todo_completed",
-          "short": "When the to-do was completed.",
-          "type": "`$INTEGER`"
+          "title": "Todo Completed",
+          "type": "`$INTEGER`",
+          "short": "When the to-do was completed."
         },
         {
           "name": "todo_due",
-          "short": "When the to-do is due.",
-          "type": "`$INTEGER`"
+          "title": "Todo Due",
+          "type": "`$INTEGER`",
+          "short": "When the to-do is due."
         },
         {
           "name": "updated_time",
-          "short": "When the note was last updated.",
-          "type": "`$INTEGER`"
+          "title": "Updated Time",
+          "type": "`$INTEGER`",
+          "short": "When the note was last updated."
         },
         {
           "name": "user_created_time",
-          "short": "When the note was created.",
-          "type": "`$INTEGER`"
+          "title": "User Created Time",
+          "type": "`$INTEGER`",
+          "short": "When the note was created."
         },
         {
           "name": "user_updated_time",
-          "short": "When the note was last updated.",
-          "type": "`$INTEGER`"
+          "title": "User Updated Time",
+          "type": "`$INTEGER`",
+          "short": "When the note was last updated."
         }
       ],
       "id": {
@@ -650,7 +675,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/notes",
@@ -659,14 +683,16 @@ class Config {
                   "lit": "notes"
                 }
               ],
-              "select": {},
+              "parts": [
+                "notes"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
               },
-              "parts": [
-                "notes"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         },
@@ -675,35 +701,6 @@ class Config {
           "name": "list",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "field",
-                    "orig": "field",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "order_by",
-                    "orig": "order_by",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "order_dir",
-                    "orig": "order_dir",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": 1,
-                    "kind": "query",
-                    "name": "page",
-                    "orig": "page",
-                    "type": "`$INTEGER`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/notes",
@@ -712,6 +709,43 @@ class Config {
                   "lit": "notes"
                 }
               ],
+              "parts": [
+                "notes"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.items`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "field",
+                    "orig": "field",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "order_by",
+                    "orig": "order_by",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "order_dir",
+                    "orig": "order_dir",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "page",
+                    "orig": "page",
+                    "type": "`$INTEGER`",
+                    "kind": "query",
+                    "example": 1
+                  }
+                ]
+              },
               "select": {
                 "exist": [
                   "field",
@@ -719,35 +753,9 @@ class Config {
                   "order_dir",
                   "page"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.items`"
-              },
-              "parts": [
-                "notes"
-              ]
+              }
             },
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "field",
-                    "orig": "field",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/notes/{id}/tags",
@@ -762,22 +770,42 @@ class Config {
                   "lit": "tags"
                 }
               ],
+              "parts": [
+                "notes",
+                "{id}",
+                "tags"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.items`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "field",
+                    "orig": "field",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  }
+                ]
+              },
               "select": {
                 "$action": "tag",
                 "exist": [
                   "field",
                   "id"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.items`"
-              },
-              "parts": [
-                "notes",
-                "{id}",
-                "tags"
-              ]
+              }
             }
           ]
         },
@@ -786,25 +814,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "field",
-                    "orig": "field",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/notes/{id}",
@@ -816,20 +825,40 @@ class Config {
                   "var": "id"
                 }
               ],
+              "parts": [
+                "notes",
+                "{id}"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "field",
+                    "orig": "field",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  }
+                ]
+              },
               "select": {
                 "exist": [
                   "field",
                   "id"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "notes",
-                "{id}"
-              ]
+              }
             }
           ]
         },
@@ -838,17 +867,6 @@ class Config {
           "name": "remove",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "DELETE",
               "orig": "/notes/{id}",
@@ -860,19 +878,31 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
+              "parts": [
+                "notes",
+                "{id}"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
               },
-              "parts": [
-                "notes",
-                "{id}"
-              ]
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         },
@@ -881,17 +911,6 @@ class Config {
           "name": "update",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "PUT",
               "orig": "/notes/{id}",
@@ -903,19 +922,31 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
+              "parts": [
+                "notes",
+                "{id}"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
               },
-              "parts": [
-                "notes",
-                "{id}"
-              ]
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         }
@@ -928,32 +959,38 @@ class Config {
       "fields": [
         {
           "name": "created_time",
-          "short": "When the tag was created.",
-          "type": "`$INTEGER`"
+          "title": "Created Time",
+          "type": "`$INTEGER`",
+          "short": "When the tag was created."
         },
         {
           "name": "id",
+          "title": "Id",
           "type": "`$STRING`"
         },
         {
           "name": "title",
-          "short": "The tag title.",
-          "type": "`$STRING`"
+          "title": "Title",
+          "type": "`$STRING`",
+          "short": "The tag title."
         },
         {
           "name": "updated_time",
-          "short": "When the tag was last updated.",
-          "type": "`$INTEGER`"
+          "title": "Updated Time",
+          "type": "`$INTEGER`",
+          "short": "When the tag was last updated."
         },
         {
           "name": "user_created_time",
-          "short": "When the tag was created.",
-          "type": "`$INTEGER`"
+          "title": "User Created Time",
+          "type": "`$INTEGER`",
+          "short": "When the tag was created."
         },
         {
           "name": "user_updated_time",
-          "short": "When the tag was last updated.",
-          "type": "`$INTEGER`"
+          "title": "User Updated Time",
+          "type": "`$INTEGER`",
+          "short": "When the tag was last updated."
         }
       ],
       "id": {
@@ -967,7 +1004,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/tags",
@@ -976,14 +1012,16 @@ class Config {
                   "lit": "tags"
                 }
               ],
-              "select": {},
+              "parts": [
+                "tags"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
               },
-              "parts": [
-                "tags"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         },
@@ -992,35 +1030,6 @@ class Config {
           "name": "list",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "field",
-                    "orig": "field",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "order_by",
-                    "orig": "order_by",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "order_dir",
-                    "orig": "order_dir",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": 1,
-                    "kind": "query",
-                    "name": "page",
-                    "orig": "page",
-                    "type": "`$INTEGER`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/tags",
@@ -1029,6 +1038,43 @@ class Config {
                   "lit": "tags"
                 }
               ],
+              "parts": [
+                "tags"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.items`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "field",
+                    "orig": "field",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "order_by",
+                    "orig": "order_by",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "order_dir",
+                    "orig": "order_dir",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "page",
+                    "orig": "page",
+                    "type": "`$INTEGER`",
+                    "kind": "query",
+                    "example": 1
+                  }
+                ]
+              },
               "select": {
                 "exist": [
                   "field",
@@ -1036,35 +1082,9 @@ class Config {
                   "order_dir",
                   "page"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.items`"
-              },
-              "parts": [
-                "tags"
-              ]
+              }
             },
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "field",
-                    "orig": "field",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/tags/{id}/notes",
@@ -1079,22 +1099,42 @@ class Config {
                   "lit": "notes"
                 }
               ],
+              "parts": [
+                "tags",
+                "{id}",
+                "notes"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.items`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "field",
+                    "orig": "field",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  }
+                ]
+              },
               "select": {
                 "$action": "note",
                 "exist": [
                   "field",
                   "id"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.items`"
-              },
-              "parts": [
-                "tags",
-                "{id}",
-                "notes"
-              ]
+              }
             }
           ]
         },
@@ -1103,25 +1143,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ],
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "field",
-                    "orig": "field",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/tags/{id}",
@@ -1133,20 +1154,40 @@ class Config {
                   "var": "id"
                 }
               ],
+              "parts": [
+                "tags",
+                "{id}"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "field",
+                    "orig": "field",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  }
+                ]
+              },
               "select": {
                 "exist": [
                   "field",
                   "id"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "tags",
-                "{id}"
-              ]
+              }
             }
           ]
         },
@@ -1155,17 +1196,6 @@ class Config {
           "name": "remove",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "DELETE",
               "orig": "/tags/{id}",
@@ -1177,19 +1207,31 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
+              "parts": [
+                "tags",
+                "{id}"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
               },
-              "parts": [
-                "tags",
-                "{id}"
-              ]
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         },
@@ -1198,17 +1240,6 @@ class Config {
           "name": "update",
           "points": [
             {
-              "args": {
-                "params": [
-                  {
-                    "kind": "param",
-                    "name": "id",
-                    "orig": "id",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "PUT",
               "orig": "/tags/{id}",
@@ -1220,19 +1251,31 @@ class Config {
                   "var": "id"
                 }
               ],
-              "select": {
-                "exist": [
-                  "id"
-                ]
-              },
+              "parts": [
+                "tags",
+                "{id}"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
               },
-              "parts": [
-                "tags",
-                "{id}"
-              ]
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "id",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id"
+                ]
+              }
             }
           ]
         }

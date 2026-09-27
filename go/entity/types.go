@@ -1,7 +1,7 @@
 // Typed models for the Joplin SDK.
 //
-// GENERATED from the API model: main.kit.entity.<e>.fields[] and per-op
-// params (op.<name>.points[].args.params[]). Field/param types come from the
+// GENERATED from the API model: main.kit.entity.<e>.fields{} and per-op
+// params (op.<name>.points[].g.params[]). Field/param types come from the
 // canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 // @voxgig/apidef VALID_CANON). Do not edit by hand.
 package entity
@@ -14,14 +14,6 @@ import (
 
 // Folder is the typed data model for the folder entity.
 type Folder struct {
-	CreatedTime *int `json:"created_time,omitempty"`
-	Id *string `json:"id,omitempty"`
-	IsShared *int `json:"is_shared,omitempty"`
-	ParentId *string `json:"parent_id,omitempty"`
-	Title *string `json:"title,omitempty"`
-	UpdatedTime *int `json:"updated_time,omitempty"`
-	UserCreatedTime *int `json:"user_created_time,omitempty"`
-	UserUpdatedTime *int `json:"user_updated_time,omitempty"`
 }
 
 // FolderLoadMatch is the typed request payload for Folder.LoadTyped.
@@ -69,24 +61,6 @@ type FolderRemoveMatch struct {
 
 // Note is the typed data model for the note entity.
 type Note struct {
-	Altitude *float64 `json:"altitude,omitempty"`
-	Author *string `json:"author,omitempty"`
-	Body *string `json:"body,omitempty"`
-	CreatedTime *int `json:"created_time,omitempty"`
-	Id *string `json:"id,omitempty"`
-	IsConflict *int `json:"is_conflict,omitempty"`
-	IsTodo *int `json:"is_todo,omitempty"`
-	Latitude *float64 `json:"latitude,omitempty"`
-	Longitude *float64 `json:"longitude,omitempty"`
-	MarkupLanguage *int `json:"markup_language,omitempty"`
-	ParentId *string `json:"parent_id,omitempty"`
-	SourceUrl *string `json:"source_url,omitempty"`
-	Title *string `json:"title,omitempty"`
-	TodoCompleted *int `json:"todo_completed,omitempty"`
-	TodoDue *int `json:"todo_due,omitempty"`
-	UpdatedTime *int `json:"updated_time,omitempty"`
-	UserCreatedTime *int `json:"user_created_time,omitempty"`
-	UserUpdatedTime *int `json:"user_updated_time,omitempty"`
 }
 
 // NoteLoadMatch is the typed request payload for Note.LoadTyped.
@@ -154,12 +128,6 @@ type NoteRemoveMatch struct {
 
 // Tag is the typed data model for the tag entity.
 type Tag struct {
-	CreatedTime *int `json:"created_time,omitempty"`
-	Id *string `json:"id,omitempty"`
-	Title *string `json:"title,omitempty"`
-	UpdatedTime *int `json:"updated_time,omitempty"`
-	UserCreatedTime *int `json:"user_created_time,omitempty"`
-	UserUpdatedTime *int `json:"user_updated_time,omitempty"`
 }
 
 // TagLoadMatch is the typed request payload for Tag.LoadTyped.

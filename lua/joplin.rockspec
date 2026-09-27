@@ -1,4 +1,4 @@
-package = "voxgig-sdk-joplin"
+package = "voxgig-sdk-joplin-sdk"
 version = "0.0.1-1"
 source = {
   -- git+https (GitHub dropped git:// in 2022); pin the install to the release
@@ -25,6 +25,7 @@ build = {
     ["config"] = "config.lua",
     ["config_shared"] = "config_shared.lua",
     ["config_plugins"] = "config_plugins.lua",
+    ["schema"] = "schema.lua",
     ["features"] = "features.lua",
     ["feature.base_feature"] = "feature/base_feature.lua",
     ["feature.debug_feature"] = "feature/debug_feature.lua",

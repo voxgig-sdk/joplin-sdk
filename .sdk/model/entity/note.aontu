@@ -1,0 +1,416 @@
+# Entity: note
+
+main: kit: entity: note: {
+
+  alias: field: {}
+
+  fields: {
+    altitude: {
+      h: "Altitude"
+      n: "altitude"
+      r: false
+      t: "`$NUMBER`"
+    }
+    author: {
+      h: "Author"
+      n: "author"
+      r: false
+      t: "`$STRING`"
+    }
+    body: {
+      h: "Body"
+      n: "body"
+      r: false
+      sh: "The note body, in Markdown."
+      t: "`$STRING`"
+    }
+    created_time: {
+      h: "Created Time"
+      n: "created_time"
+      r: false
+      sh: "When the note was created."
+      t: "`$INTEGER`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+    is_conflict: {
+      h: "Is Conflict"
+      n: "is_conflict"
+      r: false
+      sh: "Tells whether the note is a conflict or not."
+      t: "`$INTEGER`"
+    }
+    is_todo: {
+      h: "Is Todo"
+      n: "is_todo"
+      r: false
+      sh: "Tells whether this note is a to-do or not."
+      t: "`$INTEGER`"
+    }
+    latitude: {
+      h: "Latitude"
+      n: "latitude"
+      r: false
+      t: "`$NUMBER`"
+    }
+    longitude: {
+      h: "Longitude"
+      n: "longitude"
+      r: false
+      t: "`$NUMBER`"
+    }
+    markup_language: {
+      h: "Markup Language"
+      n: "markup_language"
+      r: false
+      sh: "1 for Markdown, 2 for HTML."
+      t: "`$INTEGER`"
+    }
+    parent_id: {
+      h: "Parent Id"
+      n: "parent_id"
+      r: false
+      sh: "ID of the notebook that contains this note."
+      t: "`$STRING`"
+    }
+    source_url: {
+      h: "Source Url"
+      n: "source_url"
+      r: false
+      sh: "The full URL where the note comes from."
+      t: "`$STRING`"
+    }
+    title: {
+      h: "Title"
+      n: "title"
+      r: false
+      sh: "The note title."
+      t: "`$STRING`"
+    }
+    todo_completed: {
+      h: "Todo Completed"
+      n: "todo_completed"
+      r: false
+      sh: "When the to-do was completed."
+      t: "`$INTEGER`"
+    }
+    todo_due: {
+      h: "Todo Due"
+      n: "todo_due"
+      r: false
+      sh: "When the to-do is due."
+      t: "`$INTEGER`"
+    }
+    updated_time: {
+      h: "Updated Time"
+      n: "updated_time"
+      r: false
+      sh: "When the note was last updated."
+      t: "`$INTEGER`"
+    }
+    user_created_time: {
+      h: "User Created Time"
+      n: "user_created_time"
+      r: false
+      sh: "When the note was created."
+      t: "`$INTEGER`"
+    }
+    user_updated_time: {
+      h: "User Updated Time"
+      n: "user_updated_time"
+      r: false
+      sh: "When the note was last updated."
+      t: "`$INTEGER`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "note"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /notes"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/notes"
+          s: [
+            {
+              lit: "notes"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /notes"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "field"
+                or: "field"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "order_by"
+                or: "order_by"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "order_dir"
+                or: "order_dir"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 1
+                k: "query"
+                n: "page"
+                or: "page"
+                r: false
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/notes"
+          q: {
+            exist: [
+              "field"
+              "order_by"
+              "order_dir"
+              "page"
+            ]
+          }
+          s: [
+            {
+              lit: "notes"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.items`"
+          }
+        }
+        {
+          co: {
+            id: "GET /notes/{id}/tags"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "field"
+                or: "field"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/notes/{id}/tags"
+          q: {
+            "$action": "tag"
+            exist: [
+              "field"
+              "id"
+            ]
+          }
+          s: [
+            {
+              lit: "notes"
+            }
+            {
+              var: "id"
+            }
+            {
+              lit: "tags"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.items`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /notes/{id}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "field"
+                or: "field"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/notes/{id}"
+          q: {
+            exist: [
+              "field"
+              "id"
+            ]
+          }
+          s: [
+            {
+              lit: "notes"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /notes/{id}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/notes/{id}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          s: [
+            {
+              lit: "notes"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          co: {
+            id: "PUT /notes/{id}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/notes/{id}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          s: [
+            {
+              lit: "notes"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

@@ -1,0 +1,349 @@
+# Entity: folder
+
+main: kit: entity: folder: {
+
+  alias: field: {}
+
+  fields: {
+    created_time: {
+      h: "Created Time"
+      n: "created_time"
+      r: false
+      sh: "When the folder was created."
+      t: "`$INTEGER`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+    is_shared: {
+      h: "Is Shared"
+      n: "is_shared"
+      r: false
+      t: "`$INTEGER`"
+    }
+    parent_id: {
+      h: "Parent Id"
+      n: "parent_id"
+      r: false
+      sh: "ID of the parent notebook, empty for a top-level notebook."
+      t: "`$STRING`"
+    }
+    title: {
+      h: "Title"
+      n: "title"
+      r: false
+      sh: "The folder title."
+      t: "`$STRING`"
+    }
+    updated_time: {
+      h: "Updated Time"
+      n: "updated_time"
+      r: false
+      sh: "When the folder was last updated."
+      t: "`$INTEGER`"
+    }
+    user_created_time: {
+      h: "User Created Time"
+      n: "user_created_time"
+      r: false
+      sh: "When the folder was created."
+      t: "`$INTEGER`"
+    }
+    user_updated_time: {
+      h: "User Updated Time"
+      n: "user_updated_time"
+      r: false
+      sh: "When the folder was last updated."
+      t: "`$INTEGER`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "folder"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /folders"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/folders"
+          s: [
+            {
+              lit: "folders"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /folders"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "field"
+                or: "field"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "order_by"
+                or: "order_by"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "order_dir"
+                or: "order_dir"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 1
+                k: "query"
+                n: "page"
+                or: "page"
+                r: false
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/folders"
+          q: {
+            exist: [
+              "field"
+              "order_by"
+              "order_dir"
+              "page"
+            ]
+          }
+          s: [
+            {
+              lit: "folders"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.items`"
+          }
+        }
+        {
+          co: {
+            id: "GET /folders/{id}/notes"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "field"
+                or: "field"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/folders/{id}/notes"
+          q: {
+            "$action": "note"
+            exist: [
+              "field"
+              "id"
+            ]
+          }
+          s: [
+            {
+              lit: "folders"
+            }
+            {
+              var: "id"
+            }
+            {
+              lit: "notes"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.items`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /folders/{id}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "field"
+                or: "field"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/folders/{id}"
+          q: {
+            exist: [
+              "field"
+              "id"
+            ]
+          }
+          s: [
+            {
+              lit: "folders"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /folders/{id}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/folders/{id}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          s: [
+            {
+              lit: "folders"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          co: {
+            id: "PUT /folders/{id}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/folders/{id}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          s: [
+            {
+              lit: "folders"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}
