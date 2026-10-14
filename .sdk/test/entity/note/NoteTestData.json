@@ -92,12 +92,12 @@
       "version": 2,
       "source": "openapi3"
     },
-    "GET /notes": {
+    "GET /notes/{id}/tags": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
     },
-    "GET /notes/{id}/tags": {
+    "GET /notes": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

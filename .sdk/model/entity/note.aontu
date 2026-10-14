@@ -139,6 +139,26 @@ main: kit: entity: note: {
       name: "create"
       points: [
         {
+          bf: [
+            "altitude"
+            "author"
+            "body"
+            "created_time"
+            "id"
+            "is_conflict"
+            "is_todo"
+            "latitude"
+            "longitude"
+            "markup_language"
+            "parent_id"
+            "source_url"
+            "title"
+            "todo_completed"
+            "todo_due"
+            "updated_time"
+            "user_created_time"
+            "user_updated_time"
+          ]
           co: {
             id: "POST /notes"
             source: "openapi3"
@@ -146,6 +166,10 @@ main: kit: entity: note: {
           }
           m: "POST"
           o: "/notes"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "notes"
@@ -163,6 +187,60 @@ main: kit: entity: note: {
       points: [
         {
           co: {
+            id: "GET /notes/{id}/tags"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "field"
+                or: "fields"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/notes/{id}/tags"
+          q: {
+            "$action": "tag"
+            exist: [
+              "id"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "notes"
+            }
+            {
+              var: "id"
+            }
+            {
+              lit: "tags"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.items`"
+          }
+        }
+        {
+          co: {
             id: "GET /notes"
             source: "openapi3"
             version: 2
@@ -172,7 +250,7 @@ main: kit: entity: note: {
               {
                 k: "query"
                 n: "field"
-                or: "field"
+                or: "fields"
                 r: false
                 t: "`$STRING`"
               }
@@ -202,68 +280,13 @@ main: kit: entity: note: {
           }
           m: "GET"
           o: "/notes"
-          q: {
-            exist: [
-              "field"
-              "order_by"
-              "order_dir"
-              "page"
-            ]
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
               lit: "notes"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body.items`"
-          }
-        }
-        {
-          co: {
-            id: "GET /notes/{id}/tags"
-            source: "openapi3"
-            version: 2
-          }
-          g: {
-            params: [
-              {
-                k: "param"
-                n: "id"
-                or: "id"
-                r: true
-                t: "`$STRING`"
-              }
-            ]
-            query: [
-              {
-                k: "query"
-                n: "field"
-                or: "field"
-                r: false
-                t: "`$STRING`"
-              }
-            ]
-          }
-          m: "GET"
-          o: "/notes/{id}/tags"
-          q: {
-            "$action": "tag"
-            exist: [
-              "field"
-              "id"
-            ]
-          }
-          s: [
-            {
-              lit: "notes"
-            }
-            {
-              var: "id"
-            }
-            {
-              lit: "tags"
             }
           ]
           t: {
@@ -296,7 +319,7 @@ main: kit: entity: note: {
               {
                 k: "query"
                 n: "field"
-                or: "field"
+                or: "fields"
                 r: false
                 t: "`$STRING`"
               }
@@ -306,9 +329,12 @@ main: kit: entity: note: {
           o: "/notes/{id}"
           q: {
             exist: [
-              "field"
               "id"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -371,6 +397,26 @@ main: kit: entity: note: {
       name: "update"
       points: [
         {
+          bf: [
+            "altitude"
+            "author"
+            "body"
+            "created_time"
+            "id"
+            "is_conflict"
+            "is_todo"
+            "latitude"
+            "longitude"
+            "markup_language"
+            "parent_id"
+            "source_url"
+            "title"
+            "todo_completed"
+            "todo_due"
+            "updated_time"
+            "user_created_time"
+            "user_updated_time"
+          ]
           co: {
             id: "PUT /notes/{id}"
             source: "openapi3"
@@ -393,6 +439,10 @@ main: kit: entity: note: {
             exist: [
               "id"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

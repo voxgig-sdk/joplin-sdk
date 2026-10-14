@@ -37,6 +37,8 @@ require_once __DIR__ . '/TransformResponse.php';
 
 JoplinUtility::setRegistrar(function (JoplinUtility $u): void {
     $u->clean = [JoplinClean::class, 'call'];
+    $u->clean_add = [JoplinClean::class, 'add'];
+    $u->clean_explain = [JoplinDone::class, 'clean_explain'];
     $u->done = [JoplinDone::class, 'call'];
     $u->make_error = [JoplinMakeError::class, 'call'];
     $u->feature_add = [JoplinFeatureAdd::class, 'call'];

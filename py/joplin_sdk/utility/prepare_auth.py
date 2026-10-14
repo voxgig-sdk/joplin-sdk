@@ -8,6 +8,13 @@ OPTION_APIKEY = "apikey"
 NOT_FOUND = "__NOTFOUND__"
 
 
+def _auth_name(options):
+    name = vs.getpath(options, "auth.name")
+    if isinstance(name, str) and name != "":
+        return name
+    return QUERY_AUTH
+
+
 def prepare_auth_util(ctx):
     spec = ctx.spec
     if spec is None:
@@ -22,6 +29,12 @@ def prepare_auth_util(ctx):
         query.pop(QUERY_AUTH, None)
         return spec, None
 
+    name = _auth_name(options)
+
+    # A credential left under the declared name would travel beside the renamed one.
+    if name != QUERY_AUTH:
+        query.pop(QUERY_AUTH, None)
+
     apikey = vs.getprop(options, OPTION_APIKEY, NOT_FOUND)
 
     if (
@@ -29,7 +42,7 @@ def prepare_auth_util(ctx):
         or apikey is None
         or apikey == ""
     ):
-        query.pop(QUERY_AUTH, None)
+        query.pop(name, None)
     else:
         apikey_val = ""
         if isinstance(apikey, str):
@@ -37,6 +50,6 @@ def prepare_auth_util(ctx):
         # NO PREFIX IN A QUERY STRING. `?token=Bearer%20abc` is not a
         # thing any API reads: the prefix is a header convention, so it is
         # dropped here deliberately rather than silently concatenated.
-        query[QUERY_AUTH] = apikey_val
+        query[name] = apikey_val
 
     return spec, None

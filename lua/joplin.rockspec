@@ -34,6 +34,8 @@ build = {
     ["feature.paging_feature"] = "feature/paging_feature.lua",
     ["feature.ratelimit_feature"] = "feature/ratelimit_feature.lua",
     ["feature.retry_feature"] = "feature/retry_feature.lua",
+    ["feature.station_feature"] = "feature/station_feature.lua",
+    ["feature.station.voxgig_station"] = "feature/station/voxgig_station.lua",
     ["feature.test_feature"] = "feature/test_feature.lua",
     ["feature.timeout_feature"] = "feature/timeout_feature.lua",
   }

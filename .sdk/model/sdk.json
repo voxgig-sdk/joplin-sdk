@@ -53,7 +53,7 @@
         },
         "edition": {
           "github-pages": {
-            "active": true,
+            "active": false,
             "base": "node_modules/@voxgig/docgen/project/.sdk",
             "brand": {},
             "filter": {
@@ -204,6 +204,16 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "created_time",
+                    "id",
+                    "is_shared",
+                    "parent_id",
+                    "title",
+                    "updated_time",
+                    "user_created_time",
+                    "user_updated_time"
+                  ],
                   "co": {
                     "id": "POST /folders",
                     "source": "openapi3",
@@ -215,6 +225,10 @@
                   "o": "/folders",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "folders"
@@ -234,6 +248,65 @@
                 {
                   "a": true,
                   "co": {
+                    "id": "GET /folders/{id}/notes",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
+                    "params": [
+                      {
+                        "a": true,
+                        "k": "param",
+                        "n": "id",
+                        "or": "id",
+                        "r": true,
+                        "t": "`$STRING`"
+                      }
+                    ],
+                    "query": [
+                      {
+                        "a": true,
+                        "k": "query",
+                        "n": "field",
+                        "or": "fields",
+                        "r": false,
+                        "t": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/folders/{id}/notes",
+                  "q": {
+                    "$action": "note",
+                    "exist": [
+                      "id"
+                    ]
+                  },
+                  "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
+                  "s": [
+                    {
+                      "lit": "folders"
+                    },
+                    {
+                      "var": "id"
+                    },
+                    {
+                      "lit": "notes"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body.items`"
+                  }
+                },
+                {
+                  "a": true,
+                  "co": {
                     "id": "GET /folders",
                     "source": "openapi3",
                     "version": 2
@@ -244,7 +317,7 @@
                         "a": true,
                         "k": "query",
                         "n": "field",
-                        "or": "field",
+                        "or": "fields",
                         "r": false,
                         "t": "`$STRING`"
                       },
@@ -278,74 +351,15 @@
                   "k": "http",
                   "m": "GET",
                   "o": "/folders",
-                  "q": {
-                    "exist": [
-                      "field",
-                      "order_by",
-                      "order_dir",
-                      "page"
-                    ]
-                  },
+                  "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "folders"
-                    }
-                  ],
-                  "t": {
-                    "req": "`reqdata`",
-                    "res": "`body.items`"
-                  }
-                },
-                {
-                  "a": true,
-                  "co": {
-                    "id": "GET /folders/{id}/notes",
-                    "source": "openapi3",
-                    "version": 2
-                  },
-                  "g": {
-                    "params": [
-                      {
-                        "a": true,
-                        "k": "param",
-                        "n": "id",
-                        "or": "id",
-                        "r": true,
-                        "t": "`$STRING`"
-                      }
-                    ],
-                    "query": [
-                      {
-                        "a": true,
-                        "k": "query",
-                        "n": "field",
-                        "or": "field",
-                        "r": false,
-                        "t": "`$STRING`"
-                      }
-                    ]
-                  },
-                  "k": "http",
-                  "m": "GET",
-                  "o": "/folders/{id}/notes",
-                  "q": {
-                    "$action": "note",
-                    "exist": [
-                      "field",
-                      "id"
-                    ]
-                  },
-                  "r": {},
-                  "s": [
-                    {
-                      "lit": "folders"
-                    },
-                    {
-                      "var": "id"
-                    },
-                    {
-                      "lit": "notes"
                     }
                   ],
                   "t": {
@@ -382,7 +396,7 @@
                         "a": true,
                         "k": "query",
                         "n": "field",
-                        "or": "field",
+                        "or": "fields",
                         "r": false,
                         "t": "`$STRING`"
                       }
@@ -393,11 +407,14 @@
                   "o": "/folders/{id}",
                   "q": {
                     "exist": [
-                      "field",
                       "id"
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "folders"
@@ -466,6 +483,16 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "created_time",
+                    "id",
+                    "is_shared",
+                    "parent_id",
+                    "title",
+                    "updated_time",
+                    "user_created_time",
+                    "user_updated_time"
+                  ],
                   "co": {
                     "id": "PUT /folders/{id}",
                     "source": "openapi3",
@@ -492,6 +519,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "folders"
@@ -670,6 +701,26 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "altitude",
+                    "author",
+                    "body",
+                    "created_time",
+                    "id",
+                    "is_conflict",
+                    "is_todo",
+                    "latitude",
+                    "longitude",
+                    "markup_language",
+                    "parent_id",
+                    "source_url",
+                    "title",
+                    "todo_completed",
+                    "todo_due",
+                    "updated_time",
+                    "user_created_time",
+                    "user_updated_time"
+                  ],
                   "co": {
                     "id": "POST /notes",
                     "source": "openapi3",
@@ -681,6 +732,10 @@
                   "o": "/notes",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "notes"
@@ -700,6 +755,65 @@
                 {
                   "a": true,
                   "co": {
+                    "id": "GET /notes/{id}/tags",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
+                    "params": [
+                      {
+                        "a": true,
+                        "k": "param",
+                        "n": "id",
+                        "or": "id",
+                        "r": true,
+                        "t": "`$STRING`"
+                      }
+                    ],
+                    "query": [
+                      {
+                        "a": true,
+                        "k": "query",
+                        "n": "field",
+                        "or": "fields",
+                        "r": false,
+                        "t": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/notes/{id}/tags",
+                  "q": {
+                    "$action": "tag",
+                    "exist": [
+                      "id"
+                    ]
+                  },
+                  "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
+                  "s": [
+                    {
+                      "lit": "notes"
+                    },
+                    {
+                      "var": "id"
+                    },
+                    {
+                      "lit": "tags"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body.items`"
+                  }
+                },
+                {
+                  "a": true,
+                  "co": {
                     "id": "GET /notes",
                     "source": "openapi3",
                     "version": 2
@@ -710,7 +824,7 @@
                         "a": true,
                         "k": "query",
                         "n": "field",
-                        "or": "field",
+                        "or": "fields",
                         "r": false,
                         "t": "`$STRING`"
                       },
@@ -744,74 +858,15 @@
                   "k": "http",
                   "m": "GET",
                   "o": "/notes",
-                  "q": {
-                    "exist": [
-                      "field",
-                      "order_by",
-                      "order_dir",
-                      "page"
-                    ]
-                  },
+                  "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "notes"
-                    }
-                  ],
-                  "t": {
-                    "req": "`reqdata`",
-                    "res": "`body.items`"
-                  }
-                },
-                {
-                  "a": true,
-                  "co": {
-                    "id": "GET /notes/{id}/tags",
-                    "source": "openapi3",
-                    "version": 2
-                  },
-                  "g": {
-                    "params": [
-                      {
-                        "a": true,
-                        "k": "param",
-                        "n": "id",
-                        "or": "id",
-                        "r": true,
-                        "t": "`$STRING`"
-                      }
-                    ],
-                    "query": [
-                      {
-                        "a": true,
-                        "k": "query",
-                        "n": "field",
-                        "or": "field",
-                        "r": false,
-                        "t": "`$STRING`"
-                      }
-                    ]
-                  },
-                  "k": "http",
-                  "m": "GET",
-                  "o": "/notes/{id}/tags",
-                  "q": {
-                    "$action": "tag",
-                    "exist": [
-                      "field",
-                      "id"
-                    ]
-                  },
-                  "r": {},
-                  "s": [
-                    {
-                      "lit": "notes"
-                    },
-                    {
-                      "var": "id"
-                    },
-                    {
-                      "lit": "tags"
                     }
                   ],
                   "t": {
@@ -848,7 +903,7 @@
                         "a": true,
                         "k": "query",
                         "n": "field",
-                        "or": "field",
+                        "or": "fields",
                         "r": false,
                         "t": "`$STRING`"
                       }
@@ -859,11 +914,14 @@
                   "o": "/notes/{id}",
                   "q": {
                     "exist": [
-                      "field",
                       "id"
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "notes"
@@ -932,6 +990,26 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "altitude",
+                    "author",
+                    "body",
+                    "created_time",
+                    "id",
+                    "is_conflict",
+                    "is_todo",
+                    "latitude",
+                    "longitude",
+                    "markup_language",
+                    "parent_id",
+                    "source_url",
+                    "title",
+                    "todo_completed",
+                    "todo_due",
+                    "updated_time",
+                    "user_created_time",
+                    "user_updated_time"
+                  ],
                   "co": {
                     "id": "PUT /notes/{id}",
                     "source": "openapi3",
@@ -958,6 +1036,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "notes"
@@ -1044,6 +1126,14 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "created_time",
+                    "id",
+                    "title",
+                    "updated_time",
+                    "user_created_time",
+                    "user_updated_time"
+                  ],
                   "co": {
                     "id": "POST /tags",
                     "source": "openapi3",
@@ -1055,6 +1145,10 @@
                   "o": "/tags",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "tags"
@@ -1074,6 +1168,65 @@
                 {
                   "a": true,
                   "co": {
+                    "id": "GET /tags/{id}/notes",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
+                    "params": [
+                      {
+                        "a": true,
+                        "k": "param",
+                        "n": "id",
+                        "or": "id",
+                        "r": true,
+                        "t": "`$STRING`"
+                      }
+                    ],
+                    "query": [
+                      {
+                        "a": true,
+                        "k": "query",
+                        "n": "field",
+                        "or": "fields",
+                        "r": false,
+                        "t": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/tags/{id}/notes",
+                  "q": {
+                    "$action": "note",
+                    "exist": [
+                      "id"
+                    ]
+                  },
+                  "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
+                  "s": [
+                    {
+                      "lit": "tags"
+                    },
+                    {
+                      "var": "id"
+                    },
+                    {
+                      "lit": "notes"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body.items`"
+                  }
+                },
+                {
+                  "a": true,
+                  "co": {
                     "id": "GET /tags",
                     "source": "openapi3",
                     "version": 2
@@ -1084,7 +1237,7 @@
                         "a": true,
                         "k": "query",
                         "n": "field",
-                        "or": "field",
+                        "or": "fields",
                         "r": false,
                         "t": "`$STRING`"
                       },
@@ -1118,74 +1271,15 @@
                   "k": "http",
                   "m": "GET",
                   "o": "/tags",
-                  "q": {
-                    "exist": [
-                      "field",
-                      "order_by",
-                      "order_dir",
-                      "page"
-                    ]
-                  },
+                  "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "tags"
-                    }
-                  ],
-                  "t": {
-                    "req": "`reqdata`",
-                    "res": "`body.items`"
-                  }
-                },
-                {
-                  "a": true,
-                  "co": {
-                    "id": "GET /tags/{id}/notes",
-                    "source": "openapi3",
-                    "version": 2
-                  },
-                  "g": {
-                    "params": [
-                      {
-                        "a": true,
-                        "k": "param",
-                        "n": "id",
-                        "or": "id",
-                        "r": true,
-                        "t": "`$STRING`"
-                      }
-                    ],
-                    "query": [
-                      {
-                        "a": true,
-                        "k": "query",
-                        "n": "field",
-                        "or": "field",
-                        "r": false,
-                        "t": "`$STRING`"
-                      }
-                    ]
-                  },
-                  "k": "http",
-                  "m": "GET",
-                  "o": "/tags/{id}/notes",
-                  "q": {
-                    "$action": "note",
-                    "exist": [
-                      "field",
-                      "id"
-                    ]
-                  },
-                  "r": {},
-                  "s": [
-                    {
-                      "lit": "tags"
-                    },
-                    {
-                      "var": "id"
-                    },
-                    {
-                      "lit": "notes"
                     }
                   ],
                   "t": {
@@ -1222,7 +1316,7 @@
                         "a": true,
                         "k": "query",
                         "n": "field",
-                        "or": "field",
+                        "or": "fields",
                         "r": false,
                         "t": "`$STRING`"
                       }
@@ -1233,11 +1327,14 @@
                   "o": "/tags/{id}",
                   "q": {
                     "exist": [
-                      "field",
                       "id"
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "tags"
@@ -1306,6 +1403,14 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "created_time",
+                    "id",
+                    "title",
+                    "updated_time",
+                    "user_created_time",
+                    "user_updated_time"
+                  ],
                   "co": {
                     "id": "PUT /tags/{id}",
                     "source": "openapi3",
@@ -1332,6 +1437,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "tags"
@@ -2009,6 +2118,214 @@
           "transport": "wrap",
           "version": "0.0.1"
         },
+        "station": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen-station/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "capture": "meta",
+              "fromEnv": true,
+              "instance": "",
+              "profile": "",
+              "register": true,
+              "secret": "",
+              "url": ""
+            },
+            "optspec": {},
+            "strict": false
+          },
+          "deps": {
+            "csharp": {
+              "Voxgig.Station": {
+                "active": true,
+                "kind": "prod",
+                "version": "0.0.1"
+              }
+            },
+            "dart": {
+              "voxgig_station": {
+                "active": true,
+                "kind": "prod",
+                "version": ">=0.0.1"
+              }
+            },
+            "elixir": {
+              "voxgig_station": {
+                "active": true,
+                "kind": "prod",
+                "version": ">=0.0.1"
+              }
+            },
+            "go": {
+              "github.com/voxgig/station/go": {
+                "active": true,
+                "kind": "prod",
+                "version": "v0.0.1"
+              }
+            },
+            "java": {
+              "com.voxgig:station": {
+                "active": true,
+                "kind": "prod",
+                "version": "0.0.1"
+              }
+            },
+            "js": {
+              "@voxgig/station-js": {
+                "active": true,
+                "kind": "peer",
+                "version": ">=0.0.1"
+              }
+            },
+            "kotlin": {
+              "com.voxgig:station": {
+                "active": true,
+                "kind": "prod",
+                "version": "0.0.1"
+              }
+            },
+            "php": {
+              "voxgig/station": {
+                "active": true,
+                "kind": "prod",
+                "version": "0.0.1"
+              }
+            },
+            "py": {
+              "voxgig-station": {
+                "active": true,
+                "kind": "prod",
+                "version": "0.0.1"
+              }
+            },
+            "rb": {
+              "voxgig_station": {
+                "active": true,
+                "kind": "prod",
+                "version": "0.0.1"
+              }
+            },
+            "rust": {
+              "voxgig_station": {
+                "active": true,
+                "kind": "prod",
+                "version": ">=0.0.1"
+              }
+            },
+            "swift": {
+              "VoxgigStation": {
+                "active": true,
+                "kind": "prod",
+                "url": "https://github.com/voxgig/station-swift",
+                "version": "0.0.1"
+              }
+            },
+            "ts": {
+              "@voxgig/station": {
+                "active": true,
+                "kind": "peer",
+                "version": ">=0.0.1"
+              }
+            }
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": true,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreDone": {
+              "active": true,
+              "await": false
+            },
+            "PrePoint": {
+              "active": true,
+              "await": false
+            },
+            "PreRequest": {
+              "active": false,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "PreUnexpected": {
+              "active": true,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "station",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen-station",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "c": {
+              "deps": {}
+            },
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "rb": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Station control surface binding for outbound integrations",
+          "transport": "wrap",
+          "version": "0.0.1"
+        },
         "test": {
           "active": true,
           "base": "node_modules/@voxgig/sdkgen/project/.sdk",
@@ -2126,6 +2443,7 @@
             },
             "optspec": {
               "clearTimer": "`$FUNCTION`",
+              "now": "`$FUNCTION`",
               "setTimer": "`$FUNCTION`"
             },
             "strict": false
@@ -2578,7 +2896,7 @@
       "optspec": {
         "allow": {
           "method": "GET,PUT,POST,PATCH,DELETE,OPTIONS",
-          "op": "create,update,load,list,remove,command,direct,graphql"
+          "op": "create,update,patch,load,list,remove,command,direct,graphql"
         },
         "apikey": "",
         "auth": {
@@ -2589,7 +2907,12 @@
         },
         "base": "http://localhost:8000",
         "clean": {
-          "keys": "key,token,id"
+          "active": true,
+          "hint": "0",
+          "keys": "key,secret,token,password,passwd,authorization,cookie,credential,signature",
+          "mask": "[redacted]",
+          "min": "4",
+          "values": ""
         },
         "entity": {
           "`$CHILD`": {
@@ -2626,6 +2949,11 @@
         "top": {
           "active": true
         }
+      },
+      "publisher": {
+        "name": "",
+        "security": "",
+        "url": ""
       },
       "repo": {
         "host": "github.com",
@@ -2926,7 +3254,10 @@
             "version": "0.0.1"
           },
           "superseded": [],
-          "title": "Go MCP server"
+          "title": "Go MCP server",
+          "tool": {
+            "write": false
+          }
         },
         "lua": {
           "active": true,
@@ -3303,6 +3634,17 @@
           "base": "",
           "strict": true
         }
+      },
+      "text": {
+        "about_md": "",
+        "docs_url": "",
+        "entity_desc": {},
+        "homepage": "",
+        "meta_source": "",
+        "summary": "",
+        "tagline": "",
+        "title": "",
+        "website": ""
       }
     }
   },

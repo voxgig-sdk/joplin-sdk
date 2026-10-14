@@ -6,7 +6,7 @@
 const OPTSPEC = {
   "allow": {
     "method": "GET,PUT,POST,PATCH,DELETE,OPTIONS",
-    "op": "create,update,load,list,remove,command,direct,graphql"
+    "op": "create,update,patch,load,list,remove,command,direct,graphql"
   },
   "apikey": "",
   "auth": {
@@ -17,7 +17,12 @@ const OPTSPEC = {
   },
   "base": "http://localhost:8000",
   "clean": {
-    "keys": "key,token,id"
+    "active": true,
+    "hint": "0",
+    "keys": "key,secret,token,password,passwd,authorization,cookie,credential,signature",
+    "mask": "[redacted]",
+    "min": "4",
+    "values": ""
   },
   "entity": {
     "`$CHILD`": {
@@ -287,6 +292,73 @@ const OPTSPEC = {
       },
       "`$NIL`"
     ],
+    "station": [
+      "`$ONE`",
+      {
+        "`$OPEN`": true,
+        "active": [
+          "`$ONE`",
+          "`$BOOLEAN`",
+          "`$NIL`"
+        ],
+        "capture": [
+          "`$ONE`",
+          "`$STRING`",
+          [
+            "`$EXACT`",
+            ""
+          ],
+          "`$NIL`"
+        ],
+        "fromEnv": [
+          "`$ONE`",
+          "`$BOOLEAN`",
+          "`$NIL`"
+        ],
+        "instance": [
+          "`$ONE`",
+          "`$STRING`",
+          [
+            "`$EXACT`",
+            ""
+          ],
+          "`$NIL`"
+        ],
+        "profile": [
+          "`$ONE`",
+          "`$STRING`",
+          [
+            "`$EXACT`",
+            ""
+          ],
+          "`$NIL`"
+        ],
+        "register": [
+          "`$ONE`",
+          "`$BOOLEAN`",
+          "`$NIL`"
+        ],
+        "secret": [
+          "`$ONE`",
+          "`$STRING`",
+          [
+            "`$EXACT`",
+            ""
+          ],
+          "`$NIL`"
+        ],
+        "url": [
+          "`$ONE`",
+          "`$STRING`",
+          [
+            "`$EXACT`",
+            ""
+          ],
+          "`$NIL`"
+        ]
+      },
+      "`$NIL`"
+    ],
     "test": [
       "`$ONE`",
       {
@@ -324,6 +396,11 @@ const OPTSPEC = {
           "`$NIL`"
         ],
         "clearTimer": [
+          "`$ONE`",
+          "`$FUNCTION`",
+          "`$NIL`"
+        ],
+        "now": [
           "`$ONE`",
           "`$FUNCTION`",
           "`$NIL`"

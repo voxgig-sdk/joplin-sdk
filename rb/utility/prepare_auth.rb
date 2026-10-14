@@ -18,15 +18,22 @@ module JoplinUtilities
       return spec, nil
     end
 
+    # The client's auth.name option, when set, replaces the name the API declares.
+    auth_name = VoxgigStruct.getpath(options, "auth.name")
+    name = auth_name.is_a?(String) && !auth_name.empty? ? auth_name : QUERY_AUTH
+
+    # A credential left under the declared name would travel beside the renamed one.
+    query.delete(QUERY_AUTH) unless name == QUERY_AUTH
+
     apikey = VoxgigStruct.getprop(options, OPTION_APIKEY, NOT_FOUND)
 
     if apikey.nil? || (apikey.is_a?(String) && (apikey == NOT_FOUND || apikey == ""))
-      query.delete(QUERY_AUTH)
+      query.delete(name)
     else
       apikey_val = apikey.is_a?(String) ? apikey : ""
       # NO PREFIX IN A QUERY STRING: `?token=Bearer%20abc` is not a thing
       # any API reads, so options.auth.prefix is dropped rather than joined.
-      query[QUERY_AUTH] = apikey_val
+      query[name] = apikey_val
     end
 
     return spec, nil

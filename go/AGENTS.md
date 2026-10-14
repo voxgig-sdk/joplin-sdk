@@ -48,6 +48,7 @@ the runtime under `.sdk/tm/go/feature/` and regenerate.
 | **paging** — Paging | `feature/paging_feature.go` | `PreRequest`, `PreResult` |
 | **ratelimit** — Rate limiting | `feature/ratelimit_feature.go` | — |
 | **retry** — Retry | `feature/retry_feature.go` | — |
+| **station** — Station control surface binding for outbound integrations | `feature/station_feature.go` | `PostConstruct`, `PreDone`, `PrePoint`, `PreUnexpected` |
 | **test** — Test transport | `feature/test_feature.go` | `GetData`, `GetMatch`, `PostConstruct`, `PostConstructEntity`, `PrePoint`, `PreRequest`, `PreResponse`, `PreResult`, `PreSpec`, `SetData`, `SetMatch` |
 | **timeout** — Timeout | `feature/timeout_feature.go` | — |
 

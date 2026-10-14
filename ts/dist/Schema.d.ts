@@ -12,7 +12,12 @@ declare const OPTSPEC: {
     };
     base: string;
     clean: {
+        active: boolean;
+        hint: string;
         keys: string;
+        mask: string;
+        min: string;
+        values: string;
     };
     entity: {
         "`$CHILD`": {
@@ -98,6 +103,17 @@ declare const OPTSPEC: {
             jitter: string[];
             sleep: string[];
         })[];
+        station: (string | {
+            "`$OPEN`": boolean;
+            active: string[];
+            capture: (string | string[])[];
+            fromEnv: string[];
+            instance: (string | string[])[];
+            profile: (string | string[])[];
+            register: string[];
+            secret: (string | string[])[];
+            url: (string | string[])[];
+        })[];
         test: (string | {
             "`$OPEN`": boolean;
             active: string[];
@@ -109,6 +125,7 @@ declare const OPTSPEC: {
             active: string[];
             ms: string[];
             clearTimer: string[];
+            now: string[];
             setTimer: string[];
         })[];
     };

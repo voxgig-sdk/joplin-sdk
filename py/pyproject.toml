@@ -11,6 +11,7 @@ license = "MIT"
 requires-python = ">=3.8"
 keywords = ["voxgig", "sdk", "generated-sdk", "openapi", "api-client", "joplin"]
 dependencies = [
+    "voxgig-station>=0.0.1",
     "requests>=2.33",
 ]
 

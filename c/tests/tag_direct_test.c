@@ -41,9 +41,10 @@ int main(void) {
       cmap(1, "id", v_str("direct02")));
     JoplinSDK* sdk = tag_direct_setup(mockres);
     voxgig_value* params = v_map();
+    setp(params, "id", v_str("direct01"));
     PNError* err = NULL;
     voxgig_value* result = sdk_direct(sdk, cmap(3,
-      "path", v_str("tags"),
+      "path", v_str("tags/{id}/notes"),
       "method", v_str("GET"),
       "params", params), &err);
     CHECK(err == NULL, "list: no error");
@@ -54,6 +55,7 @@ int main(void) {
     CHECK(voxgig_is_list(data), "list: data is array");
     CHECK_INT_EQ(voxgig_size(data), 2, "list: 2 items");
     CHECK_INT_EQ(CALLS, 1, "list: one call");
+    CHECK(strstr(LAST_URL, "direct01") != NULL, "list: url has direct01");
   }
 
   // LOAD
@@ -62,7 +64,7 @@ int main(void) {
     voxgig_value* mockres = cmap(1, "id", v_str("direct01"));
     JoplinSDK* sdk = tag_direct_setup(mockres);
     voxgig_value* params = v_map();
-    setp(params, "undefined", v_str("direct01"));
+    setp(params, "id", v_str("direct01"));
     PNError* err = NULL;
     voxgig_value* result = sdk_direct(sdk, cmap(3,
       "path", v_str("tags/{id}"),

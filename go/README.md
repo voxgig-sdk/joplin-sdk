@@ -16,7 +16,7 @@ go get github.com/voxgig-sdk/joplin-sdk/go@latest
 ```
 
 The Go module proxy resolves the version from the `go/vX.Y.Z` GitHub
-release tag — see [Releases](https://github.com/voxgig-sdk/joplin-sdk/releases) for the available versions.
+release tag — see [Tags](https://github.com/voxgig-sdk/joplin-sdk/tags) for the available versions.
 
 To vendor from a local checkout instead, clone this repo alongside your
 project and add a `replace` directive pointing at the checked-out
@@ -30,14 +30,15 @@ go mod edit -replace github.com/voxgig-sdk/joplin-sdk/go=../joplin-sdk/go
 ## Tutorial: your first API call
 
 This tutorial walks through creating a client, listing entities, and
-loading a specific record.
+loading a specific record. The client sends the API key as the `token` query parameter.
 
 ### Quickstart
 
 A complete program: create a client, then call the entity operations.
-Each operation returns `(value, error)` — the value is the data itself
-(there is no `{ok, data}` wrapper), so check `err` and use the value
-directly.
+Each operation returns `(value, error)` — the value is the entity, and for
+`List` a `[]any` of entities, one per record (there is no `{ok, data}`
+wrapper), so check `err` and read a record through the entity's
+`Data()`.
 
 ```go
 package main
@@ -53,45 +54,115 @@ func main() {
         "apikey": os.Getenv("JOPLIN_APIKEY"),
     })
 
-    // List folder records — the value is the array of records itself.
+    // List folder records — the value is a []any of entities, one per record.
     folders, err := client.Folder(nil).List(nil, nil)
     if err != nil {
         panic(err)
     }
     for _, item := range folders.([]any) {
-        fmt.Println(item)
+        fmt.Println(item.(sdk.Entity).Data())
     }
 
-    // Load a single folder — the value is the loaded record.
+    // Load a single folder — the value is the entity; Data() reads its record.
     folder, err := client.Folder(nil).Load(map[string]any{"id": "example_id"}, nil)
     if err != nil {
         panic(err)
     }
-    fmt.Println(folder)
+    fmt.Println(folder.(sdk.Entity).Data())
 
     // Create a folder.
     created, err := client.Folder(nil).Create(map[string]any{"created_time": 1, "is_shared": 1}, nil)
     if err != nil {
         panic(err)
     }
-    fmt.Println(created)
+    fmt.Println(created.(sdk.Entity).Data())
 
     // Update a folder.
     updated, err := client.Folder(nil).Update(map[string]any{"id": "example_id", "created_time": 1, "is_shared": 1}, nil)
     if err != nil {
         panic(err)
     }
-    fmt.Println(updated)
+    fmt.Println(updated.(sdk.Entity).Data())
 
     // Remove a folder.
     removed, err := client.Folder(nil).Remove(map[string]any{"id": "example_id"}, nil)
     if err != nil {
         panic(err)
     }
-    fmt.Println(removed)
+    fmt.Println(removed.(sdk.Entity).Data())
 }
 ```
 
+
+## Use with Station
+
+This SDK ships as a [voxgig/station](https://github.com/voxgig/station)
+plugin: bind it to a local `Station` and outbound configuration,
+credentials, and observability move to one place. The feature is
+present but **off by default** — nothing changes until you bind.
+
+### Declarative: `station.json` + `station.sdk()`
+
+Declare an instance in `station.json` at the repo root (committable —
+names and stores, never values):
+
+```json
+{ "station": 1,
+  "profiles": { "default": {
+    "sdk": { "joplin": {
+      "package": "github.com/voxgig-sdk/joplin-sdk/go" } } } } }
+```
+
+Then get the client where you need it:
+
+1. `station = Station.open()` — reads and validates `station.json`;
+   constructs nothing.
+2. `client = station.sdk('joplin')` — built on first ask and cached,
+   so the same name returns the same client.
+
+Loading this package is the whole bootstrap: it registers its own
+factory (constructor plus embedded config) with the station library at
+module init, so `station.sdk()` needs no SDK import in application
+code. That is what the `package` key above is for — it names the module
+for station to load, since nothing else in this example would execute
+it. An application that imports this SDK for its types anyway can drop
+the key: that import is itself the bootstrap.
+
+A second instance of the same API is one more key — `"joplin$test"`
+beside `"joplin"` — and `station.sdk('joplin$test')` returns it.
+SDK features are configured in the same file too: fleet-wide, per api,
+or per instance. `station.check()` resolves and constructs every
+active instance without sending a request — run it in CI.
+
+### The secret name derives from the instance
+
+The credential comes from [sekreto](https://github.com/voxgig/sekreto)
+under a name derived from the **instance** name — the instance token
+lowercased, plus `.apikey`. The untagged instance `joplin` derives
+`joplin.apikey` — by default the `JOPLIN_APIKEY` environment
+variable this README already documents, unchanged. A tagged instance
+derives its own: `joplin$test` → `joplin_test.apikey` →
+`JOPLIN_TEST_APIKEY` — each instance is a separate credentialed use
+of the API, and its env var is derivable from the name you chose. To
+pin a name instead, set `secret` on the instance block, or at the
+api level for several instances sharing one key. Point a profile at a
+vault later and application code does not change; sekreto's own
+documentation covers the stores. The key stays out of `options()` and
+`prepare()` output; `station.tap(...)` shows live traffic.
+
+### Imperative: inverted binding — the retrofit path
+
+Bind through the constructor this SDK already has (inverted
+binding): open a station, then construct with station-built options —
+`station.options()` merges the handle, the activation entry, and the
+correct feature order into the plain options the constructor accepts.
+
+With no `station.json` at all this runs solo with everything
+defaulted — the two-line form is how an existing application starts.
+
+Station failures surface through this SDK's own error path
+(`err.code`, `station_*`); the codes are catalogued in
+[station error codes](https://github.com/voxgig/sdkgen/blob/main/docs/reference/station-errors.md).
 
 ## Error handling
 
@@ -168,13 +239,16 @@ Create a mock client for unit testing — no server required:
 ```go
 client := sdk.Test()
 
-folder, err := client.Folder(nil).List(
+folders, err := client.Folder(nil).List(
     nil, nil,
 )
 if err != nil {
     panic(err)
 }
-fmt.Println(folder) // the returned mock data
+// A []any of entities, one per mock record.
+for _, item := range folders.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 ### Use a custom fetch function
@@ -263,11 +337,11 @@ All entities implement the `JoplinEntity` interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `Load` | `(reqmatch, ctrl map[string]any) (any, error)` | Load a single entity by match criteria. |
-| `List` | `(reqmatch, ctrl map[string]any) (any, error)` | List entities matching the criteria. |
-| `Create` | `(reqdata, ctrl map[string]any) (any, error)` | Create a new entity. |
-| `Update` | `(reqdata, ctrl map[string]any) (any, error)` | Update an existing entity. |
-| `Remove` | `(reqmatch, ctrl map[string]any) (any, error)` | Remove an entity. |
+| `Load` | `(reqmatch, ctrl map[string]any) (any, error)` | Load a single entity by match criteria, and return it. |
+| `List` | `(reqmatch, ctrl map[string]any) (any, error)` | List entities matching the criteria, one per record. |
+| `Create` | `(reqdata, ctrl map[string]any) (any, error)` | Create a new entity, and return it. |
+| `Update` | `(reqdata, ctrl map[string]any) (any, error)` | Update an existing entity, and return it. |
+| `Remove` | `(reqmatch, ctrl map[string]any) (any, error)` | Remove an entity, and return it marked as deleted. |
 | `Data` | `(args ...any) any` | Get or set entity data. |
 | `Match` | `(args ...any) any` | Get or set entity match criteria. |
 | `Make` | `() Entity` | Create a new instance with the same options. |
@@ -275,21 +349,21 @@ All entities implement the `JoplinEntity` interface.
 
 ### Result shape
 
-Entity operations return `(value, error)`. The `value` is the
-operation's data **directly** — there is no wrapper:
+Entity operations return `(value, error)`. The `value` is the entity
+itself — there is no wrapper:
 
 | Operation | `value` |
 | --- | --- |
-| `Load` / `Create` / `Update` / `Remove` | the entity record (`map[string]any`) |
-| `List` | a `[]any` of entity records |
+| `Load` / `Create` / `Update` / `Remove` | the entity, whose `Data()` reads its record (`map[string]any`) |
+| `List` | a `[]any` of entities, one per record |
 
 Check `err` first, then use the value directly (or the typed
 `...Typed` variants, which return the entity's model struct and a typed
 slice):
 
-    folder, err := client.Folder(nil).List(map[string]any{/* fields */}, nil)
+    folder, err := client.Folder(nil).List(nil, nil)
     if err != nil { /* handle */ }
-    // folder is the returned record
+    // folder is a []any of entities, one per record
 
 Only `Direct()` returns a response envelope — a `map[string]any` with
 `"ok"`, `"status"`, `"headers"`, and `"data"` keys.
@@ -394,7 +468,7 @@ folder, err := client.Folder(nil).Load(map[string]any{"id": "folder_id"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(folder) // the loaded record
+fmt.Println(folder.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 #### Example: List
@@ -404,7 +478,10 @@ folders, err := client.Folder(nil).List(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(folders) // the array of records
+// A []any of entities, one per record.
+for _, item := range folders.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
@@ -415,7 +492,7 @@ result, err := client.Folder(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -463,7 +540,7 @@ note, err := client.Note(nil).Load(map[string]any{"id": "note_id"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(note) // the loaded record
+fmt.Println(note.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 #### Example: List
@@ -473,7 +550,10 @@ notes, err := client.Note(nil).List(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(notes) // the array of records
+// A []any of entities, one per record.
+for _, item := range notes.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
@@ -484,7 +564,7 @@ result, err := client.Note(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -520,7 +600,7 @@ tag, err := client.Tag(nil).Load(map[string]any{"id": "tag_id"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(tag) // the loaded record
+fmt.Println(tag.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 #### Example: List
@@ -530,7 +610,10 @@ tags, err := client.Tag(nil).List(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(tags) // the array of records
+// A []any of entities, one per record.
+for _, item := range tags.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
@@ -541,12 +624,12 @@ result, err := client.Tag(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 ## Features
 
-This SDK ships 8 optional features. Each is **inactive until you
+This SDK ships 9 optional features. Each is **inactive until you
 switch it on**, so an SDK you have not configured behaves exactly as if none of
 them existed — no retries, no cache, no logging, no measurable overhead.
 
@@ -561,10 +644,11 @@ above:
 | [`paging`](#paging) | Paging |
 | [`ratelimit`](#ratelimit) | Rate limiting |
 | [`retry`](#retry) | Retry |
+| [`station`](#station) | Station control surface binding for outbound integrations |
 | [`test`](#test) | Test transport |
 | [`timeout`](#timeout) | Timeout |
 
-> **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
+> **Order matters for `ratelimit`, `retry`, `station`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
 > activate them in IS the nesting order. Activating them as an ordered list
 > rather than a map is what fixes that order.
@@ -655,6 +739,27 @@ Set `feature.retry.active` to enable it, then override any of the options above.
 transport features decides what it sees. A feature activated later wraps one
 activated earlier.
 
+### station
+
+Station control surface binding for outbound integrations.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `capture` | `'meta'` |
+| `fromEnv` | `true` |
+| `instance` | `''` |
+| `profile` | `''` |
+| `register` | `true` |
+| `secret` | `''` |
+| `url` | `''` |
+
+Set `feature.station.active` to enable it, then override any of the options above.
+
+`station` wraps the transport, so its position among the other
+transport features decides what it sees. A feature activated later wraps one
+activated earlier.
+
 ### test
 
 Test transport.
@@ -725,6 +830,7 @@ The SDK ships with built-in features:
 - **PagingFeature**: Paging
 - **RatelimitFeature**: Rate limiting
 - **RetryFeature**: Retry
+- **StationFeature**: Station control surface binding for outbound integrations
 - **TestFeature**: Test transport
 - **TimeoutFeature**: Timeout
 
@@ -737,7 +843,9 @@ The Go SDK uses `map[string]any` throughout rather than typed structs.
 This mirrors the dynamic nature of the API and keeps the SDK
 flexible — no code generation is needed when the API schema changes.
 
-Use `core.ToMapAny()` to safely cast results and nested data.
+An operation returns the entity, and its `Data()` returns the record. Use
+`core.ToMapAny()` to safely cast that record, or data nested in it, to
+`map[string]any`: it returns `nil` for anything else, an entity included.
 
 ### Package structure
 

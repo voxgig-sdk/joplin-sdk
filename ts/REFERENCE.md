@@ -112,8 +112,10 @@ Make a direct HTTP request to any API endpoint.
 | `fetchargs.headers` | `object` | Request headers (merged with defaults). |
 | `fetchargs.body` | `any` | Request body (objects are JSON-serialized). |
 | `fetchargs.ctrl` | `object` | Control options (e.g. `{ explain: true }`). |
+| `fetchargs.ctrl.signal` | `AbortSignal` | Aborts the request in flight: `ok` is then `false` and `err.code` is `request_aborted`. |
 
-**Returns:** `Promise<{ ok, status, headers, data } | Error>`
+**Returns:** `Promise<{ ok, status, headers, data }>`. On a failure
+`ok` is `false` and `err` holds the error.
 
 #### `prepare(fetchargs?: object)`
 
@@ -127,6 +129,15 @@ same parameters as `direct()`.
 Alias for `JoplinSDK.test()`.
 
 **Returns:** `JoplinSDK` instance in test mode.
+
+#### Cancelling a call
+
+Every entity operation takes an optional `ctrl` object after its match or
+data, and an `AbortSignal` in `ctrl.signal` cancels the request in flight.
+The operation then rejects with an error whose `code` is
+`request_aborted` and whose `cause` is the signal's reason. A request
+whose signal has already aborted is not sent. `stream()` takes the signal
+as `callopts.signal`, and ends when it aborts.
 
 
 ---
@@ -174,7 +185,7 @@ const result = await client.Folder().list({
 
 #### `create(data: object, ctrl?: object)`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.Folder().create({
@@ -183,7 +194,7 @@ const result = await client.Folder().create({
 
 #### `list(match: object, ctrl?: object)`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Resolves to an array of entities, one per record.
 
 ```ts
 const results = await client.Folder().list()
@@ -191,7 +202,7 @@ const results = await client.Folder().list()
 
 #### `load(match: object, ctrl?: object)`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
 
 ```ts
 const result = await client.Folder().load({ id: 'folder_id' })
@@ -199,7 +210,7 @@ const result = await client.Folder().load({ id: 'folder_id' })
 
 #### `remove(match: object, ctrl?: object)`
 
-Remove the entity matching the given criteria.
+Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
 
 ```ts
 const result = await client.Folder().remove({ id: 'folder_id' })
@@ -207,7 +218,7 @@ const result = await client.Folder().remove({ id: 'folder_id' })
 
 #### `update(data: object, ctrl?: object)`
 
-Update an existing entity. The data must include the entity `id`.
+Update an existing entity. The data must include the entity `id`. Resolves to the updated entity.
 
 ```ts
 const result = await client.Folder().update({
@@ -297,7 +308,7 @@ const result = await client.Note().list({
 
 #### `create(data: object, ctrl?: object)`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.Note().create({
@@ -306,7 +317,7 @@ const result = await client.Note().create({
 
 #### `list(match: object, ctrl?: object)`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Resolves to an array of entities, one per record.
 
 ```ts
 const results = await client.Note().list()
@@ -314,7 +325,7 @@ const results = await client.Note().list()
 
 #### `load(match: object, ctrl?: object)`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
 
 ```ts
 const result = await client.Note().load({ id: 'note_id' })
@@ -322,7 +333,7 @@ const result = await client.Note().load({ id: 'note_id' })
 
 #### `remove(match: object, ctrl?: object)`
 
-Remove the entity matching the given criteria.
+Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
 
 ```ts
 const result = await client.Note().remove({ id: 'note_id' })
@@ -330,7 +341,7 @@ const result = await client.Note().remove({ id: 'note_id' })
 
 #### `update(data: object, ctrl?: object)`
 
-Update an existing entity. The data must include the entity `id`.
+Update an existing entity. The data must include the entity `id`. Resolves to the updated entity.
 
 ```ts
 const result = await client.Note().update({
@@ -408,7 +419,7 @@ const result = await client.Tag().list({
 
 #### `create(data: object, ctrl?: object)`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.Tag().create({
@@ -417,7 +428,7 @@ const result = await client.Tag().create({
 
 #### `list(match: object, ctrl?: object)`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Resolves to an array of entities, one per record.
 
 ```ts
 const results = await client.Tag().list()
@@ -425,7 +436,7 @@ const results = await client.Tag().list()
 
 #### `load(match: object, ctrl?: object)`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
 
 ```ts
 const result = await client.Tag().load({ id: 'tag_id' })
@@ -433,7 +444,7 @@ const result = await client.Tag().load({ id: 'tag_id' })
 
 #### `remove(match: object, ctrl?: object)`
 
-Remove the entity matching the given criteria.
+Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
 
 ```ts
 const result = await client.Tag().remove({ id: 'tag_id' })
@@ -441,7 +452,7 @@ const result = await client.Tag().remove({ id: 'tag_id' })
 
 #### `update(data: object, ctrl?: object)`
 
-Update an existing entity. The data must include the entity `id`.
+Update an existing entity. The data must include the entity `id`. Resolves to the updated entity.
 
 ```ts
 const result = await client.Tag().update({
@@ -488,6 +499,7 @@ Return a copy of the entity options.
 | `paging` | 0.0.1 | Paging |
 | `ratelimit` | 0.0.1 | Rate limiting |
 | `retry` | 0.0.1 | Retry |
+| `station` | 0.0.1 | Station control surface binding for outbound integrations |
 | `test` | 0.0.1 | Test transport |
 | `timeout` | 0.0.1 | Timeout |
 
@@ -503,6 +515,7 @@ const client = new JoplinSDK({
     paging: { active: true },
     ratelimit: { active: true },
     retry: { active: true },
+    station: { active: true },
     test: { active: true },
     timeout: { active: true },
   }
@@ -521,7 +534,7 @@ transport, and the order you list them in is the order they nest.
 
 #### Ordering
 
-`ratelimit`, `retry`, `timeout` wrap the transport. Each
+`ratelimit`, `retry`, `station`, `timeout` wrap the transport. Each
 wraps whatever is already installed, so **activation order is nesting order**:
 a feature activated later sits OUTSIDE one activated earlier, and sees the call
 first.
@@ -723,6 +736,34 @@ its default unless you name it.
   sees. See [Ordering](#ordering) above.
 - Inactive by default: leaving it out costs nothing at runtime.
 
+#### `station`
+
+Station control surface binding for outbound integrations.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `capture` | `'meta'` |
+| `fromEnv` | `true` |
+| `instance` | `''` |
+| `profile` | `''` |
+| `register` | `true` |
+| `secret` | `''` |
+| `url` | `''` |
+
+**Usage**
+
+Set `feature.station.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Wraps the transport: its place in the activation order decides what it
+  sees. See [Ordering](#ordering) above.
+- Inactive by default: leaving it out costs nothing at runtime.
+
 #### `test`
 
 Test transport.
@@ -768,6 +809,7 @@ Timeout.
 | Option | Type |
 |---|---|
 | `clearTimer` | function |
+| `now` | function |
 | `setTimer` | function |
 
 These take no default: the feature behaves one way when you supply them and

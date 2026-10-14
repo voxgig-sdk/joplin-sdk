@@ -15,7 +15,7 @@ keeps the cognitive load low.
 
 ## Install
 C has no central package registry — a release is the git tag
-(`c/vX.Y.Z`, see [Releases](https://github.com/voxgig-sdk/joplin-sdk/releases)). Build from a
+(`c/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/joplin-sdk/tags)). Build from a
 source checkout with the bundled `Makefile`; the voxgig struct library is
 vendored under `utility/struct`, so there are no external dependencies to
 fetch:
@@ -36,7 +36,7 @@ cc -I c/core -I c/utility/struct \
 ## Tutorial: your first API call
 
 This tutorial walks through creating a client, listing entities, and
-loading a specific record.
+loading a specific record. The client sends the API key as the `token` query parameter.
 
 ### 1. Create a client
 
@@ -50,47 +50,116 @@ PNError* err = NULL;
 
 ### 2. List folder records
 
-`list()` returns a List of records and sets `*err` on failure — check
-`err` after the call.
+`list()` returns a `NULL`-terminated array of entities, one per record,
+and sets `*err` on failure — check `err` after the call. `vt->data`
+reads an entity's record.
 
 ```c
 Entity* folder = joplin_folder(client, NULL);
-voxgig_value* folders = folder->vt->list(folder, NULL, NULL, &err);
+Entity** folders = folder->vt->list(folder, NULL, NULL, &err);
 if (err) {
     fprintf(stderr, "list failed: %s\n", err->msg);
 } else {
-    for (size_t i = 0; i < (size_t)voxgig_size(folders); i++) {
-        printf("%s\n", voxgig_to_json(voxgig_getelem(folders, v_int(i), NULL)));
+    for (size_t i = 0; folders[i]; i++) {
+        printf("%s\n", voxgig_to_json(folders[i]->vt->data(folders[i], NULL)));
     }
 }
 ```
 
 ### 3. Load a folder
 
-`load()` returns the bare record and sets `*err` on failure.
+`load()` returns the entity and sets `*err` on failure; `vt->data` reads
+its record.
 
 ```c
-voxgig_value* folder_rec = folder->vt->load(folder, cmap(1, "id", v_str("example_id")), NULL, &err);
+Entity* loaded = folder->vt->load(folder, cmap(1, "id", v_str("example_id")), NULL, &err);
 if (err) {
     fprintf(stderr, "load failed: %s\n", err->msg);
 } else {
-    printf("%s\n", voxgig_to_json(folder_rec));
+    printf("%s\n", voxgig_to_json(loaded->vt->data(loaded, NULL)));
 }
 ```
 
 ### 4. Create, update, and remove
 
 ```c
-// Create — returns the bare created record
-voxgig_value* created = folder->vt->create(folder, cmap(2, "created_time", v_num(1), "is_shared", v_num(1)), NULL, &err);
+// Create — returns the created entity, or NULL with *err set
+Entity* created = folder->vt->create(folder, cmap(2, "created_time", v_num(1), "is_shared", v_num(1)), NULL, &err);
+voxgig_value* created_id = created
+    ? getp(created->vt->data(created, NULL), "id") : v_undef();
 
 // Update
-folder->vt->update(folder, cmap(3, "id", getp(created, "id"), "created_time", v_num(1), "is_shared", v_num(1)), NULL, &err);
+folder->vt->update(folder, cmap(3, "id", created_id, "created_time", v_num(1), "is_shared", v_num(1)), NULL, &err);
 
 // Remove
-folder->vt->remove(folder, cmap(1, "id", getp(created, "id")), NULL, &err);
+folder->vt->remove(folder, cmap(1, "id", created_id), NULL, &err);
 ```
 
+
+## Use with Station
+
+This SDK ships as a [voxgig/station](https://github.com/voxgig/station)
+plugin: bind it to a local `Station` and outbound configuration,
+credentials, and observability move to one place. The feature is
+present but **off by default** — nothing changes until you bind.
+
+### Declarative: `station.json` + `station.sdk()`
+
+Declare an instance in `station.json` at the repo root (committable —
+names and stores, never values):
+
+```json
+{ "station": 1,
+  "profiles": { "default": {
+    "sdk": { "joplin": { } } } } }
+```
+
+Then get the client where you need it:
+
+1. `station = Station.open()` — reads and validates `station.json`;
+   constructs nothing.
+2. `client = station.sdk('joplin')` — built on first ask and cached,
+   so the same name returns the same client.
+
+In this language an import runs no code, so register the factory
+once at startup — `Station.provide('joplin', ...)`, one line — and
+every other line of configuration stays in `station.json`.
+
+A second instance of the same API is one more key — `"joplin$test"`
+beside `"joplin"` — and `station.sdk('joplin$test')` returns it.
+SDK features are configured in the same file too: fleet-wide, per api,
+or per instance. `station.check()` resolves and constructs every
+active instance without sending a request — run it in CI.
+
+### The secret name derives from the instance
+
+The credential comes from [sekreto](https://github.com/voxgig/sekreto)
+under a name derived from the **instance** name — the instance token
+lowercased, plus `.apikey`. The untagged instance `joplin` derives
+`joplin.apikey` — by default the `JOPLIN_APIKEY` environment
+variable this README already documents, unchanged. A tagged instance
+derives its own: `joplin$test` → `joplin_test.apikey` →
+`JOPLIN_TEST_APIKEY` — each instance is a separate credentialed use
+of the API, and its env var is derivable from the name you chose. To
+pin a name instead, set `secret` on the instance block, or at the
+api level for several instances sharing one key. Point a profile at a
+vault later and application code does not change; sekreto's own
+documentation covers the stores. The key stays out of `options()` and
+`prepare()` output; `station.tap(...)` shows live traffic.
+
+### Imperative: inverted binding — the retrofit path
+
+Bind through the constructor this SDK already has (inverted
+binding): open a station, then construct with station-built options —
+`station.options()` merges the handle, the activation entry, and the
+correct feature order into the plain options the constructor accepts.
+
+With no `station.json` at all this runs solo with everything
+defaulted — the two-line form is how an existing application starts.
+
+Station failures surface through this SDK's own error path
+(`err.code`, `station_*`); the codes are catalogued in
+[station error codes](https://github.com/voxgig/sdkgen/blob/main/docs/reference/station-errors.md).
 
 ## Error handling
 
@@ -99,14 +168,15 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 ```ts
 try {
   const folders = await client.Folder().list()
-  console.log(folders)
+  console.log(folders.map((item) => item.data()))
 } catch (err) {
   console.error('list failed:', err)
 }
 ```
 
 The low-level `direct()` method does **not** throw — it returns the
-value or an `Error`, so check the result before using it:
+result envelope. Branch on `ok`; on failure `status` holds the HTTP status
+(for error responses) and `err` holds the error:
 
 ```ts
 const result = await client.direct({
@@ -115,8 +185,8 @@ const result = await client.direct({
   params: { id: 'example_id' },
 })
 
-if (result instanceof Error) {
-  throw result
+if (!result.ok) {
+  console.error('request failed:', result.status, result.err)
 }
 ```
 
@@ -169,10 +239,10 @@ Create a mock client for unit testing — no server required:
 JoplinSDK* client = test_sdk(NULL, NULL);
 PNError* err = NULL;
 
-// Entity ops return the bare record and set *err on failure.
+// list returns one entity per mock record, and sets *err on failure.
 Entity* folder = joplin_folder(client, NULL);
-voxgig_value* folder_rec = folder->vt->list(folder, NULL, NULL, &err);
-// folder_rec contains the mock response record
+Entity** folders = folder->vt->list(folder, NULL, NULL, &err);
+// folders[i]->vt->data(folders[i], NULL) is a mock record
 ```
 
 ### Use a custom fetch function
@@ -267,11 +337,11 @@ All entities share the same `EntityVT` vtable, reached via `e->vt->...`.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `(Entity*, reqmatch, ctrl, PNError**) -> voxgig_value*` | Load a single entity by match criteria. |
-| `list` | `(Entity*, reqmatch, ctrl, PNError**) -> voxgig_value*` | List entities matching the criteria (a List). |
-| `create` | `(Entity*, reqdata, ctrl, PNError**) -> voxgig_value*` | Create a new entity. |
-| `update` | `(Entity*, reqdata, ctrl, PNError**) -> voxgig_value*` | Update an existing entity. |
-| `remove` | `(Entity*, reqmatch, ctrl, PNError**) -> voxgig_value*` | Remove an entity. |
+| `load` | `(Entity*, reqmatch, ctrl, PNError**) -> Entity*` | Load a single entity by match criteria. |
+| `list` | `(Entity*, reqmatch, ctrl, PNError**) -> Entity**` | List entities matching the criteria: a `NULL`-terminated array, one per record. |
+| `create` | `(Entity*, reqdata, ctrl, PNError**) -> Entity*` | Create a new entity. |
+| `update` | `(Entity*, reqdata, ctrl, PNError**) -> Entity*` | Update an existing entity. |
+| `remove` | `(Entity*, reqmatch, ctrl, PNError**) -> Entity*` | Remove an entity, which is returned marked as deleted. |
 | `data` | `(Entity*, args) -> voxgig_value*` | Get entity data (pass a map to set). |
 | `matchv` | `(Entity*, args) -> voxgig_value*` | Get entity match criteria (pass a map to set). |
 | `make` | `(Entity*) -> Entity*` | Create a new instance with the same options. |
@@ -279,10 +349,10 @@ All entities share the same `EntityVT` vtable, reached via `e->vt->...`.
 
 ### Result shape
 
-Entity operations return the bare result data (a `voxgig_value` map for
-single-entity ops, a List for `list`) and set `*err` to a `PNError*` on
-failure. Always initialise `PNError* err = NULL;` and check it after the
-call.
+Entity operations return the entity, and `list` a `NULL`-terminated array
+of entities, one per record; `vt->data` reads an entity's record. On
+failure they return `NULL` and set `*err` to a `PNError*`. Always
+initialise `PNError* err = NULL;` and check it after the call.
 
 The `sdk_direct()` escape hatch never sets `*err` for a non-2xx response —
 it returns a result map you branch on via `getp(result, "ok")`:
@@ -370,11 +440,11 @@ Create an instance: `Entity* folder = joplin_folder(client, NULL);`
 
 | Method | Description |
 | --- | --- |
-| `vt->create(e, reqdata, ctrl, &err)` | Create a new entity with the given data. |
-| `vt->list(e, reqmatch, ctrl, &err)` | List entities, optionally matching the given criteria. |
-| `vt->load(e, reqmatch, ctrl, &err)` | Load a single entity by match criteria. |
-| `vt->remove(e, reqmatch, ctrl, &err)` | Remove the matching entity. |
-| `vt->update(e, reqdata, ctrl, &err)` | Update an existing entity. |
+| `Entity* vt->create(e, reqdata, ctrl, &err)` | Create a new entity with the given data. |
+| `Entity** vt->list(e, reqmatch, ctrl, &err)` | List entities, optionally matching the given criteria: a `NULL`-terminated array, one per record. |
+| `Entity* vt->load(e, reqmatch, ctrl, &err)` | Load a single entity by match criteria. |
+| `Entity* vt->remove(e, reqmatch, ctrl, &err)` | Remove the matching entity, which is returned marked as deleted. |
+| `Entity* vt->update(e, reqdata, ctrl, &err)` | Update an existing entity. |
 
 #### Fields
 
@@ -393,21 +463,27 @@ Create an instance: `Entity* folder = joplin_folder(client, NULL);`
 
 ```c
 Entity* folder = joplin_folder(client, NULL);
-voxgig_value* folder_rec = folder->vt->load(folder, cmap(1, "id", v_str("folder_id")), NULL, &err);
+Entity* loaded = folder->vt->load(folder, cmap(1, "id", v_str("folder_id")), NULL, &err);
+if (loaded) {
+    printf("%s\n", voxgig_to_json(loaded->vt->data(loaded, NULL)));
+}
 ```
 
 #### Example: List
 
 ```c
 Entity* folder = joplin_folder(client, NULL);
-voxgig_value* folders = folder->vt->list(folder, NULL, NULL, &err);
+Entity** folders = folder->vt->list(folder, NULL, NULL, &err);
+for (size_t i = 0; folders && folders[i]; i++) {
+    printf("%s\n", voxgig_to_json(folders[i]->vt->data(folders[i], NULL)));
+}
 ```
 
 #### Example: Create
 
 ```c
 Entity* folder = joplin_folder(client, NULL);
-voxgig_value* folder_rec = folder->vt->create(folder, NULL, NULL, &err);
+Entity* created = folder->vt->create(folder, NULL, NULL, &err);
 ```
 
 
@@ -419,11 +495,11 @@ Create an instance: `Entity* note = joplin_note(client, NULL);`
 
 | Method | Description |
 | --- | --- |
-| `vt->create(e, reqdata, ctrl, &err)` | Create a new entity with the given data. |
-| `vt->list(e, reqmatch, ctrl, &err)` | List entities, optionally matching the given criteria. |
-| `vt->load(e, reqmatch, ctrl, &err)` | Load a single entity by match criteria. |
-| `vt->remove(e, reqmatch, ctrl, &err)` | Remove the matching entity. |
-| `vt->update(e, reqdata, ctrl, &err)` | Update an existing entity. |
+| `Entity* vt->create(e, reqdata, ctrl, &err)` | Create a new entity with the given data. |
+| `Entity** vt->list(e, reqmatch, ctrl, &err)` | List entities, optionally matching the given criteria: a `NULL`-terminated array, one per record. |
+| `Entity* vt->load(e, reqmatch, ctrl, &err)` | Load a single entity by match criteria. |
+| `Entity* vt->remove(e, reqmatch, ctrl, &err)` | Remove the matching entity, which is returned marked as deleted. |
+| `Entity* vt->update(e, reqdata, ctrl, &err)` | Update an existing entity. |
 
 #### Fields
 
@@ -452,21 +528,27 @@ Create an instance: `Entity* note = joplin_note(client, NULL);`
 
 ```c
 Entity* note = joplin_note(client, NULL);
-voxgig_value* note_rec = note->vt->load(note, cmap(1, "id", v_str("note_id")), NULL, &err);
+Entity* loaded = note->vt->load(note, cmap(1, "id", v_str("note_id")), NULL, &err);
+if (loaded) {
+    printf("%s\n", voxgig_to_json(loaded->vt->data(loaded, NULL)));
+}
 ```
 
 #### Example: List
 
 ```c
 Entity* note = joplin_note(client, NULL);
-voxgig_value* notes = note->vt->list(note, NULL, NULL, &err);
+Entity** notes = note->vt->list(note, NULL, NULL, &err);
+for (size_t i = 0; notes && notes[i]; i++) {
+    printf("%s\n", voxgig_to_json(notes[i]->vt->data(notes[i], NULL)));
+}
 ```
 
 #### Example: Create
 
 ```c
 Entity* note = joplin_note(client, NULL);
-voxgig_value* note_rec = note->vt->create(note, NULL, NULL, &err);
+Entity* created = note->vt->create(note, NULL, NULL, &err);
 ```
 
 
@@ -478,11 +560,11 @@ Create an instance: `Entity* tag = joplin_tag(client, NULL);`
 
 | Method | Description |
 | --- | --- |
-| `vt->create(e, reqdata, ctrl, &err)` | Create a new entity with the given data. |
-| `vt->list(e, reqmatch, ctrl, &err)` | List entities, optionally matching the given criteria. |
-| `vt->load(e, reqmatch, ctrl, &err)` | Load a single entity by match criteria. |
-| `vt->remove(e, reqmatch, ctrl, &err)` | Remove the matching entity. |
-| `vt->update(e, reqdata, ctrl, &err)` | Update an existing entity. |
+| `Entity* vt->create(e, reqdata, ctrl, &err)` | Create a new entity with the given data. |
+| `Entity** vt->list(e, reqmatch, ctrl, &err)` | List entities, optionally matching the given criteria: a `NULL`-terminated array, one per record. |
+| `Entity* vt->load(e, reqmatch, ctrl, &err)` | Load a single entity by match criteria. |
+| `Entity* vt->remove(e, reqmatch, ctrl, &err)` | Remove the matching entity, which is returned marked as deleted. |
+| `Entity* vt->update(e, reqdata, ctrl, &err)` | Update an existing entity. |
 
 #### Fields
 
@@ -499,26 +581,32 @@ Create an instance: `Entity* tag = joplin_tag(client, NULL);`
 
 ```c
 Entity* tag = joplin_tag(client, NULL);
-voxgig_value* tag_rec = tag->vt->load(tag, cmap(1, "id", v_str("tag_id")), NULL, &err);
+Entity* loaded = tag->vt->load(tag, cmap(1, "id", v_str("tag_id")), NULL, &err);
+if (loaded) {
+    printf("%s\n", voxgig_to_json(loaded->vt->data(loaded, NULL)));
+}
 ```
 
 #### Example: List
 
 ```c
 Entity* tag = joplin_tag(client, NULL);
-voxgig_value* tags = tag->vt->list(tag, NULL, NULL, &err);
+Entity** tags = tag->vt->list(tag, NULL, NULL, &err);
+for (size_t i = 0; tags && tags[i]; i++) {
+    printf("%s\n", voxgig_to_json(tags[i]->vt->data(tags[i], NULL)));
+}
 ```
 
 #### Example: Create
 
 ```c
 Entity* tag = joplin_tag(client, NULL);
-voxgig_value* tag_rec = tag->vt->create(tag, NULL, NULL, &err);
+Entity* created = tag->vt->create(tag, NULL, NULL, &err);
 ```
 
 ## Features
 
-This SDK ships 8 optional features. Each is **inactive until you
+This SDK ships 9 optional features. Each is **inactive until you
 switch it on**, so an SDK you have not configured behaves exactly as if none of
 them existed — no retries, no cache, no logging, no measurable overhead.
 
@@ -533,10 +621,11 @@ above:
 | [`paging`](#paging) | Paging |
 | [`ratelimit`](#ratelimit) | Rate limiting |
 | [`retry`](#retry) | Retry |
+| [`station`](#station) | Station control surface binding for outbound integrations |
 | [`test`](#test) | Test transport |
 | [`timeout`](#timeout) | Timeout |
 
-> **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
+> **Order matters for `ratelimit`, `retry`, `station`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
 > activate them in IS the nesting order. Activating them as an ordered list
 > rather than a map is what fixes that order.
@@ -627,6 +716,27 @@ Set `feature.retry.active` to enable it, then override any of the options above.
 transport features decides what it sees. A feature activated later wraps one
 activated earlier.
 
+### station
+
+Station control surface binding for outbound integrations.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `capture` | `'meta'` |
+| `fromEnv` | `true` |
+| `instance` | `''` |
+| `profile` | `''` |
+| `register` | `true` |
+| `secret` | `''` |
+| `url` | `''` |
+
+Set `feature.station.active` to enable it, then override any of the options above.
+
+`station` wraps the transport, so its position among the other
+transport features decides what it sees. A feature activated later wraps one
+activated earlier.
+
 ### test
 
 Test transport.
@@ -697,6 +807,7 @@ The SDK ships with built-in features:
 - **PagingFeature**: Paging
 - **RatelimitFeature**: Rate limiting
 - **RetryFeature**: Retry
+- **StationFeature**: Station control surface binding for outbound integrations
 - **TestFeature**: Test transport
 - **TimeoutFeature**: Timeout
 

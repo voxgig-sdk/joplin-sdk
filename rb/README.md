@@ -12,15 +12,24 @@ The SDK exposes the API as capitalised, semantic **Entities** — for example `c
 
 ## Install
 This package is not yet published to RubyGems. Install it from the
-GitHub release tag (`rb/vX.Y.Z`):
+GitHub release tag (`rb/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/joplin-sdk/tags)), or
+from a clone:
 
-- Releases: [https://github.com/voxgig-sdk/joplin-sdk/releases](https://github.com/voxgig-sdk/joplin-sdk/releases)
+```bash
+git clone https://github.com/voxgig-sdk/joplin-sdk
+```
+
+Then add it to your `Gemfile` by path, and run `bundle install`:
+
+```ruby
+gem "voxgig-sdk-joplin-sdk", path: "./joplin-sdk/rb"
+```
 
 
 ## Tutorial: your first API call
 
 This tutorial walks through creating a client, listing entities, and
-loading a specific record.
+loading a specific record. The client sends the API key as the `token` query parameter.
 
 ### 1. Create a client
 
@@ -36,10 +45,11 @@ client = JoplinSDK.new({
 
 ```ruby
 begin
-  # list returns an Array of Folder records — iterate directly.
+  # list returns an Array of Folder entities, one per record; data_get reads the record.
   folders = client.Folder.list
   folders.each do |item|
-    puts "#{item["id"]} #{item["created_time"]}"
+    record = item.data_get
+    puts "#{record["id"]} #{record["created_time"]}"
   end
 rescue => err
   warn "list failed: #{err}"
@@ -52,7 +62,7 @@ end
 begin
   # load returns the ENTITY — call data_get for the Folder record (raises on error).
   folder = client.Folder.load({ "id" => "example_id" })
-  puts folder
+  puts folder.data_get
 rescue => err
   warn "load failed: #{err}"
 end
@@ -71,6 +81,78 @@ client.Folder.update({ "id" => created.data_get["id"], "created_time" => 1, "is_
 client.Folder.remove({ "id" => created.data_get["id"] })
 ```
 
+
+## Use with Station
+
+This SDK ships as a [voxgig/station](https://github.com/voxgig/station)
+plugin: bind it to a local `Station` and outbound configuration,
+credentials, and observability move to one place. The feature is
+present but **off by default** — nothing changes until you bind.
+
+### Declarative: `station.json` + `station.sdk()`
+
+Declare an instance in `station.json` at the repo root (committable —
+names and stores, never values):
+
+```json
+{ "station": 1,
+  "profiles": { "default": {
+    "sdk": { "joplin": {
+      "package": "voxgig-sdk-joplin-sdk" } } } } }
+```
+
+Then get the client where you need it:
+
+1. `station = Station.open()` — reads and validates `station.json`;
+   constructs nothing.
+2. `client = station.sdk('joplin')` — built on first ask and cached,
+   so the same name returns the same client.
+
+Loading this package is the whole bootstrap: it registers its own
+factory (constructor plus embedded config) with the station library at
+module init, so `station.sdk()` needs no SDK import in application
+code. That is what the `package` key above is for — it names the module
+for station to load, since nothing else in this example would execute
+it. An application that imports this SDK for its types anyway can drop
+the key: that import is itself the bootstrap.
+
+A second instance of the same API is one more key — `"joplin$test"`
+beside `"joplin"` — and `station.sdk('joplin$test')` returns it.
+SDK features are configured in the same file too: fleet-wide, per api,
+or per instance. `station.check()` resolves and constructs every
+active instance without sending a request — run it in CI.
+
+### The secret name derives from the instance
+
+The credential comes from [sekreto](https://github.com/voxgig/sekreto)
+under a name derived from the **instance** name — the instance token
+lowercased, plus `.apikey`. The untagged instance `joplin` derives
+`joplin.apikey` — by default the `JOPLIN_APIKEY` environment
+variable this README already documents, unchanged. A tagged instance
+derives its own: `joplin$test` → `joplin_test.apikey` →
+`JOPLIN_TEST_APIKEY` — each instance is a separate credentialed use
+of the API, and its env var is derivable from the name you chose. To
+pin a name instead, set `secret` on the instance block, or at the
+api level for several instances sharing one key. Point a profile at a
+vault later and application code does not change; sekreto's own
+documentation covers the stores. The key stays out of `options()` and
+`prepare()` output; `station.tap(...)` shows live traffic.
+
+### Imperative: `connect()` — the retrofit path
+
+Bind by passing the SDK class to the station:
+
+1. `station = Station.open()` — profile, env, and proxy all defaulted.
+2. `client = station.connect(JoplinSDK)` — replaces direct
+   construction; `connect(JoplinSDK, { as: 'test' })` binds
+   a second, tagged instance.
+
+With no `station.json` at all this runs solo with everything
+defaulted — the two-line form is how an existing application starts.
+
+Station failures surface through this SDK's own error path
+(`err.code`, `station_*`); the codes are catalogued in
+[station error codes](https://github.com/voxgig/sdkgen/blob/main/docs/reference/station-errors.md).
 
 ## Error handling
 
@@ -149,10 +231,10 @@ client = JoplinSDK.test({
   "entity" => { "folder" => { "test01" => { "id" => "test01" } } },
 })
 
-# Entity ops return the ENTITY (raises on error);
-# call data_get for the mock record.
-folder = client.Folder.list()
-puts folder
+# list returns an Array of Folder entities, one per mock record (raises on
+# error); data_get reads each record.
+folders = client.Folder.list()
+folders.each { |item| puts item.data_get }
 ```
 
 ### Use a custom fetch function
@@ -240,11 +322,11 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `(reqmatch, ctrl) -> any` | Load a single entity by match criteria. Raises on error. |
-| `list` | `(reqmatch = nil, ctrl) -> Array` | List entities matching the criteria (call with no argument to list all). Raises on error. |
-| `create` | `(reqdata, ctrl) -> any` | Create a new entity. Raises on error. |
-| `update` | `(reqdata, ctrl) -> any` | Update an existing entity. Raises on error. |
-| `remove` | `(reqmatch, ctrl) -> any` | Remove an entity. Raises on error. |
+| `load` | `(reqmatch, ctrl) -> any` | Load a single entity by match criteria, and return it. Raises on error. |
+| `list` | `(reqmatch = nil, ctrl) -> Array` | List entities matching the criteria (call with no argument to list all), one per record. Raises on error. |
+| `create` | `(reqdata, ctrl) -> any` | Create a new entity, and return it. Raises on error. |
+| `update` | `(reqdata, ctrl) -> any` | Update an existing entity, and return it. Raises on error. |
+| `remove` | `(reqmatch, ctrl) -> any` | Remove an entity, and return it marked as deleted. Raises on error. |
 | `data_get` | `() -> Hash` | Get entity data. |
 | `data_set` | `(data)` | Set entity data. |
 | `match_get` | `() -> Hash` | Get entity match criteria. |
@@ -254,9 +336,10 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return the result data directly. On failure they
-raise a `JoplinError` (a `StandardError` subclass), so wrap
-calls in `begin`/`rescue` where you need to handle errors.
+Entity operations return the entity, and `list` an `Array` of entities, one
+per record; an entity's `data_get` reads its record. On failure they raise a
+`JoplinError` (a `StandardError` subclass), so wrap calls in
+`begin`/`rescue` where you need to handle errors.
 
 The `direct` escape hatch is the exception: it never raises and instead
 returns a result `Hash` with these keys:
@@ -372,8 +455,9 @@ folder = client.Folder.load({ "id" => "folder_id" })
 #### Example: List
 
 ```ruby
-# list returns an Array of Folder records (raises on error).
+# list returns an Array of Folder entities, one per record (raises on error).
 folders = client.Folder.list
+folders.each { |item| puts item.data_get }
 ```
 
 #### Example: Create
@@ -431,8 +515,9 @@ note = client.Note.load({ "id" => "note_id" })
 #### Example: List
 
 ```ruby
-# list returns an Array of Note records (raises on error).
+# list returns an Array of Note entities, one per record (raises on error).
 notes = client.Note.list
+notes.each { |item| puts item.data_get }
 ```
 
 #### Example: Create
@@ -478,8 +563,9 @@ tag = client.Tag.load({ "id" => "tag_id" })
 #### Example: List
 
 ```ruby
-# list returns an Array of Tag records (raises on error).
+# list returns an Array of Tag entities, one per record (raises on error).
 tags = client.Tag.list
+tags.each { |item| puts item.data_get }
 ```
 
 #### Example: Create
@@ -491,7 +577,7 @@ tag = client.Tag.create({
 
 ## Features
 
-This SDK ships 8 optional features. Each is **inactive until you
+This SDK ships 9 optional features. Each is **inactive until you
 switch it on**, so an SDK you have not configured behaves exactly as if none of
 them existed — no retries, no cache, no logging, no measurable overhead.
 
@@ -506,10 +592,11 @@ above:
 | [`paging`](#paging) | Paging |
 | [`ratelimit`](#ratelimit) | Rate limiting |
 | [`retry`](#retry) | Retry |
+| [`station`](#station) | Station control surface binding for outbound integrations |
 | [`test`](#test) | Test transport |
 | [`timeout`](#timeout) | Timeout |
 
-> **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
+> **Order matters for `ratelimit`, `retry`, `station`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
 > activate them in IS the nesting order. Activating them as an ordered list
 > rather than a map is what fixes that order.
@@ -600,6 +687,27 @@ Set `feature.retry.active` to enable it, then override any of the options above.
 transport features decides what it sees. A feature activated later wraps one
 activated earlier.
 
+### station
+
+Station control surface binding for outbound integrations.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `capture` | `'meta'` |
+| `fromEnv` | `true` |
+| `instance` | `''` |
+| `profile` | `''` |
+| `register` | `true` |
+| `secret` | `''` |
+| `url` | `''` |
+
+Set `feature.station.active` to enable it, then override any of the options above.
+
+`station` wraps the transport, so its position among the other
+transport features decides what it sees. A feature activated later wraps one
+activated earlier.
+
 ### test
 
 Test transport.
@@ -670,6 +778,7 @@ The SDK ships with built-in features:
 - **PagingFeature**: Paging
 - **RatelimitFeature**: Rate limiting
 - **RetryFeature**: Retry
+- **StationFeature**: Station control surface binding for outbound integrations
 - **TestFeature**: Test transport
 - **TimeoutFeature**: Timeout
 
