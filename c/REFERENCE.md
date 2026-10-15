@@ -105,52 +105,58 @@ Entity* folder = joplin_folder(client, NULL);
 
 ### Operations
 
-#### `vt->create(Entity* e, voxgig_value* reqdata, voxgig_value* ctrl, PNError** err)`
+#### `Entity* vt->create(Entity* e, voxgig_value* reqdata, voxgig_value* ctrl, PNError** err)`
 
-Create a new entity with the given data. Returns the created entity data and sets `*err` on failure.
+Create a new entity with the given data. Returns the created entity, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* folder = joplin_folder(client, NULL);
-voxgig_value* result = folder->vt->create(folder, NULL, NULL, &err);
+Entity* result = folder->vt->create(folder, NULL, NULL, &err);
 ```
 
-#### `vt->list(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
+#### `Entity** vt->list(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
 
-List entities matching the given criteria. The match is optional — pass `NULL` to list all records. Returns a List.
+List entities matching the given criteria. The match is optional — pass `NULL` to list all records. Returns a `NULL`-terminated array of entities, one per record, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* folder = joplin_folder(client, NULL);
-voxgig_value* results = folder->vt->list(folder, NULL, NULL, &err);
-for (size_t i = 0; i < (size_t)voxgig_size(results); i++) {
-    printf("%s\n", voxgig_to_json(voxgig_getelem(results, v_int(i), NULL)));
+Entity** results = folder->vt->list(folder, NULL, NULL, &err);
+for (size_t i = 0; results && results[i]; i++) {
+    printf("%s\n", voxgig_to_json(results[i]->vt->data(results[i], NULL)));
 }
 ```
 
-#### `vt->load(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
+#### `Entity* vt->load(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
 
-Load a single entity matching the given criteria. Returns the entity data and sets `*err` on failure.
+Load a single entity matching the given criteria. Returns the entity, whose record `vt->data` reads, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* folder = joplin_folder(client, NULL);
-voxgig_value* result = folder->vt->load(folder, cmap(1, "id", v_str("folder_id")), NULL, &err);
+Entity* result = folder->vt->load(folder, cmap(1, "id", v_str("folder_id")), NULL, &err);
+if (result) {
+    printf("%s\n", voxgig_to_json(result->vt->data(result, NULL)));
+}
 ```
 
-#### `vt->remove(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
+#### `Entity* vt->remove(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
 
-Remove the entity matching the given criteria. Sets `*err` on failure.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* folder = joplin_folder(client, NULL);
-voxgig_value* result = folder->vt->remove(folder, cmap(1, "id", v_str("folder_id")), NULL, &err);
+Entity* result = folder->vt->remove(folder, cmap(1, "id", v_str("folder_id")), NULL, &err);
+if (result) {
+    printf("%s\n", voxgig_to_json(result->vt->data(result, NULL)));
+}
 ```
 
-#### `vt->update(Entity* e, voxgig_value* reqdata, voxgig_value* ctrl, PNError** err)`
+#### `Entity* vt->update(Entity* e, voxgig_value* reqdata, voxgig_value* ctrl, PNError** err)`
 
-Update an existing entity. The data must include the entity id. Returns the updated entity data.
+Update an existing entity. The data must include the entity id. Returns the updated entity, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* folder = joplin_folder(client, NULL);
-voxgig_value* result = folder->vt->update(folder, cmap(1, "id", v_str("folder_id")), NULL, &err);
+Entity* result = folder->vt->update(folder, cmap(1, "id", v_str("folder_id")), NULL, &err);
 ```
 
 ### Common Methods
@@ -205,52 +211,58 @@ Entity* note = joplin_note(client, NULL);
 
 ### Operations
 
-#### `vt->create(Entity* e, voxgig_value* reqdata, voxgig_value* ctrl, PNError** err)`
+#### `Entity* vt->create(Entity* e, voxgig_value* reqdata, voxgig_value* ctrl, PNError** err)`
 
-Create a new entity with the given data. Returns the created entity data and sets `*err` on failure.
+Create a new entity with the given data. Returns the created entity, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* note = joplin_note(client, NULL);
-voxgig_value* result = note->vt->create(note, NULL, NULL, &err);
+Entity* result = note->vt->create(note, NULL, NULL, &err);
 ```
 
-#### `vt->list(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
+#### `Entity** vt->list(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
 
-List entities matching the given criteria. The match is optional — pass `NULL` to list all records. Returns a List.
+List entities matching the given criteria. The match is optional — pass `NULL` to list all records. Returns a `NULL`-terminated array of entities, one per record, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* note = joplin_note(client, NULL);
-voxgig_value* results = note->vt->list(note, NULL, NULL, &err);
-for (size_t i = 0; i < (size_t)voxgig_size(results); i++) {
-    printf("%s\n", voxgig_to_json(voxgig_getelem(results, v_int(i), NULL)));
+Entity** results = note->vt->list(note, NULL, NULL, &err);
+for (size_t i = 0; results && results[i]; i++) {
+    printf("%s\n", voxgig_to_json(results[i]->vt->data(results[i], NULL)));
 }
 ```
 
-#### `vt->load(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
+#### `Entity* vt->load(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
 
-Load a single entity matching the given criteria. Returns the entity data and sets `*err` on failure.
+Load a single entity matching the given criteria. Returns the entity, whose record `vt->data` reads, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* note = joplin_note(client, NULL);
-voxgig_value* result = note->vt->load(note, cmap(1, "id", v_str("note_id")), NULL, &err);
+Entity* result = note->vt->load(note, cmap(1, "id", v_str("note_id")), NULL, &err);
+if (result) {
+    printf("%s\n", voxgig_to_json(result->vt->data(result, NULL)));
+}
 ```
 
-#### `vt->remove(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
+#### `Entity* vt->remove(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
 
-Remove the entity matching the given criteria. Sets `*err` on failure.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* note = joplin_note(client, NULL);
-voxgig_value* result = note->vt->remove(note, cmap(1, "id", v_str("note_id")), NULL, &err);
+Entity* result = note->vt->remove(note, cmap(1, "id", v_str("note_id")), NULL, &err);
+if (result) {
+    printf("%s\n", voxgig_to_json(result->vt->data(result, NULL)));
+}
 ```
 
-#### `vt->update(Entity* e, voxgig_value* reqdata, voxgig_value* ctrl, PNError** err)`
+#### `Entity* vt->update(Entity* e, voxgig_value* reqdata, voxgig_value* ctrl, PNError** err)`
 
-Update an existing entity. The data must include the entity id. Returns the updated entity data.
+Update an existing entity. The data must include the entity id. Returns the updated entity, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* note = joplin_note(client, NULL);
-voxgig_value* result = note->vt->update(note, cmap(1, "id", v_str("note_id")), NULL, &err);
+Entity* result = note->vt->update(note, cmap(1, "id", v_str("note_id")), NULL, &err);
 ```
 
 ### Common Methods
@@ -293,52 +305,58 @@ Entity* tag = joplin_tag(client, NULL);
 
 ### Operations
 
-#### `vt->create(Entity* e, voxgig_value* reqdata, voxgig_value* ctrl, PNError** err)`
+#### `Entity* vt->create(Entity* e, voxgig_value* reqdata, voxgig_value* ctrl, PNError** err)`
 
-Create a new entity with the given data. Returns the created entity data and sets `*err` on failure.
+Create a new entity with the given data. Returns the created entity, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* tag = joplin_tag(client, NULL);
-voxgig_value* result = tag->vt->create(tag, NULL, NULL, &err);
+Entity* result = tag->vt->create(tag, NULL, NULL, &err);
 ```
 
-#### `vt->list(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
+#### `Entity** vt->list(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
 
-List entities matching the given criteria. The match is optional — pass `NULL` to list all records. Returns a List.
+List entities matching the given criteria. The match is optional — pass `NULL` to list all records. Returns a `NULL`-terminated array of entities, one per record, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* tag = joplin_tag(client, NULL);
-voxgig_value* results = tag->vt->list(tag, NULL, NULL, &err);
-for (size_t i = 0; i < (size_t)voxgig_size(results); i++) {
-    printf("%s\n", voxgig_to_json(voxgig_getelem(results, v_int(i), NULL)));
+Entity** results = tag->vt->list(tag, NULL, NULL, &err);
+for (size_t i = 0; results && results[i]; i++) {
+    printf("%s\n", voxgig_to_json(results[i]->vt->data(results[i], NULL)));
 }
 ```
 
-#### `vt->load(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
+#### `Entity* vt->load(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
 
-Load a single entity matching the given criteria. Returns the entity data and sets `*err` on failure.
+Load a single entity matching the given criteria. Returns the entity, whose record `vt->data` reads, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* tag = joplin_tag(client, NULL);
-voxgig_value* result = tag->vt->load(tag, cmap(1, "id", v_str("tag_id")), NULL, &err);
+Entity* result = tag->vt->load(tag, cmap(1, "id", v_str("tag_id")), NULL, &err);
+if (result) {
+    printf("%s\n", voxgig_to_json(result->vt->data(result, NULL)));
+}
 ```
 
-#### `vt->remove(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
+#### `Entity* vt->remove(Entity* e, voxgig_value* reqmatch, voxgig_value* ctrl, PNError** err)`
 
-Remove the entity matching the given criteria. Sets `*err` on failure.
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* tag = joplin_tag(client, NULL);
-voxgig_value* result = tag->vt->remove(tag, cmap(1, "id", v_str("tag_id")), NULL, &err);
+Entity* result = tag->vt->remove(tag, cmap(1, "id", v_str("tag_id")), NULL, &err);
+if (result) {
+    printf("%s\n", voxgig_to_json(result->vt->data(result, NULL)));
+}
 ```
 
-#### `vt->update(Entity* e, voxgig_value* reqdata, voxgig_value* ctrl, PNError** err)`
+#### `Entity* vt->update(Entity* e, voxgig_value* reqdata, voxgig_value* ctrl, PNError** err)`
 
-Update an existing entity. The data must include the entity id. Returns the updated entity data.
+Update an existing entity. The data must include the entity id. Returns the updated entity, or `NULL` with `*err` set on failure.
 
 ```c
 Entity* tag = joplin_tag(client, NULL);
-voxgig_value* result = tag->vt->update(tag, cmap(1, "id", v_str("tag_id")), NULL, &err);
+Entity* result = tag->vt->update(tag, cmap(1, "id", v_str("tag_id")), NULL, &err);
 ```
 
 ### Common Methods
@@ -372,6 +390,7 @@ Return the entity name.
 | `paging` | 0.0.1 | Paging |
 | `ratelimit` | 0.0.1 | Rate limiting |
 | `retry` | 0.0.1 | Retry |
+| `station` | 0.0.1 | Station control surface binding for outbound integrations |
 | `test` | 0.0.1 | Test transport |
 | `timeout` | 0.0.1 | Timeout |
 
@@ -380,13 +399,14 @@ Features are activated via the `feature` option:
 
 ```c
 JoplinSDK* client = joplin_sdk_new(cmap(1,
-    "feature", cmap(8,
+    "feature", cmap(9,
         "debug", cmap(1, "active", v_bool(true)),
         "idempotency", cmap(1, "active", v_bool(true)),
         "metrics", cmap(1, "active", v_bool(true)),
         "paging", cmap(1, "active", v_bool(true)),
         "ratelimit", cmap(1, "active", v_bool(true)),
         "retry", cmap(1, "active", v_bool(true)),
+        "station", cmap(1, "active", v_bool(true)),
         "test", cmap(1, "active", v_bool(true)),
         "timeout", cmap(1, "active", v_bool(true)))
 ));
@@ -404,7 +424,7 @@ transport, and the order you list them in is the order they nest.
 
 #### Ordering
 
-`ratelimit`, `retry`, `timeout` wrap the transport. Each
+`ratelimit`, `retry`, `station`, `timeout` wrap the transport. Each
 wraps whatever is already installed, so **activation order is nesting order**:
 a feature activated later sits OUTSIDE one activated earlier, and sees the call
 first.
@@ -606,6 +626,34 @@ its default unless you name it.
   sees. See [Ordering](#ordering) above.
 - Inactive by default: leaving it out costs nothing at runtime.
 
+#### `station`
+
+Station control surface binding for outbound integrations.
+
+**Configuration**
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+| `capture` | `'meta'` |
+| `fromEnv` | `true` |
+| `instance` | `''` |
+| `profile` | `''` |
+| `register` | `true` |
+| `secret` | `''` |
+| `url` | `''` |
+
+**Usage**
+
+Set `feature.station.active` to true in the client options, and override any option above in the same entry. Every option keeps
+its default unless you name it.
+
+**Considerations**
+
+- Wraps the transport: its place in the activation order decides what it
+  sees. See [Ordering](#ordering) above.
+- Inactive by default: leaving it out costs nothing at runtime.
+
 #### `test`
 
 Test transport.
@@ -651,6 +699,7 @@ Timeout.
 | Option | Type |
 |---|---|
 | `clearTimer` | function |
+| `now` | function |
 | `setTimer` | function |
 
 These take no default: the feature behaves one way when you supply them and

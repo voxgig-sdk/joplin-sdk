@@ -44,12 +44,12 @@
       "version": 2,
       "source": "openapi3"
     },
-    "GET /tags": {
+    "GET /tags/{id}/notes": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
     },
-    "GET /tags/{id}/notes": {
+    "GET /tags": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

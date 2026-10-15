@@ -52,12 +52,12 @@
       "version": 2,
       "source": "openapi3"
     },
-    "GET /folders": {
+    "GET /folders/{id}/notes": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
     },
-    "GET /folders/{id}/notes": {
+    "GET /folders": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

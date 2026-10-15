@@ -26,13 +26,30 @@ There are companion guides deeper in the tree: one per language
 | `rb` | `rb/` | [`rb/AGENTS.md`](./rb/AGENTS.md) |
 | `ts` | `ts/` | [`ts/AGENTS.md`](./ts/AGENTS.md) |
 
-**Features** (8): `debug`, `idempotency`, `metrics`, `paging`, `ratelimit`, `retry`, `test`, `timeout`.
+**Features** (9): `debug`, `idempotency`, `metrics`, `paging`, `ratelimit`, `retry`, `station`, `test`, `timeout`.
 
 Each feature is generated into every SDK target — as a directory
 `<lang>/src/feature/<name>/` (ts/js) or a flat file in the `<lang>/feature/`
 package (other languages). Each target's guide documents its features.
 
 **Entities** (3): `Folder`, `Note`, `Tag`.
+
+**Station**: this SDK is a
+[voxgig/station](https://github.com/voxgig/station) plugin (the
+`station` feature, off by default). An application's outbound
+integrations are **declared in `station.json`** at its repo root —
+to learn what the application talks to, read that file: every SDK
+instance (`sdk`), per-api default (`api`), feature setting, and
+egress policy is declared there, and never a credential value.
+`station.sdk('<name>')` builds a declared instance on first ask;
+`station.instances()` lists them. Bound to an open `Station`,
+the credential is resolved by sekreto under the instance's secret name
+and injected at the transport seam — `options()` and
+`prepare()` output hold only a placeholder, so both are safe to
+inspect and log. `station.tap(...)`/`station.events()` show live
+traffic; `station.plugins()` lists live descriptors. See the "Use
+with Station" README section and `src/feature/station/` (or the
+target's feature container) for the generated adapter.
 
 ## Generating and updating the SDK
 

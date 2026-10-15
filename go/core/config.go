@@ -123,6 +123,21 @@ func MakeConfig() map[string]any {
 				"strict": false,
 				"transport": "wrap",
 			},
+			"station": map[string]any{
+				"options": map[string]any{
+					"active": false,
+					"capture": "meta",
+					"fromEnv": true,
+					"instance": "",
+					"profile": "",
+					"register": true,
+					"secret": "",
+					"url": "",
+				},
+				"optspec": map[string]any{},
+				"strict": false,
+				"transport": "wrap",
+			},
 			"test": map[string]any{
 				"options": map[string]any{
 					"active": false,
@@ -141,6 +156,7 @@ func MakeConfig() map[string]any {
 				},
 				"optspec": map[string]any{
 					"clearTimer": "`$FUNCTION`",
+					"now": "`$FUNCTION`",
 					"setTimer": "`$FUNCTION`",
 				},
 				"strict": false,
@@ -242,6 +258,10 @@ func MakeConfig() map[string]any {
 								},
 								"args": map[string]any{},
 								"select": map[string]any{},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
 							},
 						},
 					},
@@ -249,61 +269,6 @@ func MakeConfig() map[string]any {
 						"input": "data",
 						"name": "list",
 						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/folders",
-								"segments": []any{
-									map[string]any{
-										"lit": "folders",
-									},
-								},
-								"parts": []any{
-									"folders",
-								},
-								"rename": map[string]any{},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body.items`",
-								},
-								"args": map[string]any{
-									"query": []any{
-										map[string]any{
-											"name": "field",
-											"orig": "field",
-											"type": "`$STRING`",
-											"kind": "query",
-										},
-										map[string]any{
-											"name": "order_by",
-											"orig": "order_by",
-											"type": "`$STRING`",
-											"kind": "query",
-										},
-										map[string]any{
-											"name": "order_dir",
-											"orig": "order_dir",
-											"type": "`$STRING`",
-											"kind": "query",
-										},
-										map[string]any{
-											"name": "page",
-											"orig": "page",
-											"type": "`$INTEGER`",
-											"kind": "query",
-											"example": 1,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"field",
-										"order_by",
-										"order_dir",
-										"page",
-									},
-								},
-							},
 							map[string]any{
 								"kind": "http",
 								"method": "GET",
@@ -342,7 +307,7 @@ func MakeConfig() map[string]any {
 									"query": []any{
 										map[string]any{
 											"name": "field",
-											"orig": "field",
+											"orig": "fields",
 											"type": "`$STRING`",
 											"kind": "query",
 										},
@@ -351,9 +316,64 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"$action": "note",
 									"exist": []any{
-										"field",
 										"id",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/folders",
+								"segments": []any{
+									map[string]any{
+										"lit": "folders",
+									},
+								},
+								"parts": []any{
+									"folders",
+								},
+								"rename": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.items`",
+								},
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"name": "field",
+											"orig": "fields",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+										map[string]any{
+											"name": "order_by",
+											"orig": "order_by",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+										map[string]any{
+											"name": "order_dir",
+											"orig": "order_dir",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+										map[string]any{
+											"name": "page",
+											"orig": "page",
+											"type": "`$INTEGER`",
+											"kind": "query",
+											"example": 1,
+										},
+									},
+								},
+								"select": map[string]any{},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -396,7 +416,7 @@ func MakeConfig() map[string]any {
 									"query": []any{
 										map[string]any{
 											"name": "field",
-											"orig": "field",
+											"orig": "fields",
 											"type": "`$STRING`",
 											"kind": "query",
 										},
@@ -404,9 +424,12 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"field",
 										"id",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -495,6 +518,10 @@ func MakeConfig() map[string]any {
 									"exist": []any{
 										"id",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -639,6 +666,10 @@ func MakeConfig() map[string]any {
 								},
 								"args": map[string]any{},
 								"select": map[string]any{},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
 							},
 						},
 					},
@@ -646,61 +677,6 @@ func MakeConfig() map[string]any {
 						"input": "data",
 						"name": "list",
 						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/notes",
-								"segments": []any{
-									map[string]any{
-										"lit": "notes",
-									},
-								},
-								"parts": []any{
-									"notes",
-								},
-								"rename": map[string]any{},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body.items`",
-								},
-								"args": map[string]any{
-									"query": []any{
-										map[string]any{
-											"name": "field",
-											"orig": "field",
-											"type": "`$STRING`",
-											"kind": "query",
-										},
-										map[string]any{
-											"name": "order_by",
-											"orig": "order_by",
-											"type": "`$STRING`",
-											"kind": "query",
-										},
-										map[string]any{
-											"name": "order_dir",
-											"orig": "order_dir",
-											"type": "`$STRING`",
-											"kind": "query",
-										},
-										map[string]any{
-											"name": "page",
-											"orig": "page",
-											"type": "`$INTEGER`",
-											"kind": "query",
-											"example": 1,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"field",
-										"order_by",
-										"order_dir",
-										"page",
-									},
-								},
-							},
 							map[string]any{
 								"kind": "http",
 								"method": "GET",
@@ -739,7 +715,7 @@ func MakeConfig() map[string]any {
 									"query": []any{
 										map[string]any{
 											"name": "field",
-											"orig": "field",
+											"orig": "fields",
 											"type": "`$STRING`",
 											"kind": "query",
 										},
@@ -748,9 +724,64 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"$action": "tag",
 									"exist": []any{
-										"field",
 										"id",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/notes",
+								"segments": []any{
+									map[string]any{
+										"lit": "notes",
+									},
+								},
+								"parts": []any{
+									"notes",
+								},
+								"rename": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.items`",
+								},
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"name": "field",
+											"orig": "fields",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+										map[string]any{
+											"name": "order_by",
+											"orig": "order_by",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+										map[string]any{
+											"name": "order_dir",
+											"orig": "order_dir",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+										map[string]any{
+											"name": "page",
+											"orig": "page",
+											"type": "`$INTEGER`",
+											"kind": "query",
+											"example": 1,
+										},
+									},
+								},
+								"select": map[string]any{},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -793,7 +824,7 @@ func MakeConfig() map[string]any {
 									"query": []any{
 										map[string]any{
 											"name": "field",
-											"orig": "field",
+											"orig": "fields",
 											"type": "`$STRING`",
 											"kind": "query",
 										},
@@ -801,9 +832,12 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"field",
 										"id",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -892,6 +926,10 @@ func MakeConfig() map[string]any {
 									"exist": []any{
 										"id",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -968,6 +1006,10 @@ func MakeConfig() map[string]any {
 								},
 								"args": map[string]any{},
 								"select": map[string]any{},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
 							},
 						},
 					},
@@ -975,61 +1017,6 @@ func MakeConfig() map[string]any {
 						"input": "data",
 						"name": "list",
 						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/tags",
-								"segments": []any{
-									map[string]any{
-										"lit": "tags",
-									},
-								},
-								"parts": []any{
-									"tags",
-								},
-								"rename": map[string]any{},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body.items`",
-								},
-								"args": map[string]any{
-									"query": []any{
-										map[string]any{
-											"name": "field",
-											"orig": "field",
-											"type": "`$STRING`",
-											"kind": "query",
-										},
-										map[string]any{
-											"name": "order_by",
-											"orig": "order_by",
-											"type": "`$STRING`",
-											"kind": "query",
-										},
-										map[string]any{
-											"name": "order_dir",
-											"orig": "order_dir",
-											"type": "`$STRING`",
-											"kind": "query",
-										},
-										map[string]any{
-											"name": "page",
-											"orig": "page",
-											"type": "`$INTEGER`",
-											"kind": "query",
-											"example": 1,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"field",
-										"order_by",
-										"order_dir",
-										"page",
-									},
-								},
-							},
 							map[string]any{
 								"kind": "http",
 								"method": "GET",
@@ -1068,7 +1055,7 @@ func MakeConfig() map[string]any {
 									"query": []any{
 										map[string]any{
 											"name": "field",
-											"orig": "field",
+											"orig": "fields",
 											"type": "`$STRING`",
 											"kind": "query",
 										},
@@ -1077,9 +1064,64 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"$action": "note",
 									"exist": []any{
-										"field",
 										"id",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/tags",
+								"segments": []any{
+									map[string]any{
+										"lit": "tags",
+									},
+								},
+								"parts": []any{
+									"tags",
+								},
+								"rename": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.items`",
+								},
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"name": "field",
+											"orig": "fields",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+										map[string]any{
+											"name": "order_by",
+											"orig": "order_by",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+										map[string]any{
+											"name": "order_dir",
+											"orig": "order_dir",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+										map[string]any{
+											"name": "page",
+											"orig": "page",
+											"type": "`$INTEGER`",
+											"kind": "query",
+											"example": 1,
+										},
+									},
+								},
+								"select": map[string]any{},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -1122,7 +1164,7 @@ func MakeConfig() map[string]any {
 									"query": []any{
 										map[string]any{
 											"name": "field",
-											"orig": "field",
+											"orig": "fields",
 											"type": "`$STRING`",
 											"kind": "query",
 										},
@@ -1130,9 +1172,12 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"field",
 										"id",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -1222,6 +1267,10 @@ func MakeConfig() map[string]any {
 										"id",
 									},
 								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
 							},
 						},
 					},
@@ -1288,6 +1337,10 @@ func makeFeature(name string) Feature {
 	case "retry":
 		if NewRetryFeatureFunc != nil {
 			return NewRetryFeatureFunc()
+		}
+	case "station":
+		if NewStationFeatureFunc != nil {
+			return NewStationFeatureFunc()
 		}
 	case "test":
 		if NewTestFeatureFunc != nil {

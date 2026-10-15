@@ -82,9 +82,15 @@ class FolderEntity extends JoplinEntityBase_1.JoplinEntityBase {
             return (ctx.result && ctx.result.ok) ? this : out;
         }
         catch (err) {
-            fres = featureHook(ctx, 'PreUnexpected');
-            if (fres instanceof Promise) {
-                await fres;
+            // What a hook throws here must not escape the cleaning below.
+            try {
+                fres = featureHook(ctx, 'PreUnexpected');
+                if (fres instanceof Promise) {
+                    await fres;
+                }
+            }
+            catch (hookerr) {
+                err = hookerr;
             }
             err = this._unexpected(ctx, err);
             if (err) {
@@ -92,7 +98,7 @@ class FolderEntity extends JoplinEntityBase_1.JoplinEntityBase {
             }
             else {
                 // Off-happy-path (throw disabled): typed as any so the method's
-                // Promise<Folder> return stays clean under strict null checks.
+                // Promise<FolderEntity> return stays clean under strict null checks.
                 return undefined;
             }
         }
@@ -163,9 +169,15 @@ class FolderEntity extends JoplinEntityBase_1.JoplinEntityBase {
             return done(ctx);
         }
         catch (err) {
-            fres = featureHook(ctx, 'PreUnexpected');
-            if (fres instanceof Promise) {
-                await fres;
+            // What a hook throws here must not escape the cleaning below.
+            try {
+                fres = featureHook(ctx, 'PreUnexpected');
+                if (fres instanceof Promise) {
+                    await fres;
+                }
+            }
+            catch (hookerr) {
+                err = hookerr;
             }
             err = this._unexpected(ctx, err);
             if (err) {
@@ -173,7 +185,7 @@ class FolderEntity extends JoplinEntityBase_1.JoplinEntityBase {
             }
             else {
                 // Off-happy-path (throw disabled): typed as any so the method's
-                // Promise<Folder[]> return stays clean under strict null checks.
+                // Promise<FolderEntity[]> return stays clean under strict null checks.
                 return undefined;
             }
         }
@@ -245,9 +257,15 @@ class FolderEntity extends JoplinEntityBase_1.JoplinEntityBase {
             return (ctx.result && ctx.result.ok) ? this : out;
         }
         catch (err) {
-            fres = featureHook(ctx, 'PreUnexpected');
-            if (fres instanceof Promise) {
-                await fres;
+            // What a hook throws here must not escape the cleaning below.
+            try {
+                fres = featureHook(ctx, 'PreUnexpected');
+                if (fres instanceof Promise) {
+                    await fres;
+                }
+            }
+            catch (hookerr) {
+                err = hookerr;
             }
             err = this._unexpected(ctx, err);
             if (err) {
@@ -255,7 +273,7 @@ class FolderEntity extends JoplinEntityBase_1.JoplinEntityBase {
             }
             else {
                 // Off-happy-path (throw disabled): typed as any so the method's
-                // Promise<Folder> return stays clean under strict null checks.
+                // Promise<FolderEntity> return stays clean under strict null checks.
                 return undefined;
             }
         }
@@ -330,9 +348,15 @@ class FolderEntity extends JoplinEntityBase_1.JoplinEntityBase {
             return (ctx.result && ctx.result.ok) ? this : out;
         }
         catch (err) {
-            fres = featureHook(ctx, 'PreUnexpected');
-            if (fres instanceof Promise) {
-                await fres;
+            // What a hook throws here must not escape the cleaning below.
+            try {
+                fres = featureHook(ctx, 'PreUnexpected');
+                if (fres instanceof Promise) {
+                    await fres;
+                }
+            }
+            catch (hookerr) {
+                err = hookerr;
             }
             err = this._unexpected(ctx, err);
             if (err) {
@@ -340,7 +364,7 @@ class FolderEntity extends JoplinEntityBase_1.JoplinEntityBase {
             }
             else {
                 // Off-happy-path (throw disabled): typed as any so the method's
-                // Promise<Folder> return stays clean under strict null checks.
+                // Promise<FolderEntity> return stays clean under strict null checks.
                 return undefined;
             }
         }
@@ -419,9 +443,15 @@ class FolderEntity extends JoplinEntityBase_1.JoplinEntityBase {
             return out;
         }
         catch (err) {
-            fres = featureHook(ctx, 'PreUnexpected');
-            if (fres instanceof Promise) {
-                await fres;
+            // What a hook throws here must not escape the cleaning below.
+            try {
+                fres = featureHook(ctx, 'PreUnexpected');
+                if (fres instanceof Promise) {
+                    await fres;
+                }
+            }
+            catch (hookerr) {
+                err = hookerr;
             }
             err = this._unexpected(ctx, err);
             if (err) {

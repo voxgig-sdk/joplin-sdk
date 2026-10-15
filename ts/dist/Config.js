@@ -7,6 +7,7 @@ const MetricsFeature_1 = require("./feature/metrics/MetricsFeature");
 const PagingFeature_1 = require("./feature/paging/PagingFeature");
 const RatelimitFeature_1 = require("./feature/ratelimit/RatelimitFeature");
 const RetryFeature_1 = require("./feature/retry/RetryFeature");
+const StationFeature_1 = require("./feature/station/StationFeature");
 const TestFeature_1 = require("./feature/test/TestFeature");
 const TimeoutFeature_1 = require("./feature/timeout/TimeoutFeature");
 const FEATURE_CLASS = {
@@ -16,6 +17,7 @@ const FEATURE_CLASS = {
     paging: PagingFeature_1.PagingFeature,
     ratelimit: RatelimitFeature_1.RatelimitFeature,
     retry: RetryFeature_1.RetryFeature,
+    station: StationFeature_1.StationFeature,
     test: TestFeature_1.TestFeature,
     timeout: TimeoutFeature_1.TimeoutFeature,
 };
@@ -147,6 +149,21 @@ class Config {
             "strict": false,
             "transport": "wrap"
         },
+        station: {
+            "options": {
+                "active": false,
+                "capture": "meta",
+                "fromEnv": true,
+                "instance": "",
+                "profile": "",
+                "register": true,
+                "secret": "",
+                "url": ""
+            },
+            "optspec": {},
+            "strict": false,
+            "transport": "wrap"
+        },
         test: {
             "options": {
                 "active": false
@@ -165,6 +182,7 @@ class Config {
             },
             "optspec": {
                 "clearTimer": "`$FUNCTION`",
+                "now": "`$FUNCTION`",
                 "setTimer": "`$FUNCTION`"
             },
             "strict": false,
@@ -265,7 +283,11 @@ class Config {
                                 "res": "`body`"
                             },
                             "args": {},
-                            "select": {}
+                            "select": {},
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
                         }
                     ]
                 },
@@ -273,61 +295,6 @@ class Config {
                     "input": "data",
                     "name": "list",
                     "points": [
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/folders",
-                            "segments": [
-                                {
-                                    "lit": "folders"
-                                }
-                            ],
-                            "parts": [
-                                "folders"
-                            ],
-                            "rename": {},
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body.items`"
-                            },
-                            "args": {
-                                "query": [
-                                    {
-                                        "name": "field",
-                                        "orig": "field",
-                                        "type": "`$STRING`",
-                                        "kind": "query"
-                                    },
-                                    {
-                                        "name": "order_by",
-                                        "orig": "order_by",
-                                        "type": "`$STRING`",
-                                        "kind": "query"
-                                    },
-                                    {
-                                        "name": "order_dir",
-                                        "orig": "order_dir",
-                                        "type": "`$STRING`",
-                                        "kind": "query"
-                                    },
-                                    {
-                                        "name": "page",
-                                        "orig": "page",
-                                        "type": "`$INTEGER`",
-                                        "kind": "query",
-                                        "example": 1
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "field",
-                                    "order_by",
-                                    "order_dir",
-                                    "page"
-                                ]
-                            }
-                        },
                         {
                             "kind": "http",
                             "method": "GET",
@@ -366,7 +333,7 @@ class Config {
                                 "query": [
                                     {
                                         "name": "field",
-                                        "orig": "field",
+                                        "orig": "fields",
                                         "type": "`$STRING`",
                                         "kind": "query"
                                     }
@@ -375,9 +342,64 @@ class Config {
                             "select": {
                                 "$action": "note",
                                 "exist": [
-                                    "field",
                                     "id"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
+                        },
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/folders",
+                            "segments": [
+                                {
+                                    "lit": "folders"
+                                }
+                            ],
+                            "parts": [
+                                "folders"
+                            ],
+                            "rename": {},
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body.items`"
+                            },
+                            "args": {
+                                "query": [
+                                    {
+                                        "name": "field",
+                                        "orig": "fields",
+                                        "type": "`$STRING`",
+                                        "kind": "query"
+                                    },
+                                    {
+                                        "name": "order_by",
+                                        "orig": "order_by",
+                                        "type": "`$STRING`",
+                                        "kind": "query"
+                                    },
+                                    {
+                                        "name": "order_dir",
+                                        "orig": "order_dir",
+                                        "type": "`$STRING`",
+                                        "kind": "query"
+                                    },
+                                    {
+                                        "name": "page",
+                                        "orig": "page",
+                                        "type": "`$INTEGER`",
+                                        "kind": "query",
+                                        "example": 1
+                                    }
+                                ]
+                            },
+                            "select": {},
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -420,7 +442,7 @@ class Config {
                                 "query": [
                                     {
                                         "name": "field",
-                                        "orig": "field",
+                                        "orig": "fields",
                                         "type": "`$STRING`",
                                         "kind": "query"
                                     }
@@ -428,9 +450,12 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "field",
                                     "id"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -519,6 +544,10 @@ class Config {
                                 "exist": [
                                     "id"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -662,7 +691,11 @@ class Config {
                                 "res": "`body`"
                             },
                             "args": {},
-                            "select": {}
+                            "select": {},
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
                         }
                     ]
                 },
@@ -670,61 +703,6 @@ class Config {
                     "input": "data",
                     "name": "list",
                     "points": [
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/notes",
-                            "segments": [
-                                {
-                                    "lit": "notes"
-                                }
-                            ],
-                            "parts": [
-                                "notes"
-                            ],
-                            "rename": {},
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body.items`"
-                            },
-                            "args": {
-                                "query": [
-                                    {
-                                        "name": "field",
-                                        "orig": "field",
-                                        "type": "`$STRING`",
-                                        "kind": "query"
-                                    },
-                                    {
-                                        "name": "order_by",
-                                        "orig": "order_by",
-                                        "type": "`$STRING`",
-                                        "kind": "query"
-                                    },
-                                    {
-                                        "name": "order_dir",
-                                        "orig": "order_dir",
-                                        "type": "`$STRING`",
-                                        "kind": "query"
-                                    },
-                                    {
-                                        "name": "page",
-                                        "orig": "page",
-                                        "type": "`$INTEGER`",
-                                        "kind": "query",
-                                        "example": 1
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "field",
-                                    "order_by",
-                                    "order_dir",
-                                    "page"
-                                ]
-                            }
-                        },
                         {
                             "kind": "http",
                             "method": "GET",
@@ -763,7 +741,7 @@ class Config {
                                 "query": [
                                     {
                                         "name": "field",
-                                        "orig": "field",
+                                        "orig": "fields",
                                         "type": "`$STRING`",
                                         "kind": "query"
                                     }
@@ -772,9 +750,64 @@ class Config {
                             "select": {
                                 "$action": "tag",
                                 "exist": [
-                                    "field",
                                     "id"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
+                        },
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/notes",
+                            "segments": [
+                                {
+                                    "lit": "notes"
+                                }
+                            ],
+                            "parts": [
+                                "notes"
+                            ],
+                            "rename": {},
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body.items`"
+                            },
+                            "args": {
+                                "query": [
+                                    {
+                                        "name": "field",
+                                        "orig": "fields",
+                                        "type": "`$STRING`",
+                                        "kind": "query"
+                                    },
+                                    {
+                                        "name": "order_by",
+                                        "orig": "order_by",
+                                        "type": "`$STRING`",
+                                        "kind": "query"
+                                    },
+                                    {
+                                        "name": "order_dir",
+                                        "orig": "order_dir",
+                                        "type": "`$STRING`",
+                                        "kind": "query"
+                                    },
+                                    {
+                                        "name": "page",
+                                        "orig": "page",
+                                        "type": "`$INTEGER`",
+                                        "kind": "query",
+                                        "example": 1
+                                    }
+                                ]
+                            },
+                            "select": {},
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -817,7 +850,7 @@ class Config {
                                 "query": [
                                     {
                                         "name": "field",
-                                        "orig": "field",
+                                        "orig": "fields",
                                         "type": "`$STRING`",
                                         "kind": "query"
                                     }
@@ -825,9 +858,12 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "field",
                                     "id"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -916,6 +952,10 @@ class Config {
                                 "exist": [
                                     "id"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -991,7 +1031,11 @@ class Config {
                                 "res": "`body`"
                             },
                             "args": {},
-                            "select": {}
+                            "select": {},
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
                         }
                     ]
                 },
@@ -999,61 +1043,6 @@ class Config {
                     "input": "data",
                     "name": "list",
                     "points": [
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/tags",
-                            "segments": [
-                                {
-                                    "lit": "tags"
-                                }
-                            ],
-                            "parts": [
-                                "tags"
-                            ],
-                            "rename": {},
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body.items`"
-                            },
-                            "args": {
-                                "query": [
-                                    {
-                                        "name": "field",
-                                        "orig": "field",
-                                        "type": "`$STRING`",
-                                        "kind": "query"
-                                    },
-                                    {
-                                        "name": "order_by",
-                                        "orig": "order_by",
-                                        "type": "`$STRING`",
-                                        "kind": "query"
-                                    },
-                                    {
-                                        "name": "order_dir",
-                                        "orig": "order_dir",
-                                        "type": "`$STRING`",
-                                        "kind": "query"
-                                    },
-                                    {
-                                        "name": "page",
-                                        "orig": "page",
-                                        "type": "`$INTEGER`",
-                                        "kind": "query",
-                                        "example": 1
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "field",
-                                    "order_by",
-                                    "order_dir",
-                                    "page"
-                                ]
-                            }
-                        },
                         {
                             "kind": "http",
                             "method": "GET",
@@ -1092,7 +1081,7 @@ class Config {
                                 "query": [
                                     {
                                         "name": "field",
-                                        "orig": "field",
+                                        "orig": "fields",
                                         "type": "`$STRING`",
                                         "kind": "query"
                                     }
@@ -1101,9 +1090,64 @@ class Config {
                             "select": {
                                 "$action": "note",
                                 "exist": [
-                                    "field",
                                     "id"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
+                        },
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/tags",
+                            "segments": [
+                                {
+                                    "lit": "tags"
+                                }
+                            ],
+                            "parts": [
+                                "tags"
+                            ],
+                            "rename": {},
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body.items`"
+                            },
+                            "args": {
+                                "query": [
+                                    {
+                                        "name": "field",
+                                        "orig": "fields",
+                                        "type": "`$STRING`",
+                                        "kind": "query"
+                                    },
+                                    {
+                                        "name": "order_by",
+                                        "orig": "order_by",
+                                        "type": "`$STRING`",
+                                        "kind": "query"
+                                    },
+                                    {
+                                        "name": "order_dir",
+                                        "orig": "order_dir",
+                                        "type": "`$STRING`",
+                                        "kind": "query"
+                                    },
+                                    {
+                                        "name": "page",
+                                        "orig": "page",
+                                        "type": "`$INTEGER`",
+                                        "kind": "query",
+                                        "example": 1
+                                    }
+                                ]
+                            },
+                            "select": {},
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -1146,7 +1190,7 @@ class Config {
                                 "query": [
                                     {
                                         "name": "field",
-                                        "orig": "field",
+                                        "orig": "fields",
                                         "type": "`$STRING`",
                                         "kind": "query"
                                     }
@@ -1154,9 +1198,12 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "field",
                                     "id"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -1245,6 +1292,10 @@ class Config {
                                 "exist": [
                                     "id"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]

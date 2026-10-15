@@ -48,6 +48,7 @@ the runtime under `.sdk/tm/c/feature/` and regenerate.
 | **paging** — Paging | `feature/paging_feature.c` | `PreRequest`, `PreResult` |
 | **ratelimit** — Rate limiting | `feature/ratelimit_feature.c` | — |
 | **retry** — Retry | `feature/retry_feature.c` | — |
+| **station** — Station control surface binding for outbound integrations | `feature/station_feature.c` | `PostConstruct`, `PreDone`, `PrePoint`, `PreUnexpected` |
 | **test** — Test transport | `feature/test_feature.c` | `GetData`, `GetMatch`, `PostConstruct`, `PostConstructEntity`, `PrePoint`, `PreRequest`, `PreResponse`, `PreResult`, `PreSpec`, `SetData`, `SetMatch` |
 | **timeout** — Timeout | `feature/timeout_feature.c` | — |
 

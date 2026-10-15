@@ -10,7 +10,7 @@ Learn more about Voxgig SDKs at [voxgig.com/sdk](https://voxgig.com/sdk/).
 
 > TypeScript, Python, PHP, Golang, Ruby, Lua, C SDKs, a CLI with an interactive REPL, and an MCP server for AI agents — all generated from one OpenAPI spec by [@voxgig/sdkgen](https://github.com/voxgig/sdkgen).
 
-> **Features:** `undefined`, `undefined`, `undefined`, `undefined`, `undefined`, `undefined`, `undefined`, `undefined` — opt-in,
+> **Features:** `debug`, `idempotency`, `metrics`, `paging`, `ratelimit`, `retry`, `station`, `test`, `timeout` — opt-in,
 > inactive until switched on, and configured per client. See the Features
 > section of any SDK README below for what each one does.
 
@@ -48,9 +48,8 @@ const client = JoplinSDK.test({
   },
 })
 const folders = await client.Folder().list()
-// folders is an array of Folder entities, populated with mock data
-// — call folders[0].data() for the record itself
-console.log(folders)
+// folders is an array of Folder entities, one per mock record
+console.log(folders.map((folder) => folder.data()))
 ```
 
 ### Python
@@ -58,7 +57,7 @@ console.log(folders)
 ```python
 client = JoplinSDK.test()
 folders = client.Folder().list()
-print(folders)
+print([item.data_get() for item in folders])
 ```
 
 ### PHP
@@ -105,23 +104,25 @@ local results, err = client:Folder():list()
 JoplinSDK* client = test_sdk(NULL, NULL);
 PNError* err = NULL;
 Entity* folder = joplin_folder(client, NULL);
-voxgig_value* folders = folder->vt->list(folder, NULL, NULL, &err);
-printf("%s\n", voxgig_to_json(folders));
+Entity** folders = folder->vt->list(folder, NULL, NULL, &err);
+for (size_t i = 0; folders && folders[i]; i++) {
+    printf("%s\n", voxgig_to_json(folders[i]->vt->data(folders[i], NULL)));
+}
 ```
 
 ## Packages
 
 | Language | Package | Install |
 | --- | --- | --- |
-| TypeScript | `@voxgig-sdk/joplin-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/joplin-sdk/tags) |
-| Python | `voxgig-sdk-joplin-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/joplin-sdk/tags) |
-| PHP | `voxgig-sdk/joplin-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/joplin-sdk/tags) |
+| TypeScript | `@voxgig-sdk/joplin-sdk` | publish pending — [install from source](ts/README.md#install) |
+| Python | `voxgig-sdk-joplin-sdk` | publish pending — [install from source](py/README.md#install) |
+| PHP | `voxgig-sdk/joplin-sdk` | publish pending — [install from source](php/README.md#install) |
 | Golang | `github.com/voxgig-sdk/joplin-sdk/go` | `go get github.com/voxgig-sdk/joplin-sdk/go@latest` |
-| Ruby | `voxgig-sdk-joplin-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/joplin-sdk/tags) |
-| Lua | `voxgig-sdk-joplin-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/joplin-sdk/tags) |
-| C | `voxgig-sdk-joplin-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/joplin-sdk/tags) |
-| Go CLI | `github.com/voxgig-sdk/joplin-sdk/go-cli` | `go install github.com/voxgig-sdk/joplin-sdk/go-cli/cmd/joplin@latest` |
-| Go MCP server | `github.com/voxgig-sdk/joplin-sdk/go-mcp` | `go get github.com/voxgig-sdk/joplin-sdk/go-mcp@latest` |
+| Ruby | `voxgig-sdk-joplin-sdk` | publish pending — [install from source](rb/README.md#install) |
+| Lua | `voxgig-sdk-joplin-sdk` | publish pending — [install from source](lua/README.md#install) |
+| C | `voxgig-sdk-joplin-sdk` | publish pending — [install from source](c/README.md#install) |
+| Go CLI | `github.com/voxgig-sdk/joplin-sdk/go-cli` | build from source — [go-cli/README.md](go-cli/README.md) |
+| Go MCP server | `github.com/voxgig-sdk/joplin-sdk/go-mcp` | build from source — [go-mcp/README.md](go-mcp/README.md) |
 
 ## Quickstart
 
@@ -134,12 +135,14 @@ const client = new JoplinSDK({
   apikey: process.env.JOPLIN_APIKEY,
 })
 
-// List all folders (returns FolderEntity[] — .data() for the record)
+// List all folders (returns FolderEntity[], one entity per record)
 const folders = await client.Folder().list()
 for (const folder of folders) {
-  console.log(folder)
+  console.log(folder.data())
 }
 ```
+
+The client sends the API key as the `token` query parameter.
 
 See the [TypeScript README](ts/README.md) for the full guide.
 
@@ -153,9 +156,10 @@ See the [TypeScript README](ts/README.md) for the full guide.
 
 ## Use it from an AI agent (MCP)
 
-The generated MCP server exposes every operation in this SDK as an
-[MCP](https://modelcontextprotocol.io) tool that Claude, Cursor or Cline
-can call directly. Build and register it:
+The generated MCP server exposes this SDK's list and load operations as
+[MCP](https://modelcontextprotocol.io) tools that Claude, Cursor or Cline
+can call directly. It only reads: create, update, patch and remove become tools when the SDK's model sets
+`main: kit: target: 'go-mcp': tool: write: true`. Build and register it:
 
 ```bash
 cd go-mcp && go build -o joplin-mcp .
@@ -198,14 +202,14 @@ client = JoplinSDK({
     "apikey": os.environ.get("JOPLIN_APIKEY"),
 })
 
-# List all folders (returns a list, raises on error)
+# List all folders (a list of entities, one per record; raises on error)
 folders = client.Folder().list()
 for folder in folders:
-    print(folder)
+    print(folder.data_get())
 
-# Load a specific folder (returns the record, raises on error)
+# Load a specific folder (returns the entity, raises on error)
 folder = client.Folder().load({"id": "example_id"})
-print(folder)
+print(folder.data_get())
 ```
 
 ### PHP
@@ -218,11 +222,11 @@ $client = new JoplinSDK([
     "apikey" => getenv("JOPLIN_APIKEY"),
 ]);
 
-// List all folders (returns an array; throws on error)
+// List all folders (an array of entities, one per record; throws on error)
 $folders = $client->Folder()->list();
 print_r(array_map(fn($item) => $item->data_get(), $folders));
 
-// Load a specific folder (returns the ENTITY; call data_get() for the record; throws on error)
+// Load a specific folder (returns the entity; data_get() reads its record; throws on error)
 $folder = $client->Folder()->load(["id" => "example_id"]);
 print_r($folder->data_get());
 ```
@@ -236,12 +240,14 @@ client := sdk.NewJoplinSDK(map[string]any{
     "apikey": os.Getenv("JOPLIN_APIKEY"),
 })
 
-// List all folders
+// List all folders (one entity per record; err is non-nil on failure)
 folders, err := client.Folder(nil).List(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(folders)
+for _, folder := range folders.([]any) {
+    fmt.Println(folder.(sdk.Entity).Data())
+}
 ```
 
 ### Ruby
@@ -253,31 +259,36 @@ client = JoplinSDK.new({
   "apikey" => ENV["JOPLIN_APIKEY"],
 })
 
-# List all folders (returns an Array; raises on error)
+# List all folders (an Array of entities, one per record; raises on error)
 folders = client.Folder.list
-puts folders
+folders.each { |item| puts item.data_get }
 
-# Load a specific folder (returns the ENTITY; call data_get for the record)
+# Load a specific folder (returns the entity; data_get reads its record; raises on error)
 folder = client.Folder.load({ "id" => "example_id" })
-puts folder
+puts folder.data_get
 ```
 
 ### Lua
 
 ```lua
 local sdk = require("joplin_sdk")
+local json = require("dkjson")
 
 local client = sdk.new({
   apikey = os.getenv("JOPLIN_APIKEY"),
 })
 
--- List all folders
+-- List all folders (an array of entities, one per record; err on failure)
 local folders, err = client:Folder():list()
-print(folders)
+if err then error(err) end
+for _, folder in ipairs(folders) do
+  print(json.encode(folder:data_get()))
+end
 
--- Load a specific folder
+-- Load a specific folder (returns the entity; err on failure)
 local folder, err = client:Folder():load({ id = "example_id" })
-print(folder)
+if err then error(err) end
+print(json.encode(folder:data_get()))
 ```
 
 ### C
@@ -291,15 +302,17 @@ PNError* err = NULL;
 
 Entity* folder = joplin_folder(client, NULL);
 
-// List all folders (returns a List, sets *err on failure)
-voxgig_value* folders = folder->vt->list(folder, NULL, NULL, &err);
-for (size_t i = 0; i < (size_t)voxgig_size(folders); i++) {
-    printf("%s\n", voxgig_to_json(voxgig_getelem(folders, v_int(i), NULL)));
+// List all folders (one entity per record, sets *err on failure)
+Entity** folders = folder->vt->list(folder, NULL, NULL, &err);
+for (size_t i = 0; folders && folders[i]; i++) {
+    printf("%s\n", voxgig_to_json(folders[i]->vt->data(folders[i], NULL)));
 }
 
-// Load a specific folder (returns the record, sets *err on failure)
-voxgig_value* folder_rec = folder->vt->load(folder, cmap(1, "id", v_str("example_id")), NULL, &err);
-printf("%s\n", voxgig_to_json(folder_rec));
+// Load a specific folder (returns the entity, sets *err on failure)
+Entity* loaded = folder->vt->load(folder, cmap(1, "id", v_str("example_id")), NULL, &err);
+if (loaded) {
+    printf("%s\n", voxgig_to_json(loaded->vt->data(loaded, NULL)));
+}
 ```
 
 ## Direct and prepare
@@ -325,10 +338,9 @@ const result = await client.direct({
   method: 'GET',
   params: { id: 'example' },
 })
-if (result instanceof Error) {
-  throw result
+if (result.ok) {
+  console.log(result.data)
 }
-console.log(result.data)
 ```
 
 **Python:**
@@ -416,6 +428,7 @@ forking the SDK.
 | **PagingFeature** | Paging |
 | **RatelimitFeature** | Rate limiting |
 | **RetryFeature** | Retry |
+| **StationFeature** | Station control surface binding for outbound integrations |
 | **TestFeature** | Test transport |
 | **TimeoutFeature** | Timeout |
 
@@ -435,10 +448,12 @@ customizable without forking any upstream tool:
 - **Templates** (`.sdk/tm/`) and **components** (`.sdk/src/cmp/`) are
   the two layers of generation, copied into this repo: templates are the
   literal per-language source, components generate the API-shaped parts.
-- **Regeneration merges.** By default, newly generated content is
-  three-way merged into existing files, so generator updates and local
-  edits usually converge without manual conflict handling. A project can
-  opt for plain overwrite instead.
+- **Regeneration overwrites.** Each run rewrites every generated file from
+  the model, the templates and the components, so an edit made to
+  generated output is lost. Say what this project needs in its own model
+  (`.sdk/model/sdk.aontu`), or extend a target with a component of its
+  own in `.sdk/src/cmp/<target>/`, registered with `registerComponent`,
+  which `voxgig-sdkgen doctor` reports as an addition rather than drift.
 - **Custom features and entire custom targets** arrive through sdkgen
   packages (`voxgig-sdkgen package add`), on the same rails as the
   bundled languages, and `voxgig-sdkgen doctor` reports any drift from

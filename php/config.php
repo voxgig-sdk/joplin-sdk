@@ -145,6 +145,21 @@ class JoplinConfig
           'strict' => false,
           'transport' => 'wrap',
         ],
+                "station" => [
+          'options' => [
+            'active' => false,
+            'capture' => 'meta',
+            'fromEnv' => true,
+            'instance' => '',
+            'profile' => '',
+            'register' => true,
+            'secret' => '',
+            'url' => '',
+          ],
+          'optspec' => [],
+          'strict' => false,
+          'transport' => 'wrap',
+        ],
                 "test" => [
           'options' => [
             'active' => false,
@@ -163,6 +178,7 @@ class JoplinConfig
           ],
           'optspec' => [
             'clearTimer' => '`$FUNCTION`',
+            'now' => '`$FUNCTION`',
             'setTimer' => '`$FUNCTION`',
           ],
           'strict' => false,
@@ -264,6 +280,10 @@ class JoplinConfig
                   ],
                   'args' => [],
                   'select' => [],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
+                  ],
                 ],
               ],
             ],
@@ -271,61 +291,6 @@ class JoplinConfig
               'input' => 'data',
               'name' => 'list',
               'points' => [
-                [
-                  'kind' => 'http',
-                  'method' => 'GET',
-                  'orig' => '/folders',
-                  'segments' => [
-                    [
-                      'lit' => 'folders',
-                    ],
-                  ],
-                  'parts' => [
-                    'folders',
-                  ],
-                  'rename' => [],
-                  'transform' => [
-                    'req' => '`reqdata`',
-                    'res' => '`body.items`',
-                  ],
-                  'args' => [
-                    'query' => [
-                      [
-                        'name' => 'field',
-                        'orig' => 'field',
-                        'type' => '`$STRING`',
-                        'kind' => 'query',
-                      ],
-                      [
-                        'name' => 'order_by',
-                        'orig' => 'order_by',
-                        'type' => '`$STRING`',
-                        'kind' => 'query',
-                      ],
-                      [
-                        'name' => 'order_dir',
-                        'orig' => 'order_dir',
-                        'type' => '`$STRING`',
-                        'kind' => 'query',
-                      ],
-                      [
-                        'name' => 'page',
-                        'orig' => 'page',
-                        'type' => '`$INTEGER`',
-                        'kind' => 'query',
-                        'example' => 1,
-                      ],
-                    ],
-                  ],
-                  'select' => [
-                    'exist' => [
-                      'field',
-                      'order_by',
-                      'order_dir',
-                      'page',
-                    ],
-                  ],
-                ],
                 [
                   'kind' => 'http',
                   'method' => 'GET',
@@ -364,7 +329,7 @@ class JoplinConfig
                     'query' => [
                       [
                         'name' => 'field',
-                        'orig' => 'field',
+                        'orig' => 'fields',
                         'type' => '`$STRING`',
                         'kind' => 'query',
                       ],
@@ -373,9 +338,64 @@ class JoplinConfig
                   'select' => [
                     '$action' => 'note',
                     'exist' => [
-                      'field',
                       'id',
                     ],
+                  ],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
+                  ],
+                ],
+                [
+                  'kind' => 'http',
+                  'method' => 'GET',
+                  'orig' => '/folders',
+                  'segments' => [
+                    [
+                      'lit' => 'folders',
+                    ],
+                  ],
+                  'parts' => [
+                    'folders',
+                  ],
+                  'rename' => [],
+                  'transform' => [
+                    'req' => '`reqdata`',
+                    'res' => '`body.items`',
+                  ],
+                  'args' => [
+                    'query' => [
+                      [
+                        'name' => 'field',
+                        'orig' => 'fields',
+                        'type' => '`$STRING`',
+                        'kind' => 'query',
+                      ],
+                      [
+                        'name' => 'order_by',
+                        'orig' => 'order_by',
+                        'type' => '`$STRING`',
+                        'kind' => 'query',
+                      ],
+                      [
+                        'name' => 'order_dir',
+                        'orig' => 'order_dir',
+                        'type' => '`$STRING`',
+                        'kind' => 'query',
+                      ],
+                      [
+                        'name' => 'page',
+                        'orig' => 'page',
+                        'type' => '`$INTEGER`',
+                        'kind' => 'query',
+                        'example' => 1,
+                      ],
+                    ],
+                  ],
+                  'select' => [],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
                   ],
                 ],
               ],
@@ -418,7 +438,7 @@ class JoplinConfig
                     'query' => [
                       [
                         'name' => 'field',
-                        'orig' => 'field',
+                        'orig' => 'fields',
                         'type' => '`$STRING`',
                         'kind' => 'query',
                       ],
@@ -426,9 +446,12 @@ class JoplinConfig
                   ],
                   'select' => [
                     'exist' => [
-                      'field',
                       'id',
                     ],
+                  ],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
                   ],
                 ],
               ],
@@ -517,6 +540,10 @@ class JoplinConfig
                     'exist' => [
                       'id',
                     ],
+                  ],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
                   ],
                 ],
               ],
@@ -661,6 +688,10 @@ class JoplinConfig
                   ],
                   'args' => [],
                   'select' => [],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
+                  ],
                 ],
               ],
             ],
@@ -668,61 +699,6 @@ class JoplinConfig
               'input' => 'data',
               'name' => 'list',
               'points' => [
-                [
-                  'kind' => 'http',
-                  'method' => 'GET',
-                  'orig' => '/notes',
-                  'segments' => [
-                    [
-                      'lit' => 'notes',
-                    ],
-                  ],
-                  'parts' => [
-                    'notes',
-                  ],
-                  'rename' => [],
-                  'transform' => [
-                    'req' => '`reqdata`',
-                    'res' => '`body.items`',
-                  ],
-                  'args' => [
-                    'query' => [
-                      [
-                        'name' => 'field',
-                        'orig' => 'field',
-                        'type' => '`$STRING`',
-                        'kind' => 'query',
-                      ],
-                      [
-                        'name' => 'order_by',
-                        'orig' => 'order_by',
-                        'type' => '`$STRING`',
-                        'kind' => 'query',
-                      ],
-                      [
-                        'name' => 'order_dir',
-                        'orig' => 'order_dir',
-                        'type' => '`$STRING`',
-                        'kind' => 'query',
-                      ],
-                      [
-                        'name' => 'page',
-                        'orig' => 'page',
-                        'type' => '`$INTEGER`',
-                        'kind' => 'query',
-                        'example' => 1,
-                      ],
-                    ],
-                  ],
-                  'select' => [
-                    'exist' => [
-                      'field',
-                      'order_by',
-                      'order_dir',
-                      'page',
-                    ],
-                  ],
-                ],
                 [
                   'kind' => 'http',
                   'method' => 'GET',
@@ -761,7 +737,7 @@ class JoplinConfig
                     'query' => [
                       [
                         'name' => 'field',
-                        'orig' => 'field',
+                        'orig' => 'fields',
                         'type' => '`$STRING`',
                         'kind' => 'query',
                       ],
@@ -770,9 +746,64 @@ class JoplinConfig
                   'select' => [
                     '$action' => 'tag',
                     'exist' => [
-                      'field',
                       'id',
                     ],
+                  ],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
+                  ],
+                ],
+                [
+                  'kind' => 'http',
+                  'method' => 'GET',
+                  'orig' => '/notes',
+                  'segments' => [
+                    [
+                      'lit' => 'notes',
+                    ],
+                  ],
+                  'parts' => [
+                    'notes',
+                  ],
+                  'rename' => [],
+                  'transform' => [
+                    'req' => '`reqdata`',
+                    'res' => '`body.items`',
+                  ],
+                  'args' => [
+                    'query' => [
+                      [
+                        'name' => 'field',
+                        'orig' => 'fields',
+                        'type' => '`$STRING`',
+                        'kind' => 'query',
+                      ],
+                      [
+                        'name' => 'order_by',
+                        'orig' => 'order_by',
+                        'type' => '`$STRING`',
+                        'kind' => 'query',
+                      ],
+                      [
+                        'name' => 'order_dir',
+                        'orig' => 'order_dir',
+                        'type' => '`$STRING`',
+                        'kind' => 'query',
+                      ],
+                      [
+                        'name' => 'page',
+                        'orig' => 'page',
+                        'type' => '`$INTEGER`',
+                        'kind' => 'query',
+                        'example' => 1,
+                      ],
+                    ],
+                  ],
+                  'select' => [],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
                   ],
                 ],
               ],
@@ -815,7 +846,7 @@ class JoplinConfig
                     'query' => [
                       [
                         'name' => 'field',
-                        'orig' => 'field',
+                        'orig' => 'fields',
                         'type' => '`$STRING`',
                         'kind' => 'query',
                       ],
@@ -823,9 +854,12 @@ class JoplinConfig
                   ],
                   'select' => [
                     'exist' => [
-                      'field',
                       'id',
                     ],
+                  ],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
                   ],
                 ],
               ],
@@ -914,6 +948,10 @@ class JoplinConfig
                     'exist' => [
                       'id',
                     ],
+                  ],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
                   ],
                 ],
               ],
@@ -990,6 +1028,10 @@ class JoplinConfig
                   ],
                   'args' => [],
                   'select' => [],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
+                  ],
                 ],
               ],
             ],
@@ -997,61 +1039,6 @@ class JoplinConfig
               'input' => 'data',
               'name' => 'list',
               'points' => [
-                [
-                  'kind' => 'http',
-                  'method' => 'GET',
-                  'orig' => '/tags',
-                  'segments' => [
-                    [
-                      'lit' => 'tags',
-                    ],
-                  ],
-                  'parts' => [
-                    'tags',
-                  ],
-                  'rename' => [],
-                  'transform' => [
-                    'req' => '`reqdata`',
-                    'res' => '`body.items`',
-                  ],
-                  'args' => [
-                    'query' => [
-                      [
-                        'name' => 'field',
-                        'orig' => 'field',
-                        'type' => '`$STRING`',
-                        'kind' => 'query',
-                      ],
-                      [
-                        'name' => 'order_by',
-                        'orig' => 'order_by',
-                        'type' => '`$STRING`',
-                        'kind' => 'query',
-                      ],
-                      [
-                        'name' => 'order_dir',
-                        'orig' => 'order_dir',
-                        'type' => '`$STRING`',
-                        'kind' => 'query',
-                      ],
-                      [
-                        'name' => 'page',
-                        'orig' => 'page',
-                        'type' => '`$INTEGER`',
-                        'kind' => 'query',
-                        'example' => 1,
-                      ],
-                    ],
-                  ],
-                  'select' => [
-                    'exist' => [
-                      'field',
-                      'order_by',
-                      'order_dir',
-                      'page',
-                    ],
-                  ],
-                ],
                 [
                   'kind' => 'http',
                   'method' => 'GET',
@@ -1090,7 +1077,7 @@ class JoplinConfig
                     'query' => [
                       [
                         'name' => 'field',
-                        'orig' => 'field',
+                        'orig' => 'fields',
                         'type' => '`$STRING`',
                         'kind' => 'query',
                       ],
@@ -1099,9 +1086,64 @@ class JoplinConfig
                   'select' => [
                     '$action' => 'note',
                     'exist' => [
-                      'field',
                       'id',
                     ],
+                  ],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
+                  ],
+                ],
+                [
+                  'kind' => 'http',
+                  'method' => 'GET',
+                  'orig' => '/tags',
+                  'segments' => [
+                    [
+                      'lit' => 'tags',
+                    ],
+                  ],
+                  'parts' => [
+                    'tags',
+                  ],
+                  'rename' => [],
+                  'transform' => [
+                    'req' => '`reqdata`',
+                    'res' => '`body.items`',
+                  ],
+                  'args' => [
+                    'query' => [
+                      [
+                        'name' => 'field',
+                        'orig' => 'fields',
+                        'type' => '`$STRING`',
+                        'kind' => 'query',
+                      ],
+                      [
+                        'name' => 'order_by',
+                        'orig' => 'order_by',
+                        'type' => '`$STRING`',
+                        'kind' => 'query',
+                      ],
+                      [
+                        'name' => 'order_dir',
+                        'orig' => 'order_dir',
+                        'type' => '`$STRING`',
+                        'kind' => 'query',
+                      ],
+                      [
+                        'name' => 'page',
+                        'orig' => 'page',
+                        'type' => '`$INTEGER`',
+                        'kind' => 'query',
+                        'example' => 1,
+                      ],
+                    ],
+                  ],
+                  'select' => [],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
                   ],
                 ],
               ],
@@ -1144,7 +1186,7 @@ class JoplinConfig
                     'query' => [
                       [
                         'name' => 'field',
-                        'orig' => 'field',
+                        'orig' => 'fields',
                         'type' => '`$STRING`',
                         'kind' => 'query',
                       ],
@@ -1152,9 +1194,12 @@ class JoplinConfig
                   ],
                   'select' => [
                     'exist' => [
-                      'field',
                       'id',
                     ],
+                  ],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
                   ],
                 ],
               ],
@@ -1243,6 +1288,10 @@ class JoplinConfig
                     'exist' => [
                       'id',
                     ],
+                  ],
+                  'response' => [
+                    'kind' => 'json',
+                    'media' => 'application/json',
                   ],
                 ],
               ],

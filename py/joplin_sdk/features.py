@@ -7,6 +7,7 @@ from joplin_sdk.feature.metrics_feature import JoplinMetricsFeature
 from joplin_sdk.feature.paging_feature import JoplinPagingFeature
 from joplin_sdk.feature.ratelimit_feature import JoplinRatelimitFeature
 from joplin_sdk.feature.retry_feature import JoplinRetryFeature
+from joplin_sdk.feature.station_feature import JoplinStationFeature
 from joplin_sdk.feature.test_feature import JoplinTestFeature
 from joplin_sdk.feature.timeout_feature import JoplinTimeoutFeature
 
@@ -19,6 +20,7 @@ _FEATURES = {
     "paging": lambda: JoplinPagingFeature(),
     "ratelimit": lambda: JoplinRatelimitFeature(),
     "retry": lambda: JoplinRetryFeature(),
+    "station": lambda: JoplinStationFeature(),
     "test": lambda: JoplinTestFeature(),
     "timeout": lambda: JoplinTimeoutFeature(),
 }

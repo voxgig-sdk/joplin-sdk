@@ -43,6 +43,7 @@ component.* After editing a component run `npm run build` before
 - [`paging`](./src/feature/paging/AGENTS.md) — Paging
 - [`ratelimit`](./src/feature/ratelimit/AGENTS.md) — Rate limiting
 - [`retry`](./src/feature/retry/AGENTS.md) — Retry
+- [`station`](./src/feature/station/AGENTS.md) — Station control surface binding for outbound integrations
 - [`test`](./src/feature/test/AGENTS.md) — Test transport
 - [`timeout`](./src/feature/timeout/AGENTS.md) — Timeout
 

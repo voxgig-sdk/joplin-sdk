@@ -49,6 +49,7 @@ the runtime under `.sdk/tm/php/feature/` and regenerate.
 | **paging** — Paging | `feature/PagingFeature.php` | `PreRequest`, `PreResult` |
 | **ratelimit** — Rate limiting | `feature/RatelimitFeature.php` | — |
 | **retry** — Retry | `feature/RetryFeature.php` | — |
+| **station** — Station control surface binding for outbound integrations | `feature/StationFeature.php` | `PostConstruct`, `PreDone`, `PrePoint`, `PreUnexpected` |
 | **test** — Test transport | `feature/TestFeature.php` | `GetData`, `GetMatch`, `PostConstruct`, `PostConstructEntity`, `PrePoint`, `PreRequest`, `PreResponse`, `PreResult`, `PreSpec`, `SetData`, `SetMatch` |
 | **timeout** — Timeout | `feature/TimeoutFeature.php` | — |
 

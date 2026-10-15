@@ -72,6 +72,16 @@ main: kit: entity: folder: {
       name: "create"
       points: [
         {
+          bf: [
+            "created_time"
+            "id"
+            "is_shared"
+            "parent_id"
+            "title"
+            "updated_time"
+            "user_created_time"
+            "user_updated_time"
+          ]
           co: {
             id: "POST /folders"
             source: "openapi3"
@@ -79,6 +89,10 @@ main: kit: entity: folder: {
           }
           m: "POST"
           o: "/folders"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "folders"
@@ -96,6 +110,60 @@ main: kit: entity: folder: {
       points: [
         {
           co: {
+            id: "GET /folders/{id}/notes"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "field"
+                or: "fields"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/folders/{id}/notes"
+          q: {
+            "$action": "note"
+            exist: [
+              "id"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "folders"
+            }
+            {
+              var: "id"
+            }
+            {
+              lit: "notes"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.items`"
+          }
+        }
+        {
+          co: {
             id: "GET /folders"
             source: "openapi3"
             version: 2
@@ -105,7 +173,7 @@ main: kit: entity: folder: {
               {
                 k: "query"
                 n: "field"
-                or: "field"
+                or: "fields"
                 r: false
                 t: "`$STRING`"
               }
@@ -135,68 +203,13 @@ main: kit: entity: folder: {
           }
           m: "GET"
           o: "/folders"
-          q: {
-            exist: [
-              "field"
-              "order_by"
-              "order_dir"
-              "page"
-            ]
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
               lit: "folders"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body.items`"
-          }
-        }
-        {
-          co: {
-            id: "GET /folders/{id}/notes"
-            source: "openapi3"
-            version: 2
-          }
-          g: {
-            params: [
-              {
-                k: "param"
-                n: "id"
-                or: "id"
-                r: true
-                t: "`$STRING`"
-              }
-            ]
-            query: [
-              {
-                k: "query"
-                n: "field"
-                or: "field"
-                r: false
-                t: "`$STRING`"
-              }
-            ]
-          }
-          m: "GET"
-          o: "/folders/{id}/notes"
-          q: {
-            "$action": "note"
-            exist: [
-              "field"
-              "id"
-            ]
-          }
-          s: [
-            {
-              lit: "folders"
-            }
-            {
-              var: "id"
-            }
-            {
-              lit: "notes"
             }
           ]
           t: {
@@ -229,7 +242,7 @@ main: kit: entity: folder: {
               {
                 k: "query"
                 n: "field"
-                or: "field"
+                or: "fields"
                 r: false
                 t: "`$STRING`"
               }
@@ -239,9 +252,12 @@ main: kit: entity: folder: {
           o: "/folders/{id}"
           q: {
             exist: [
-              "field"
               "id"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {
@@ -304,6 +320,16 @@ main: kit: entity: folder: {
       name: "update"
       points: [
         {
+          bf: [
+            "created_time"
+            "id"
+            "is_shared"
+            "parent_id"
+            "title"
+            "updated_time"
+            "user_created_time"
+            "user_updated_time"
+          ]
           co: {
             id: "PUT /folders/{id}"
             source: "openapi3"
@@ -326,6 +352,10 @@ main: kit: entity: folder: {
             exist: [
               "id"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

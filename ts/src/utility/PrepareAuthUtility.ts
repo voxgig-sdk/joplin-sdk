@@ -10,6 +10,12 @@ const OPTION_secret = 'secret'
 const NOTFOUND = '__NOTFOUND__'
 
 
+// The client's `auth.name` option, when set, replaces the name the API declares.
+function credName(name: any): string {
+  return 'string' === typeof name && '' !== name ? name : CRED_name
+}
+
+
 function prepareAuth(ctx: Context): Spec | Error {
   const utility = ctx.utility
 
@@ -36,14 +42,20 @@ function prepareAuth(ctx: Context): Spec | Error {
   }
 
   const prefix = options.auth.prefix
+  const name = credName(options.auth.name)
+
+  // A credential left under the declared name would travel beside the renamed one.
+  if (CRED_name !== name) {
+    delprop(query, CRED_name)
+  }
 
   const apikey = getprop(options, OPTION_apikey, NOTFOUND)
 
   if (NOTFOUND === apikey || null == apikey || '' === apikey) {
-    delprop(query, CRED_name)
+    delprop(query, name)
   }
   else {
-    setprop(query, CRED_name, apikey)
+    setprop(query, name, apikey)
   }
 
   return spec

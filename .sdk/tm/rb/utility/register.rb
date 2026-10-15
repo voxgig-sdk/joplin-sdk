@@ -33,6 +33,8 @@ require_relative 'transform_response'
 
 JoplinUtility.registrar = ->(u) {
   u.clean = JoplinUtilities::Clean
+  u.clean_add = JoplinUtilities::CleanAdd
+  u.clean_explain = JoplinUtilities::CleanExplain
   u.done = JoplinUtilities::Done
   u.make_error = JoplinUtilities::MakeError
   u.feature_add = JoplinUtilities::FeatureAdd

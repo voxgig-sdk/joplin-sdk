@@ -49,6 +49,7 @@ the runtime under `.sdk/tm/rb/feature/` and regenerate.
 | **paging** — Paging | `feature/paging_feature.rb` | `PreRequest`, `PreResult` |
 | **ratelimit** — Rate limiting | `feature/ratelimit_feature.rb` | — |
 | **retry** — Retry | `feature/retry_feature.rb` | — |
+| **station** — Station control surface binding for outbound integrations | `feature/station_feature.rb` | `PostConstruct`, `PreDone`, `PrePoint`, `PreUnexpected` |
 | **test** — Test transport | `feature/test_feature.rb` | `GetData`, `GetMatch`, `PostConstruct`, `PostConstructEntity`, `PrePoint`, `PreRequest`, `PreResponse`, `PreResult`, `PreSpec`, `SetData`, `SetMatch` |
 | **timeout** — Timeout | `feature/timeout_feature.rb` | — |
 
